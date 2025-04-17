@@ -1,37 +1,39 @@
 /* Ajustar la posición de la barra de búsqueda */
 .search-bar-container {
     position: relative;
-}
-
-.search-bar {
-    position: absolute;
-    right: 60px; /* Ajusta este valor para moverla más a la izquierda */
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 200;
-    width: 400px;
-    max-width: 100%;
-    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-bar {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
     font-size: 16px;
     border: 2px solid var(--gray-light);
     border-radius: 25px;
     background-color: var(--bg-light);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    box-shadow: var(--shadow-sm);
-    color: black; /* Asegura que el texto sea visible */
-    font-family: 'Times New Roman', Times, serif; /* Asegura que use la fuente correcta */
-    font-weight: 400; /* Peso de fuente normal */
-}
-
-.search-bar.visible {
-    opacity: 1;
-    visibility: visible; /* Cambia a visible para mostrar la barra de búsqueda */
-    transform: translateY(-50%) scale(1); /* Escala para mostrar la barra de búsqueda */
-}
-
-.search-bar::placeholder {
+    color: var(--text-dark);
+    font-family: 'Roboto', sans-serif;
+    transition: all 0.3s ease;
+  }
+  
+  .search-bar:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 5px var(--primary);
+  }
+  
+  .search-bar::placeholder {
     color: var(--gray-light);
-    font-style: Roboto, sans-serif; /* Asegura que el placeholder use la fuente correcta */
-}
+  }
+  
+  #search-submit {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }

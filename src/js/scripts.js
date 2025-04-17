@@ -3,15 +3,39 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchMovies();
 
   // Funcionalidad para el botón de búsqueda
-  const searchButton = document.getElementById("search-button");
   const searchBar = document.getElementById("search-bar");
+  const searchSubmit = document.getElementById("search-submit");
+  const movieList = document.getElementById("movie-list");
 
-  if (searchButton) {
-    searchButton.addEventListener("click", () => {
-      const searchBar = document.getElementById("search-bar");
-      if (searchBar) {
-        searchBar.classList.toggle("visible"); // Mostrar/ocultar barra de búsqueda
-      }
+  if (searchSubmit && searchBar) {
+    searchSubmit.addEventListener("click", () => {
+      const query = searchBar.value.trim().toLowerCase();
+      if (!query) return;
+
+      // Filtrar películas por título
+      const movies = Array.from(movieList.children);
+      movies.forEach((movie) => {
+        const title = movie.querySelector(".movie-title").textContent.toLowerCase();
+        if (title.includes(query)) {
+          movie.style.display = "block";
+        } else {
+          movie.style.display = "none";
+        }
+      });
+    });
+
+    // Opcional: Buscar al escribir
+    searchBar.addEventListener("input", () => {
+      const query = searchBar.value.trim().toLowerCase();
+      const movies = Array.from(movieList.children);
+      movies.forEach((movie) => {
+        const title = movie.querySelector(".movie-title").textContent.toLowerCase();
+        if (title.includes(query)) {
+          movie.style.display = "block";
+        } else {
+          movie.style.display = "none";
+        }
+      });
     });
   }
 
@@ -25,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const nowShowingButton = document.getElementById("now-showing-button");
   const upcomingButton = document.getElementById("upcoming-button");
-  const movieList = document.getElementById("movie-list");
 
   function loadMovies(jsonPath, isUpcoming = false) {
     fetch(jsonPath)
