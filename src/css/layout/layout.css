@@ -5,7 +5,7 @@
     color: inherit;
     background-color: var(--secondary); /* Fondo de la cabecera */
     color: var(--text-light); /* Color del texto */
-    position: sticky; /* Fija la cabecera en la parte superior al hacer scroll */
+    position: relative; /* Fija la cabecera en la parte superior al hacer scroll */
     top: 0;
     z-index: 99; /* Asegura que la cabecera esté por encima de otros elementos */
     box-shadow: var(--shadow-sm); /* Sombra para dar profundidad */

@@ -55,7 +55,4 @@ function fetchMovies() {
 
       movieContainer.appendChild(movieCard);
     });
-  
-  // Cargar películas en cartelera por defecto
-  loadMovies("../data/movies.json");
 };
