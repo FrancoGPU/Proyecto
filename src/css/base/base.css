@@ -1,21 +1,24 @@
+/* Reinicia el margen y el relleno predeterminados, y establece el box-sizing en border-box para todos los elementos */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Establece los estilos base para el elemento body */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
-    line-height: 1.6;
-    overflow-x: hidden;
-    overflow-y: auto;
+    font-family: 'Roboto', sans-serif; /* Usa la fuente Roboto para todo el sitio web */
+    background-color: var(--bg-light); /* Color de fondo utilizando una variable CSS */
+    color: var(--text-dark); /* Color del texto utilizando una variable CSS */
+    line-height: 1.6; /* Mejora la legibilidad del texto con altura de línea */
+    overflow-x: hidden; /* Evita el desplazamiento horizontal */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
+/* Define una fuente personalizada para Roboto Italic */
 @font-face {
-    font-family: 'Roboto Italic';
-    src: url('../assets/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
-    font-weight: 100 900;
-    font-style: italic;
+    font-family: 'Roboto Italic'; /* Nombre de la fuente personalizada */
+    src: url('../assets/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype'); /* Ruta al archivo de la fuente */
+    font-weight: 100 900; /* Soporta pesos de fuente desde 100 hasta 900 */
+    font-style: italic; /* Estilo en cursiva para la fuente */
 }

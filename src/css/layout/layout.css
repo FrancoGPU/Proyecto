@@ -1,111 +1,133 @@
 /* cabecera */
+/* Estilos para la cabecera del sitio web, que incluye el encabezado principal */
 .cine-cabecera {
     text-decoration: none;
     color: inherit;
-    background-color: var(--secondary);
-    color: var(--text-light);
-    position: sticky;
+    background-color: var(--secondary); /* Fondo de la cabecera */
+    color: var(--text-light); /* Color del texto */
+    position: sticky; /* Fija la cabecera en la parte superior al hacer scroll */
     top: 0;
-    z-index: 99;
-    box-shadow: var(--shadow-sm);
+    z-index: 99; /* Asegura que la cabecera esté por encima de otros elementos */
+    box-shadow: var(--shadow-sm); /* Sombra para dar profundidad */
 }
 
+/* Contenedor interno de la cabecera, organiza los elementos en un diseño flexible */
 .cabecera-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-sm) var(--space-lg);
-    max-width: 1200px;
-    margin: 0 auto;
+    justify-content: space-between; /* Espaciado entre elementos */
+    align-items: center; /* Alineación vertical */
+    padding: var(--space-sm) var(--space-lg); /* Espaciado interno */
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centra el contenedor */
 }
 
+/* Ajustar la posición de los íconos y la barra de búsqueda */
+.cabecera-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm); /* Espaciado entre los íconos */
+    position: relative;
+}
+
+/* Estilos generales para enlaces */
 a {
     text-decoration: none; /* Elimina el subrayado */
     color: inherit; /* Usa el color del texto del elemento padre */
 }
 
 /* Contenido principal */
+/* Estilos para el área principal del contenido */
 .main-content {
-    min-height: calc(100vh - var(--cabecera-height) - var(--piePagina-height));
+    min-height: calc(100vh - var(--cabecera-height) - var(--piePagina-height)); /* Altura mínima ajustada al viewport */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column; /* Organiza los elementos en columna */
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
 }
 
+/* Estilos para las secciones con encabezado dentro del contenido principal */
 .section-cabecera {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-lg);
-    padding-bottom: var(--space-xs);
-    border-bottom: 1px solid var(--gray-light);
+    justify-content: space-between; /* Espaciado entre elementos */
+    align-items: center; /* Alineación vertical */
+    margin-bottom: var(--space-lg); /* Margen inferior */
+    padding-bottom: var(--space-xs); /* Espaciado inferior */
+    border-bottom: 1px solid var(--gray-light); /* Línea divisoria */
 }
 
 /* Estilos para el modal */
+/* Contenedor principal del modal, inicialmente oculto */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
+    display: none; /* Oculta el modal por defecto */
+    position: fixed; /* Posición fija en la pantalla */
+    z-index: 1000; /* Asegura que el modal esté por encima de otros elementos */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
+    width: 100%; /* Ocupa todo el ancho de la pantalla */
+    height: 100%; /* Ocupa todo el alto de la pantalla */
+    overflow: auto; /* Permite el scroll si el contenido es demasiado grande */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    justify-content: center; /* Centra el modal horizontalmente */
+    align-items: center; /* Centra el modal verticalmente */
 }
 
+/* Contenido interno del modal */
 .modal-content {
-    background-color: white;
-    margin: auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-    text-align: center;
+    background-color: white; /* Fondo blanco */
+    margin: auto; /* Centra el contenido */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    width: 80%; /* Ancho relativo */
+    max-width: 500px; /* Ancho máximo */
+    box-shadow: var(--shadow-lg); /* Sombra para dar profundidad */
+    text-align: center; /* Centra el texto */
 }
 
+/* Estilo para el título dentro del modal */
 .modal-content h2 {
-    margin-bottom: 1rem;
-    color: var(--primary);
+    margin-bottom: 1rem; /* Margen inferior */
+    color: var(--primary); /* Color principal */
 }
 
+/* Estilo para listas dentro del modal */
 .modal-content ul {
-    list-style: none;
-    padding: 0;
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0; /* Elimina el padding */
 }
 
+/* Estilo para los elementos de la lista dentro del modal */
 .modal-content li {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    color: var(--text-dark);
+    margin: 0.5rem 0; /* Margen vertical */
+    font-size: 1rem; /* Tamaño de fuente */
+    color: var(--text-dark); /* Color del texto */
 }
 
+/* Botón de cierre del modal */
 .close {
-    color: var(--primary);
-    float: right;
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
+    color: var(--primary); /* Color principal */
+    float: right; /* Alinea el botón a la derecha */
+    font-size: 1.5rem; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
 }
 
+/* Efecto hover para el botón de cierre */
 .close:hover {
-    color: var(--primary-dark);
+    color: var(--primary-dark); /* Cambia el color al pasar el cursor */
 }
 
 /* piePagina */
+/* Estilos para el pie de página del sitio web */
 .cine-piePagina {
-    background-color: var(--secondary);
-    color: var(--text-light);
-    padding: var(--space-lg);
-    text-align: center;
-    margin-top: var(--space-xl);
+    background-color: var(--secondary); /* Fondo del pie de página */
+    color: var(--text-light); /* Color del texto */
+    padding: var(--space-lg); /* Espaciado interno */
+    text-align: center; /* Centra el texto */
+    margin-top: var(--space-xl); /* Margen superior */
 }
 
+/* Contenedor interno del pie de página */
 .piePagina-content {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centra el contenedor */
 }

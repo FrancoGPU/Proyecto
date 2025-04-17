@@ -1,0 +1,77 @@
+/* Estilos para el logo */
+.logo {
+    font-size: 3rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+}
+
+.logo-go {
+    color: var(--logo-go-color);
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s ease;
+}
+
+.logo-cine {
+    color: var(--logo-cine-color);
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s ease;
+}
+
+/* Efecto de foco de cine */
+.logo::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 110%;
+    height: 120%;
+    background: radial-gradient(circle at center, 
+            rgba(75, 56, 119, 0.233) 0%, 
+            transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.logo:hover::before {
+    opacity: 1;
+}
+
+/* Efecto de levantamiento */
+.logo:hover .logo-go {
+    transform: translateY(-5px);
+    text-shadow: 0 5px 10px rgba(97, 49, 129, 0.247);
+}
+
+.logo:hover .logo-cine {
+    transform: translateY(-5px);
+    text-shadow: 0 5px 10px rgba(113, 52, 119, 0.4);
+}
+
+/* Línea decorativa */
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+            var(--logo-go-color) 0%, 
+            var(--logo-cine-color) 100%);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}

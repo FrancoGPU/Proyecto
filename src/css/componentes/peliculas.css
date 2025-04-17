@@ -1,0 +1,169 @@
+/* Pelicula Cards */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-lg);
+}
+
+.movie-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+}
+
+.movie-image-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 150%;
+    overflow: hidden;
+}
+
+.movie-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.movie-card:hover .movie-image {
+    transform: scale(1.05);
+}
+
+.movie-info {
+    padding: var(--space-md);
+    flex-grow: 1;
+}
+
+.movie-title {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.movie-genre {
+    display: inline-block;
+    background: rgba(0, 194, 255, 0.1);
+    color: var(--secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
+}
+
+.movie-release {
+    font-size: 0.85rem;
+    color: #666;
+    margin: var(--space-xs) 0;
+}
+
+.movie-description {
+    font-size: 0.85rem;
+    color: #555;
+    margin: var(--space-xs) 0;
+    max-height: 3.6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    transition: var(--transition-normal);
+}
+
+.movie-card:hover .movie-description {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.movie-showtimes {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.movie-showtime {
+    background-color: var(--gray-light);
+    color: var(--secondary);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.showtimes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.showtimes-grid .btn-primary {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-light);
+    background-color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.showtimes-grid .btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.showtimes-grid .btn-primary:active {
+    transform: scale(0.95);
+}
+
+.showtimes-grid .btn-primary.selected {
+    background-color: var(--accent);
+    color: var(--text-dark);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.schedule-title {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--secondary);
+    margin-bottom: var(--space-lg);
+    font-weight: bold;
+}
+
+.schedule-selection {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+
+}

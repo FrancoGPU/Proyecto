@@ -1,5 +1,10 @@
 @import "/src/css/base/variables.css";
 @import "/src/css/base/base.css";
 @import "/src/css/layout/layout.css";
-@import "/src/css/components.css";
 @import "/src/css/layout/responsive.css";
+@import "/src/css/componentes/animaciones.css";
+@import "/src/css/componentes/barraBusqueda.css";
+@import "/src/css/componentes/botones.css";
+@import "/src/css/componentes/combos.css";
+@import "/src/css/componentes/logo.css";
+@import "/src/css/componentes/peliculas.css";

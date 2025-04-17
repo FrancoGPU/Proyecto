@@ -1,0 +1,73 @@
+/* Botones de navegación */
+.cine-nav-button {
+    background-color: var(--secondary); /* Mismo color que el fondo */
+    color: var(--text-light); /* Texto claro para contraste */
+    border: none; /* Sin bordes */
+    padding: var(--space-md) var(--space-xl); /* Aumentar el tamaño del botón */
+    font-size: 1rem; /* Texto más grande */
+    font-weight: 600; /* Texto más destacado */
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrar el contenido */
+    gap: 0.5rem;
+    position: relative;
+    z-index: 101; /* Asegura que esté por encima de la cabecera */
+    text-decoration: none; /* Sin subrayado */
+    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Línea vertical sutil */
+    flex-grow: 1; /* Permite que los botones ocupen el espacio disponible */
+}
+
+.cine-nav-button:hover {
+    color: var(--accent); /* Cambia el color del texto al pasar el cursor */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.cine-nav-button.active {
+    color: var(--accent); /* Texto destacado */
+    font-weight: bold; /* Resalta el texto */
+}
+
+.cine-nav-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 4px; /* Línea más gruesa */
+    background-color: var(--primary); /* Línea roja para el botón activo */
+    border-radius: 2px;
+}
+
+
+/* Contenedor de botones */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Distribuir botones uniformemente */
+    align-items: center;
+    gap: 1; /* Sin espacio entre botones */
+    margin-top: var(--space-sm);
+    padding: var(--space-sm) 0;
+    background-color: var(--secondary);
+    border-top: 1px solid var(--gray-light);
+    border-bottom: 1px solid var(--gray-light);
+    position: relative;
+    z-index: 100; /* Asegura que el contenedor esté por encima de otros elementos */
+}
+
+/* Botones Iconos */
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    padding: var(--space-xs);
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+    color: var(--accent);
+}
