@@ -1,0 +1,78 @@
+/* Estilos para la sección de confirmación */
+.confirmation-section {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+.confirmation-section h2 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: var(--space-md);
+}
+
+.purchase-summary {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background-color: var(--gray-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.purchase-summary h3 {
+    color: var(--secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.purchase-summary p {
+    margin: var(--space-xs) 0;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.payment-form label {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.payment-form input {
+    padding: var(--space-sm);
+    border: 1px solid var(--gray-light);
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.payment-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: var(--space-sm);
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}

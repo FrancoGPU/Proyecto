@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra - GOCINE</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/paginas/confirmacion.css">
+</head>
+<body>
+    <header></header> <!-- La cabecera se cargará dinámicamente -->
+
+    <main class="main-content">
+        <section class="confirmation-section">
+            <h2>Confirmación de Compra</h2>
+            <div class="purchase-summary">
+                <h3>Resumen de tu compra</h3>
+                <p><strong>Película:</strong> <span id="movie-name"></span></p>
+                <p><strong>Butacas:</strong> <span id="seats"></span></p>
+                <p><strong>Total:</strong> <span id="total-price"></span></p>
+            </div>
+
+            <form class="payment-form" id="payment-form">
+                <h3>Detalles de Pago</h3>
+                <label for="card-name">Nombre en la tarjeta:</label>
+                <input type="text" id="card-name" name="card-name" placeholder="Nombre completo" required>
+
+                <label for="card-number">Número de tarjeta:</label>
+                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+
+                <label for="expiry-date">Fecha de expiración:</label>
+                <input type="month" id="expiry-date" name="expiry-date" required>
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
+
+                <button type="submit" class="btn-primary">Realizar Pago</button>
+            </form>
+        </section>
+    </main>
+
+    <footer></footer> <!-- El pie de página se cargará dinámicamente -->
+
+    <script src="../js/components/cabecera.js"></script>
+    <script src="../js/components/piePagina.js"></script>
+    <script src="../js/paginas/confirmacion.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+@media (max-width: 768px) {
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .cine-nav a {
+        font-size: 0.75rem;
+        padding: var(--space-sm) 0.2rem;
+    }
+
+    .movie-card {
+        transform: none !important;
+    }
+    
+    .movie-card:hover .movie-description {
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .section-cabecera {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+}

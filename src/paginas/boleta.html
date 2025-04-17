@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleta de Compra - GOCINE</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/paginas/boleta.css">
+</head>
+<body>
+    <header class="cine-cabecera">
+        <div class="cabecera-container">
+            <h1 class="logo">
+                <span class="logo-go">GO</span>
+                <span class="logo-cine">CINE</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="boleta-section">
+            <h2>Boleta de Compra</h2>
+            <div class="boleta-details">
+                <p><strong>Película:</strong> <span id="movie-name"></span></p>
+                <p><strong>Butacas:</strong> <span id="seats"></span></p>
+                <p><strong>Total Pagado:</strong> <span id="total-price"></span></p>
+                <p><strong>Fecha:</strong> <span id="purchase-date"></span></p>
+            </div>
+            <button id="back-to-home" class="btn-primary">Regresar al Inicio</button>
+        </section>
+    </main>
+
+    <footer></footer> <!-- El pie de página se cargará dinámicamente -->
+
+    <script src="../js/paginas/boleta.js"></script>
+    <script src="../js/components/cabecera.js"></script>
+    <script src="../js/components/piePagina.js"></script>
+</body>
+</html>

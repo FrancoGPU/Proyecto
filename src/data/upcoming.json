@@ -1,0 +1,16 @@
+[
+    {
+        "title": "Avatar 3",
+        "genre": "Ciencia Ficción",
+        "release_date": "2025-12-20",
+        "description": "La próxima entrega de la épica saga de Pandora.",
+        "image": "../assets/images/Avatar3.jpg"
+    },
+    {
+        "title": "Los Vengadores: Dinastía Kang",
+        "genre": "Acción",
+        "release_date": "2026-05-01",
+        "description": "Los héroes más poderosos de la Tierra enfrentan una nueva amenaza.",
+        "image": "../assets/images/avengers-kang.jpg"
+    }
+]

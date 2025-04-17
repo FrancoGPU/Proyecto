@@ -1,0 +1,50 @@
+[
+    {
+        "title": "El Origen",
+        "genre": "Ciencia Ficción",
+        "release_date": "2010-07-16",
+        "description": "Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños recibe la tarea inversa de implantar una idea en la mente de un CEO.",
+        "image": "../assets/images/inception.jpg",
+        "showtimes": ["12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM"]
+    },
+    {
+        "title": "Sueño de Fuga",
+        "genre": "Drama",
+        "release_date": "1994-09-23",
+        "description": "Dos hombres encarcelados se hacen amigos durante varios años, encontrando consuelo y redención a través de actos de decencia común.",
+        "image": "../assets/images/shawshank.jpg",
+        "showtimes": ["1:00 PM", "4:00 PM", "7:00 PM", "10:00 PM"]
+    },
+    {
+        "title": "El Caballero Oscuro",
+        "genre": "Acción",
+        "release_date": "2008-07-18",
+        "description": "Batman se enfrenta a su mayor desafío cuando el Joker desata el caos en Gotham City, poniendo a prueba los límites del héroe y su moralidad.",
+        "image": "../assets/images/dark-knight.jpg",
+        "showtimes": ["2:00 PM", "5:00 PM", "8:00 PM", "11:00 PM"]
+    },
+    {
+        "title": "Forrest Gump",
+        "genre": "Drama",
+        "release_date": "1994-07-06",
+        "description": "La vida de Forrest Gump, un hombre con un coeficiente intelectual bajo pero con un corazón puro, lo lleva a ser testigo de eventos históricos y a influir en ellos.",
+        "image": "../assets/images/forrest-gump.jpg",
+        "showtimes": ["12:30 PM", "3:30 PM", "6:30 PM", "9:30 PM"]
+    },
+    {
+        "title": "Tiempos Violentos",
+        "genre": "Crimen",
+        "release_date": "1994-10-14",
+        "description": "Las vidas de dos sicarios, un boxeador, la esposa de un gánster y un par de ladrones se entrelazan en una serie de eventos inesperados y violentos.",
+        "image": "../assets/images/pulp-fiction.jpg",
+        "showtimes": ["1:30 PM", "4:30 PM", "7:30 PM", "10:30 PM"]
+    },
+    {
+        "title": "Coraline",
+        "genre": "Animado / Drama",
+        "release_date": "1994-10-14",
+        "description": "Coraline es una joven aburrida que descubre una puerta secreta en su nuevo hogar que la lleva a otro mundo con otra madre y otro padre. La película sigue a Coraline Jones, una niña de 11 años que se muda con sus padres a una antigua casa en Oregón. Aburrida y sin la atención de sus ocupados progenitores, Coraline explora su nuevo hogar y descubre una puerta secreta que la transporta a una versión paralela de su vida.",
+        "image": "../assets/images/Coraline.jpg",
+        "showtimes": ["1:30 PM", "4:30 PM", "7:30 PM", "10:30 PM"]
+    }
+]

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Butacas - GOCINE</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/paginas/asientos.css">
+</head>
+<body>
+    <header></header> <!-- La cabecera se cargará dinámicamente -->
+
+    <main class="main-content">
+        <section class="seat-selection">
+            <div class="screen">PANTALLA</div>
+
+            <div class="seats-container" id="seats-map">
+                <!-- Butacas se generarán dinámicamente aquí -->
+            </div>
+
+            <div class="booking-summary">
+                <h3 id="movie-title"></h3>
+                <div class="selected-seats">
+                    <p>Butacas seleccionadas: <span id="selected-seats-display">Ninguna</span></p>
+                    <p>Total: <span id="total-price">$0</span></p>
+                </div>
+                <button id="confirm-booking" class="btn-primary">Confirmar Reserva</button>
+            </div>
+        </section>
+    </main>
+
+    <footer></footer> <!-- El pie de página se cargará dinámicamente -->
+
+    <script src="../js/components/cabecera.js"></script>
+    <script src="../js/components/piePagina.js"></script>
+    <script src="../js/paginas/asientos.js"></script>
+</body>
+</html>

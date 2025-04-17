@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GOCINE - Cartelera</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="index-page">
+    <header class="cine-cabecera">
+      <div class="cabecera-container">
+        <a href="../paginas/prueba.html">
+          <h1 class="logo">
+            <span class="logo-go">GO</span>
+            <span class="logo-cine">CINE</span>
+          </h1>
+        </a>
+        <div class="cabecera-actions">
+          <button id="search-button" class="btn-icon" aria-label="Buscar">
+            <i class="fas fa-search"></i>
+          </button>
+          <div class="search-bar-container">
+
+            <input
+              type="text"
+              id="search-bar"
+              class="search-bar"
+              placeholder="Buscar películas..."
+            />
+          </div>
+          <button id="user-button" class="btn-icon" aria-label="Cuenta">
+            <i class="fas fa-user"></i>
+          </button>
+        </div>
+      </div>
+      <nav class="button-container">
+        <button id="now-showing-button" class="cine-nav-button active">
+          <i class="fas fa-film"></i> Cartelera
+        </button>
+        <button id="upcoming-button" class="cine-nav-button">
+          <i class="fas fa-calendar-alt"></i> Próximamente
+        </button>
+        <button
+          id="promotions-button"
+          class="cine-nav-button promotions-only"
+          style="display: none"
+        >
+          <i class="fas fa-tags"></i> Promociones
+        </button>
+      </nav>
+    </header>
+
+    <!-- Modal para promociones -->
+    <div id="promotions-modal" class="modal">
+      <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>Combos de Dulcería</h2>
+        <div id="combos-list" class="combos-grid">
+          <!-- Los combos se cargarán dinámicamente aquí -->
+        </div>
+      </div>
+    </div>
+
+    <main class="main-content">
+      <section id="movie-section" class="movie-section">
+        <div id="movie-list" class="movie-grid">
+          <!-- Las películas se cargarán dinámicamente aquí -->
+        </div>
+      </section>
+    </main>
+
+    <footer></footer>
+    <!-- El pie de página se cargará dinámicamente -->
+
+    <script src="../js/components/piePagina.js"></script>
+    <script src="../js/scripts.js"></script>
+  </body>
+</html>
