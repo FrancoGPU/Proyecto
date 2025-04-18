@@ -1,10 +1,8 @@
 {
     "name": "Node.js & PostgreSQL",
     "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-    "features": {
-      "postgresql": "latest"
-    },
-    "forwardPorts": [3000],
+    "features": {},
+    "forwardPorts": [3000, 5432],
     "postCreateCommand": "npm install",
     "customizations": {
       "vscode": {
@@ -13,5 +11,6 @@
           "esbenp.prettier-vscode"
         ]
       }
-    }
+    },
+    "initializeCommand": "sudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib"
   }
