@@ -10,38 +10,36 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('movieTitle', movieTitle);
 
         // Fetch movie data
-        fetch('../data/movies.json')
-            .then(response => response.json())
-            .then(movies => {
-                const movie = movies.find(m => m.title === movieTitle);
-                if (movie) {
-                    movie.showtimes.forEach(time => {
+        fetch('/api/movies')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al cargar los datos de las películas");
+                }
+                return response.json();
+            })
+            .then((movies) => {
+                const movie = movies.find((m) => m.title === movieTitle);
+                if (movie && movie.showtimes) {
+                    movie.showtimes.forEach((time) => {
                         const button = document.createElement('button');
                         button.className = 'btn-primary';
                         button.textContent = time;
 
                         button.addEventListener('click', () => {
-                            // Quitar la clase 'selected' de otros botones
-                            document.querySelectorAll('.btn-primary').forEach(btn => btn.classList.remove('selected'));
-                            // Añadir la clase 'selected' al botón actual
+                            document.querySelectorAll('.btn-primary').forEach((btn) => btn.classList.remove('selected'));
                             button.classList.add('selected');
-
-                            // Guardar el horario seleccionado y redirigir
                             localStorage.setItem('selectedShowtime', time);
-
-                            // Redirigir a la página de butacas
                             window.location.href = '../paginas/butacas.html';
                         });
 
                         showtimesContainer.appendChild(button);
                     });
                 } else {
-                    console.error('Película no encontrada en los datos.');
+                    console.error('Película no encontrada o no tiene horarios disponibles.');
                 }
             })
-            .catch(error => console.error('Error al cargar los datos de las películas:', error));
+            .catch((error) => console.error('Error al cargar los datos de las películas:', error));
     } else {
-        console.error('No se encontró el parámetro "movie" en la URL.');
+        console.error("No se especificó una película en la URL.");
     }
-    
 });

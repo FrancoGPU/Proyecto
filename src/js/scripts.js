@@ -1,145 +1,107 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("scripts.js cargado correctamente");
-  fetchMovies();
+  fetchMovies(); // Esta función vendrá de movies.js
 
-  // Funcionalidad para el botón de búsqueda
   const searchBar = document.getElementById("search-bar");
   const searchSubmit = document.getElementById("search-submit");
   const movieList = document.getElementById("movie-list");
 
   if (searchSubmit && searchBar) {
-    searchSubmit.addEventListener("click", () => {
-      const query = searchBar.value.trim().toLowerCase();
-      if (!query) return;
-
-      // Filtrar películas por título
-      const movies = Array.from(movieList.children);
-      movies.forEach((movie) => {
-        const title = movie.querySelector(".movie-title").textContent.toLowerCase();
-        if (title.includes(query)) {
-          movie.style.display = "block";
-        } else {
-          movie.style.display = "none";
-        }
-      });
-    });
-
-    // Opcional: Buscar al escribir
-    searchBar.addEventListener("input", () => {
+    const handleSearch = () => {
       const query = searchBar.value.trim().toLowerCase();
       const movies = Array.from(movieList.children);
       movies.forEach((movie) => {
         const title = movie.querySelector(".movie-title").textContent.toLowerCase();
-        if (title.includes(query)) {
-          movie.style.display = "block";
-        } else {
-          movie.style.display = "none";
-        }
+        movie.style.display = title.includes(query) ? "block" : "none";
       });
-    });
+    };
+
+    searchSubmit.addEventListener("click", handleSearch);
+    searchBar.addEventListener("input", handleSearch);
   }
 
-  // Funcionalidad para el botón de usuario
   const userButton = document.getElementById("user-button");
   if (userButton) {
     userButton.addEventListener("click", () => {
-      window.location.href = "login.html"; // Redirige directamente a la página de inicio de sesión
+      window.location.href = "/paginas/login.html";
     });
   }
 
   const nowShowingButton = document.getElementById("now-showing-button");
   const upcomingButton = document.getElementById("upcoming-button");
 
-  function loadMovies(jsonPath, isUpcoming = false) {
-    fetch(jsonPath)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al cargar las películas");
-        }
-        return response.json();
+  function activateButton(active, inactive) {
+    active.classList.add("active");
+    inactive.classList.remove("active");
+  }
+
+  if (nowShowingButton && upcomingButton) {
+    nowShowingButton.addEventListener("click", () => {
+      activateButton(nowShowingButton, upcomingButton);
+      fetchMovies();
+    });
+
+    upcomingButton.addEventListener("click", () => {
+      activateButton(upcomingButton, nowShowingButton);
+      fetch("/api/upcoming")
+        .then((response) => {
+          if (!response.ok) throw new Error("Error al cargar las películas próximas");
+          return response.json();
+        })
+        .then((data) => {
+          displayMovies(data); // Esta también viene de movies.js
+        })
+        .catch((error) => console.error("Error fetching upcoming movies:", error));
+    });
+  }
+
+  // Cargar combos
+  function loadCombos() {
+    fetch("/api/combos")
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al cargar los combos");
+        return res.json();
       })
-      .then((movies) => {
-        movieList.innerHTML = "";
-        movies.forEach((movie) => {
-          const movieCard = document.createElement("article");
-          movieCard.classList.add("movie-card");
+      .then((combos) => {
+        const combosList = document.getElementById("combos-list");
+        if (!combosList) return;
+        combosList.innerHTML = "";
 
-          const releaseDate = new Date(movie.release_date);
-          const formattedDate = releaseDate.toLocaleDateString("es-ES", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
+        combos.forEach((combo) => {
+          const comboCard = document.createElement("div");
+          comboCard.classList.add("combo-card");
 
-          movieCard.innerHTML = `
-                                        <div class="movie-image-container">
-                                            <img src="${movie.image}" alt="${movie.title}" class="movie-image">
-                                        </div>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">${movie.title}</h3>
-                                            <span class="movie-genre">${movie.genre}</span>
-                                            <p class="movie-release">Estreno: ${formattedDate}</p>
-                                            <p class="movie-description">${movie.description}</p>
-                                        </div>
-                                    `;
+          const price = parseFloat(combo.price) || 0;
 
-          // Si no es "Próximamente", permitir redirección
-          if (!isUpcoming) {
-            movieCard.addEventListener("click", () => {
-              window.location.href = `../paginas/horarios.html?movie=${encodeURIComponent(
-                movie.title
-              )}`;
-            });
-          }
+          comboCard.innerHTML = `
+            <img src="${combo.image}" alt="${combo.name}">
+            <h3>${combo.name}</h3>
+            <p>${combo.description}</p>
+            <p class="price">S/.${price.toFixed(2)}</p>
+          `;
 
-          movieList.appendChild(movieCard);
+          combosList.appendChild(comboCard);
         });
       })
-      .catch((error) => console.error(error));
+      .catch((err) => console.error("Error al cargar los combos:", err));
   }
 
-  function activateButton(activeButton, inactiveButton) {
-    activeButton.classList.add("active");
-    inactiveButton.classList.remove("active");
-  }
-
-  // Asignar eventos a los botones principales
-  nowShowingButton.addEventListener("click", () => {
-    activateButton(nowShowingButton, upcomingButton);
-    loadMovies("../data/movies.json", false); // Cartelera: seleccionable
-  });
-
-  upcomingButton.addEventListener("click", () => {
-    activateButton(upcomingButton, nowShowingButton);
-    loadMovies("../data/upcoming.json", true); // Próximamente: no seleccionable
-  });
-});
-
-function loadCombos() {
-  fetch("../data/combos.json")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al cargar los combos");
+  const promotionsButton = document.getElementById("promotions-button");
+  if (promotionsButton) {
+    promotionsButton.addEventListener("click", () => {
+      const modal = document.getElementById("promotions-modal");
+      if (modal) {
+        modal.style.display = "block";
+        loadCombos();
       }
-      return response.json();
-    })
-    .then((combos) => {
-      const combosList = document.getElementById("combos-list");
-      combosList.innerHTML = ""; // Limpiar contenido previo
+    });
+  }
 
-      combos.forEach((combo) => {
-        const comboCard = document.createElement("div");
-        comboCard.classList.add("combo-card");
-
-        comboCard.innerHTML = `
-                    <img src="${combo.image}" alt="${combo.name}">
-                    <h3>${combo.name}</h3>
-                    <p>${combo.description}</p>
-                    <p class="price">${combo.price}</p>
-                `;
-
-        combosList.appendChild(comboCard);
-      });
-    })
-    .catch((error) => console.error("Error al cargar los combos:", error));
-}
+  const closeModal = document.getElementById("close-modal");
+  if (closeModal) {
+    closeModal.addEventListener("click", () => {
+      const modal = document.getElementById("promotions-modal");
+      if (modal) modal.style.display = "none";
+    });
+  }
+});

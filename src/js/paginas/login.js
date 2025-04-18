@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Guardar estado de inicio de sesión en localStorage
             localStorage.setItem('isLoggedIn', 'true');
             alert('Inicio de sesión exitoso.');
-            window.location.href = '../paginas/prueba.html'; // Redirigir al inicio
+            window.location.href = '/paginas/prueba.html'; // Redirigir al inicio
         } else {
             alert('Credenciales incorrectas.');
         }

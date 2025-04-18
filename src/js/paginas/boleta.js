@@ -22,6 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar el botón para regresar al inicio
     document.getElementById('back-to-home').addEventListener('click', () => {
-        window.location.href = 'prueba.html';
+        window.location.href = '/paginas/prueba.html';
     });
 });
