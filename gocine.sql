@@ -5,6 +5,10 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
+DROP TABLE IF EXISTS public.combos CASCADE;
+DROP TABLE IF EXISTS public.movies CASCADE;
+DROP TABLE IF EXISTS public.upcoming_movies CASCADE;
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -172,7 +176,7 @@ COPY public.combos (id, name, description, price, image) FROM stdin;
 --
 
 COPY public.movies (id, title, genre, release_date, description, image, showtimes) FROM stdin;
-1	El Origen	Ciencia Ficción	2010-07-16	Un ladrón que roba secretos corporativos...	/assets/images/inception.jpg	{"12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
+1	El Origen	Ciencia Ficción	2010-07-16	Un ladrón que roba secretos corporativos.	/assets/images/Inception.jpg	{"12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
 2	Coraline	Animacion / Drama	2010-12-15	Coralinexd	/assets/images/Coraline.jpg	{"12:00 PM","3:00 PM","6:00 PM","9:00 PM"}
 \.
 

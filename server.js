@@ -24,6 +24,19 @@ app.get("/api/movies", async (req, res) => {
     }
 });
 
+app.put("/api/update-movie-image", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "UPDATE public.movies SET image = $1 WHERE title = $2",
+            ['/assets/images/inception.jpg', 'El Origen']
+        );
+        res.send("Imagen actualizada correctamente");
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error al actualizar la imagen");
+    }
+});
+
 // Iniciar el servidor
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
