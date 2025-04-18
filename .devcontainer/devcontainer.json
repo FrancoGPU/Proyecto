@@ -5,12 +5,13 @@
     "forwardPorts": [3000, 5432],
     "postCreateCommand": "npm install",
     "customizations": {
-      "vscode": {
-        "extensions": [
-          "dbaeumer.vscode-eslint",
-          "esbenp.prettier-vscode"
-        ]
-      }
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode"
+            ]
+        }
     },
-    "initializeCommand": "sudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib"
-  }
+    "initializeCommand": "sudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib",
+    "remoteUser": "root"
+}
