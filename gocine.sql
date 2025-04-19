@@ -165,7 +165,7 @@ ALTER TABLE ONLY public.upcoming_movies ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 COPY public.combos (id, name, description, price, image) FROM stdin;
-1	Combo 1	Palomitas grandes + Refresco grande	10.99	../assets/images/combo1.png
+1	Combo 1	Palomitas grandes + Refresco grande	10.99	../assets/images/Combo1.png
 2	Combo 2	Palomitas medianas + Refresco mediano + Nachos	12.99	../assets/images/combo2.png
 3	Combo 3	Palomitas pequeñas + Refresco pequeño	8.99	../assets/images/combo3.png
 \.

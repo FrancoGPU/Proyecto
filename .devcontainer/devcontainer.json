@@ -3,7 +3,7 @@
     "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
     "features": {},
     "forwardPorts": [3000, 5432],
-    "postCreateCommand": "npm install",
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib && sudo service postgresql start && sleep 5 && sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '123456';\" && sudo -u postgres psql -c \"CREATE DATABASE gocine;\" && sudo -u postgres psql -d gocine -f /workspaces/Proyecto/gocine.sql",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -12,6 +12,5 @@
             ]
         }
     },
-    "initializeCommand": "sudo apt-get update && sudo apt-get install -y postgresql postgresql-contrib",
     "remoteUser": "root"
 }

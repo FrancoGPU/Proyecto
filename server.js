@@ -24,6 +24,28 @@ app.get("/api/movies", async (req, res) => {
     }
 });
 
+// Endpoint para obtener películas
+app.get("/api/upcoming", async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM upcoming_movies"); // Cambiado a upcoming_movies
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error al obtener las películas");
+    }
+});
+
+// Endpoint para obtener combos
+app.get("/api/combos", async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM combos");
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error al obtener las combos");
+    }
+});
+
 app.put("/api/update-movie-image", async (req, res) => {
     try {
         const result = await pool.query(
