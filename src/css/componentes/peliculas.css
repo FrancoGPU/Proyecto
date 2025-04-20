@@ -1,14 +1,15 @@
 /* Pelicula Cards */
 .movie-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-lg);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Cambia a grid */
+    gap: 30px;
+    padding: 20px;
     justify-content: center;
 }
 
 .movie-card {
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--shadow-md);
     transition: var(--transition-normal);
@@ -17,12 +18,12 @@
     position: relative;
     z-index: 1;
     flex: 1 1 220px;
-    max-width: 250px;
-    min-width: 200px;
+    min-width: 300px;
+    justify-content: space-between;
 }
 
 .movie-card:hover {
-    transform: translateY(-10px) scale(1.05);
+    transform: scale(1.05);
     box-shadow: var(--shadow-lg);
     z-index: 10;
 }
@@ -99,9 +100,10 @@
 
 .movie-showtimes {
     margin-top: var(--space-sm);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: grid; /* Cambia a grid */
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+    gap: 0.5rem; /* Espaciado entre los elementos */
+    justify-content: center; /* Centra el contenido */
 }
 
 .movie-showtime {
@@ -112,6 +114,27 @@
     font-size: 0.8rem;
     font-weight: bold;
     text-align: center;
+    display: inline-block; /* Asegura que se comporten como etiquetas */
+    box-shadow: var(--shadow-sm); /* Mantén el diseño atractivo */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: red;
+    color: white;
+    flex: 1 1 auto; /* Permite que los botones se ajusten al espacio disponible */
+    min-width: 80px; /* Ancho mínimo para los botones */
+    max-width: 120px; /* Ancho máximo para los botones */
+    text-decoration: none; /* Elimina el subrayado */
+    text-transform: uppercase; /* Convierte el texto a mayúsculas */
+    font-family: 'Roboto', sans-serif; /* Usa la fuente Roboto */
+    font-weight: 600; /* Peso de fuente más grueso */
+    text-align: center; /* Centra el texto */
+    padding: 0.5rem 1rem; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-top: auto; /* Alinea al final del contenedor */
+}
+
+.movie-showtime:hover {
+    transform: none; /* Elimina el efecto hover interactivo */
+    box-shadow: var(--shadow-sm); /* Mantén el diseño consistente */
 }
 
 .showtimes-grid {

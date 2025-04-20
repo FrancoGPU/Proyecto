@@ -6,13 +6,14 @@
 }
 
 /* Establece los estilos base para el elemento body */
-body {
+html, body {
     font-family: 'Roboto', sans-serif; /* Usa la fuente Roboto para todo el sitio web */
     background-color: var(--bg-light); /* Color de fondo utilizando una variable CSS */
     color: var(--text-dark); /* Color del texto utilizando una variable CSS */
     line-height: 1.6; /* Mejora la legibilidad del texto con altura de línea */
     overflow-x: hidden; /* Evita el desplazamiento horizontal */
     overflow-y: auto; /* Habilita el desplazamiento vertical */
+    width: 100%; /* Ancho del body al 100% */
 }
 
 /* Define una fuente personalizada para Roboto Italic */

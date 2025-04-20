@@ -24,7 +24,16 @@ function displayMovies(movies) {
         <p class="movie-description">${movie.description}</p>
         ${
           movie.showtimes && Array.isArray(movie.showtimes)
-            ? `<strong>Horarios:</strong> ${movie.showtimes.map((time) => `<span class="showtime">${time}</span>`).join(", ")}`
+            ? `<div class="movie-showtimes">
+                 <strong>Horarios:</strong>
+                 <br>
+                 ${movie.showtimes
+                   .map(
+                     (time) =>
+                       `<span class="movie-showtime">${time}</span>`
+                   )
+                   .join("")}
+               </div>`
             : ""
         }
       </div>
