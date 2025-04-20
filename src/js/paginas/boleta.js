@@ -3,25 +3,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const movieName = localStorage.getItem('movieTitle');
     const seats = localStorage.getItem('selectedSeats');
     const totalPrice = parseFloat(localStorage.getItem('totalPrice')); // Convertir a número
-    const showtime = localStorage.getItem('selectedShowtime'); // Recuperar el horario seleccionado
-
-    // Obtener la fecha actual
-    const purchaseDate = new Date().toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    const purchaseDate = new Date().toLocaleString(); // Fecha y hora actual
+    const selectedCombo = JSON.parse(localStorage.getItem('selectedCombo')); // Recuperar el combo seleccionado
 
     // Mostrar los datos en la boleta
-    document.getElementById('movie-name').textContent = `${movieName || 'No especificada'} - ${showtime || 'Sin horario'}`;
-    document.getElementById('seats').textContent = seats || 'No seleccionadas';
-    document.getElementById('total-price').textContent = !isNaN(totalPrice) ? `S/.${totalPrice.toFixed(2)}` : 'S/.0.00';
-    document.getElementById('purchase-date').textContent = purchaseDate;
+    const movieNameElement = document.getElementById('movie-name');
+    if (movieNameElement) {
+        movieNameElement.textContent = movieName || 'Película no especificada';
+    }
+
+    const seatsElement = document.getElementById('seats');
+    if (seatsElement) {
+        seatsElement.textContent = seats || 'No seleccionadas';
+    }
+
+    const totalPriceElement = document.getElementById('total-price');
+    if (totalPriceElement) {
+        totalPriceElement.textContent = !isNaN(totalPrice) ? `S/.${totalPrice.toFixed(2)}` : 'S/.0.00';
+    }
+
+    const purchaseDateElement = document.getElementById('purchase-date');
+    if (purchaseDateElement) {
+        purchaseDateElement.textContent = purchaseDate;
+    }
+
+    // Mostrar los detalles del combo seleccionado
+    const comboSummaryElement = document.getElementById('combo-summary');
+    if (comboSummaryElement && selectedCombo) {
+        comboSummaryElement.innerHTML = `
+            <h4>${selectedCombo.name}</h4>
+            <img src="${selectedCombo.image}" alt="${selectedCombo.name}" style="width: 100px; height: auto;">
+            <p>${selectedCombo.description}</p>
+            <p class="price">S/.${parseFloat(selectedCombo.price).toFixed(2)}</p>
+        `;
+    } else if (comboSummaryElement) {
+        comboSummaryElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
+    }
 
     // Manejar el botón para regresar al inicio
-    document.getElementById('back-to-home').addEventListener('click', () => {
-        window.location.href = '/paginas/prueba.html';
-    });
+    const backToHomeButton = document.getElementById('back-to-home');
+    if (backToHomeButton) {
+        backToHomeButton.addEventListener('click', () => {
+            window.location.href = 'prueba.html'; // Redirigir al inicio
+        });
+    }
 });

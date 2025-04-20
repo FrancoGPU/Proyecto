@@ -51,7 +51,6 @@
 
 .movie-info {
     padding: var(--space-md);
-    flex-grow: 1;
 }
 
 .movie-title {

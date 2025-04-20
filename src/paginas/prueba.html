@@ -43,31 +43,24 @@
         <button id="upcoming-button" class="cine-nav-button">
           <i class="fas fa-calendar-alt"></i> Próximamente
         </button>
-        <button
-          id="promotions-button"
-          class="cine-nav-button promotions-only"
-          style="display: none"
-        >
+        <button id="promotions-button" class="cine-nav-button promotions-only">
           <i class="fas fa-tags"></i> Promociones
         </button>
       </nav>
     </header>
 
-    <!-- Modal para promociones -->
-    <div id="promotions-modal" class="modal">
-      <div class="modal-content">
-        <span id="close-modal" class="close">&times;</span>
-        <h2>Combos de Dulcería</h2>
-        <div id="combos-list" class="combos-grid">
-          <!-- Los combos se cargarán dinámicamente aquí -->
-        </div>
-      </div>
-    </div>
-
     <main class="main-content">
       <section id="movie-section" class="movie-section">
+        <h2>Cartelera</h2>
         <div id="movie-list" class="movie-grid">
           <!-- Las películas se cargarán dinámicamente aquí -->
+        </div>
+      </section>
+
+      <section id="combo-section" class="combo-section">
+        <h2>Combos de Dulcería</h2>
+        <div id="combo-list" class="movie-grid">
+          <!-- Los combos se cargarán dinámicamente aquí -->
         </div>
       </section>
     </main>
@@ -78,7 +71,6 @@
     <script src="../js/components/piePagina.js"></script>
     <script src="../js/scripts.js"></script>
     <script src="../js/components/autenticacion.js"></script>
-    <script src="../js/components/modal.js"></script>
     <script src="../js/components/movies.js"></script>
   </body>
 </html>

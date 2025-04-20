@@ -105,6 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('totalPrice', totalPrice);
 
         // Redirigir a confirmacion.html
-        window.location.href = '../paginas/confirmacion.html';
+        window.location.href = '../paginas/combos.html';
     });
 });
