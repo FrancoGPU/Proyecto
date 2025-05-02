@@ -98,41 +98,30 @@
 }
 
 .movie-showtimes {
-    margin-top: var(--space-sm);
-    display: grid; /* Cambia a grid */
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
-    gap: 0.5rem; /* Espaciado entre los elementos */
+    display: grid; /* Usa grid para organizar los horarios */
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 15px; /* Espaciado entre los botones */
     justify-content: center; /* Centra el contenido */
+    align-items: center; /* Alinea verticalmente */
+    margin-top: 1rem; /* Espaciado superior */
 }
 
 .movie-showtime {
-    background-color: var(--gray-light);
-    color: var(--secondary);
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-align: center;
-    display: inline-block; /* Asegura que se comporten como etiquetas */
-    box-shadow: var(--shadow-sm); /* Mantén el diseño atractivo */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: red;
-    color: white;
-    flex: 1 1 auto; /* Permite que los botones se ajusten al espacio disponible */
-    min-width: 80px; /* Ancho mínimo para los botones */
-    max-width: 120px; /* Ancho máximo para los botones */
-    text-decoration: none; /* Elimina el subrayado */
-    text-transform: uppercase; /* Convierte el texto a mayúsculas */
-    font-family: 'Roboto', sans-serif; /* Usa la fuente Roboto */
-    font-weight: 600; /* Peso de fuente más grueso */
-    text-align: center; /* Centra el texto */
+    background-color: red; /* Color de fondo */
+    color: white; /* Color del texto */
     padding: 0.5rem 1rem; /* Espaciado interno */
     border-radius: 8px; /* Bordes redondeados */
-    margin-top: auto; /* Alinea al final del contenedor */
+    font-size: 0.9rem; /* Tamaño de fuente */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centra el texto */
+    text-transform: uppercase; /* Texto en mayúsculas */
+    box-shadow: var(--shadow-sm); /* Sombra para diseño atractivo */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
 }
 
 .movie-showtime:hover {
-    transform: none; /* Elimina el efecto hover interactivo */
+    transform: scale(1.05); /* Elimina el efecto hover interactivo */
     box-shadow: var(--shadow-sm); /* Mantén el diseño consistente */
 }
 

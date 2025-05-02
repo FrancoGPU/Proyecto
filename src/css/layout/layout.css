@@ -122,12 +122,47 @@ a {
     background-color: var(--secondary); /* Fondo del pie de página */
     color: var(--text-light); /* Color del texto */
     padding: var(--space-lg); /* Espaciado interno */
-    text-align: center; /* Centra el texto */
     margin-top: var(--space-xl); /* Margen superior */
+    font-size: 0.9rem; /* Tamaño de fuente */
+    line-height: 1.5; /* Altura de línea para mejor legibilidad */
 }
 
-/* Contenedor interno del pie de página */
+.cine-piePagina strong {
+    font-weight: bold; /* Negrita */
+    color: white; /* Color principal */
+}
+
+.cine-piePagina h2 {
+    font-size: 1.5rem; /* Tamaño de fuente */
+    margin-bottom: var(--space-sm); /* Margen inferior */
+    color: var(--primary); /* Color principal */
+}
+
+.cine-piePagina p {
+    margin-bottom: var(--space-sm); /* Margen inferior */
+    color: var(--primary); /* Color del texto */
+}
+
+.cine-piePagina a {
+    color: var(--primary); /* Color de los enlaces */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Negrita */
+}
+
+.cine-piePagina a:hover {
+    text-decoration: underline; /* Subrayado al pasar el cursor */
+    color: var(--primary-dark); /* Color más oscuro al hacer hover */
+}
+
+.piePagina-contacto {
+    justify-content: space-between; /* Espaciado entre elementos */
+    text-align: left; /* Alineación a la izquierda */
+    align-items: center; /* Alineación vertical */
+}
+
 .piePagina-content {
-    max-width: 1200px; /* Ancho máximo del contenedor */
-    margin: 0 auto; /* Centra el contenedor */
+    display: flex; /* Diseño flexible */
+    flex-direction: column; /* Organiza en columna */
+    gap: var(--space-sm); /* Espaciado entre elementos */
+    text-align: center; /* Alineación centrada */
 }
