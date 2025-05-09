@@ -122,7 +122,7 @@ a {
     background-color: var(--secondary); /* Fondo del pie de página */
     color: var(--text-light); /* Color del texto */
     padding: var(--space-lg); /* Espaciado interno */
-    margin-top: var(--space-xl); /* Margen superior */
+    margin-top: 1lm; /* Margen superior */
     font-size: 0.9rem; /* Tamaño de fuente */
     line-height: 1.5; /* Altura de línea para mejor legibilidad */
 }
@@ -134,13 +134,12 @@ a {
 
 .cine-piePagina h2 {
     font-size: 1.5rem; /* Tamaño de fuente */
-    margin-bottom: var(--space-sm); /* Margen inferior */
     color: var(--primary); /* Color principal */
 }
 
 .cine-piePagina p {
-    margin-bottom: var(--space-sm); /* Margen inferior */
     color: var(--primary); /* Color del texto */
+    font-weight: bold;
 }
 
 .cine-piePagina a {
@@ -149,20 +148,42 @@ a {
     font-weight: bold; /* Negrita */
 }
 
+.piePagina-contacto a img {
+    margin-right: 10px; /* Espaciado entre el ícono y el texto */
+    width: 40px; /* Tamaño uniforme para los íconos */
+    height: 40px;
+    transition: transform 0.3s ease; /* Efecto de hover */
+}
+
+.piePagina-contacto a img:hover {
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el cursor */
+}
+
 .cine-piePagina a:hover {
     text-decoration: underline; /* Subrayado al pasar el cursor */
     color: var(--primary-dark); /* Color más oscuro al hacer hover */
 }
 
+/* Contenedor principal del pie de página */
 .piePagina-contacto {
-    justify-content: space-between; /* Espaciado entre elementos */
-    text-align: left; /* Alineación a la izquierda */
-    align-items: center; /* Alineación vertical */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en una columna */
+    gap: 15px; /* Espaciado entre los elementos */
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
 }
 
+.piePagina-contacto a {
+    display: flex; /* Asegura que los elementos internos sean flexibles */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 10px; /* Espaciado entre los botones */
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+/* Texto del pie de página */
 .piePagina-content {
-    display: flex; /* Diseño flexible */
+    display: flex;
     flex-direction: column; /* Organiza en columna */
     gap: var(--space-sm); /* Espaciado entre elementos */
     text-align: center; /* Alineación centrada */
 }
+

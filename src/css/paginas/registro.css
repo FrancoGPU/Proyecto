@@ -1,0 +1,57 @@
+
+
+/* Contenedor principal del formulario */
+form {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título del formulario */
+form h1 {
+    font-size: 1.8rem;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los campos de entrada */
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Botón de registro */
+form button {
+    background-color: #e50914;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #b20710;
+}
+
+/* Estilo para el texto de ayuda */
+form label {
+    font-size: 0.9rem;
+    color: #555555;
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+}
