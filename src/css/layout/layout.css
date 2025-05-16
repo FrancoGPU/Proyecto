@@ -120,70 +120,78 @@ a {
 /* Estilos para el pie de página del sitio web */
 .cine-piePagina {
     background-color: var(--secondary); /* Fondo del pie de página */
-    color: var(--text-light); /* Color del texto */
+    color: --text-light; /* Color del texto */
     padding: var(--space-lg); /* Espaciado interno */
     margin-top: 1lm; /* Margen superior */
-    font-size: 0.9rem; /* Tamaño de fuente */
-    line-height: 1.5; /* Altura de línea para mejor legibilidad */
 }
 
-.cine-piePagina strong {
+.piePagina-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+    z-index: 100000; /* Asegura que el pie de página esté por encima de otros elementos */
+    color: var(--text-light); /* Color del texto */
+}
+
+/* Contenedor principal del pie de página */
+.piePagina-container {
+    display: flex; /* Divide en dos columnas */
+    justify-content: space-between; /* Espaciado entre las columnas */
+    align-items: flex-start; /* Alinea los elementos al inicio */
+    gap: 20px; /* Espaciado entre las columnas */
+    color: aliceblue;
+}
+
+/* Sección izquierda: Texto */
+.piePagina-texto {
+    flex: 1; /* Ocupa el espacio disponible */
+    color: var(--text-light); /* Color del texto */
+    font-size: 1rem; /* Aumenta el tamaño de la fuente */
+    line-height: 1.8; /* Mejora la separación entre líneas */
+    margin-bottom: 10px; /* Espaciado entre párrafos */
+}
+
+.piePagina-texto h2 {
+    font-size: 1.8rem; /* Tamaño más grande para el encabezado */
+    color: var(--primary); /* Color destacado */
+    margin-bottom: 15px; /* Espaciado inferior */
+}
+
+.piePagina-texto h3 {
+    font-size: 1.5rem; /* Tamaño más grande para el subtítulo */
+    color: var(--text-light); /* Color destacado */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+.piePagina-texto p {
+    margin-bottom: 10px; /* Espaciado entre párrafos */
+    color: var(--primary); 
+}
+
+.piePagina-texto strong {
+    color: var(--text-light); 
     font-weight: bold; /* Negrita */
-    color: white; /* Color principal */
 }
 
-.cine-piePagina h2 {
-    font-size: 1.5rem; /* Tamaño de fuente */
-    color: var(--primary); /* Color principal */
+/* Sección derecha: Iconos */
+.piePagina-iconos {
+    display: flex; /* Alinea los íconos horizontalmente */
+    flex-wrap: wrap; /* Permite que los íconos se ajusten si no hay espacio */
+    gap: 15px; /* Espaciado entre los íconos */
 }
 
-.cine-piePagina p {
-    color: var(--primary); /* Color del texto */
-    font-weight: bold;
-}
-
-.cine-piePagina a {
-    color: var(--primary); /* Color de los enlaces */
-    text-decoration: none; /* Sin subrayado */
-    font-weight: bold; /* Negrita */
-}
-
-.piePagina-contacto a img {
-    margin-right: 10px; /* Espaciado entre el ícono y el texto */
+.piePagina-iconos img {
     width: 40px; /* Tamaño uniforme para los íconos */
     height: 40px;
     transition: transform 0.3s ease; /* Efecto de hover */
 }
 
-.piePagina-contacto a img:hover {
+.piePagina-iconos img:hover {
     transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el cursor */
 }
 
-.cine-piePagina a:hover {
-    text-decoration: underline; /* Subrayado al pasar el cursor */
-    color: var(--primary-dark); /* Color más oscuro al hacer hover */
-}
-
-/* Contenedor principal del pie de página */
-.piePagina-contacto {
-    display: flex;
-    flex-direction: column; /* Organiza los elementos en una columna */
-    gap: 15px; /* Espaciado entre los elementos */
-    align-items: flex-start; /* Alinea los elementos a la izquierda */
-}
-
-.piePagina-contacto a {
-    display: flex; /* Asegura que los elementos internos sean flexibles */
-    align-items: center; /* Centra verticalmente los elementos */
-    margin-bottom: 10px; /* Espaciado entre los botones */
-    text-decoration: none; /* Elimina el subrayado de los enlaces */
-}
-
-/* Texto del pie de página */
-.piePagina-content {
-    display: flex;
-    flex-direction: column; /* Organiza en columna */
-    gap: var(--space-sm); /* Espaciado entre elementos */
-    text-align: center; /* Alineación centrada */
-}
-
+.icono-facebook img {
+    background-color: white;
+  }

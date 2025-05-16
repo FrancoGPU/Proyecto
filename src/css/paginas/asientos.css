@@ -1,10 +1,15 @@
 /* Estilos para la selección de butacas */
 .seat-selection {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 800px; /* Aumenta el ancho máximo para pantallas grandes */
+    margin: 0 auto; /* Centra horizontalmente */
     padding: 2rem;
     text-align: center;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    justify-content: center; /* Centra verticalmente */
+    min-height: calc(100vh - var(--cabecera-height) - var(--piePagina-height)); /* Ajusta la altura */
 }
+
 
 .screen {
     width: 100%;
@@ -19,8 +24,8 @@
 
 .seats-container {
     display: grid;
-    grid-template-columns: repeat(11, 1fr); /* 10 columnas de asientos + 1 para las etiquetas de fila */
-    gap: 0.5rem;
+    grid-template-columns: repeat(10, 1fr); /* 10 columnas de asientos */
+    gap: 1rem; /* Aumenta el espacio entre los asientos */
     margin-bottom: 2rem;
 }
 
@@ -123,4 +128,31 @@
     background-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .seat-selection {
+        max-width: 90%; /* Ocupa el 90% del ancho en pantallas pequeñas */
+        padding: 1rem;
+    }
+
+    .seats-container {
+        grid-template-columns: repeat(5, 1fr); /* Reduce a 5 columnas en pantallas pequeñas */
+    }
+
+    .screen {
+        font-size: 0.9rem; /* Reduce el tamaño del texto */
+    }
+}
+
+@media (max-width: 480px) {
+    .seats-container {
+        grid-template-columns: repeat(4, 1fr); /* Reduce a 4 columnas en pantallas muy pequeñas */
+    }
+
+    .btn-primary {
+        font-size: 0.9rem; /* Reduce el tamaño del botón */
+        padding: 0.6rem 1rem;
+    }
 }
