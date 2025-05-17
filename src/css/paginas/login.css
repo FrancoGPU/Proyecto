@@ -4,7 +4,7 @@
     align-items: center;
     height: 100vh; /* Mantener la altura completa de la pantalla */
     background-color: var(--bg-light);
-    padding: 2rem; /* Espaciado alrededor */
+    padding: 25rem; /* Espaciado alrededor */
 }
 
 .login-container {
@@ -104,7 +104,7 @@
 }
 
 .register-text a {
-    color: var(--primary);
+    color: #fff;
     font-weight: bold;
     text-decoration: none;
     padding: 0.5rem 1rem;

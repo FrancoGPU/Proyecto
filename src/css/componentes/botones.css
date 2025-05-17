@@ -71,3 +71,52 @@
     transform: scale(1.1);
     color: var(--accent);
 }
+
+/* Estilo para el icono de usuario cuando está logueado */
+.btn-icon i.fas.fa-user.logged-in {
+  color: var(--accent, #e50914); /* O el color que prefieras para indicar sesión activa */
+}
+
+/* Estilos para el menú desplegable del usuario */
+.user-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none; /* Oculto por defecto */
+  position: absolute;
+  top: 100%; /* Se posiciona justo debajo del botón */
+  right: 0; /* Alineado a la derecha del contenedor */
+  background-color: var(--secondary-dark, #2c3e50); /* Un color de fondo oscuro, ajusta si es necesario */
+  border: 1px solid var(--gray-light, #444);
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+  z-index: 1050; /* Asegurar que esté por encima de otros elementos de la cabecera */
+  min-width: 180px; /* Ancho mínimo del menú */
+  border-radius: var(--border-radius-sm, 4px); /* Bordes redondeados */
+  padding: var(--space-xs, 0.5rem) 0; /* Padding vertical */
+}
+
+/* Estilo para mostrar el email del usuario en el dropdown */
+.dropdown-user-email {
+  padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+  color: var(--text-muted, #aaa); /* Un color más tenue para el email */
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--gray-dark, #333); /* Separador sutil */
+  margin-bottom: var(--space-xs, 0.5rem);
+  text-align: center;
+}
+
+.dropdown-menu a {
+  color: var(--text-light, #f1f1f1);
+  padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+  text-decoration: none;
+  display: block;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-dark, #c0392b); /* Un color de hover, ajusta si es necesario */
+  color: var(--text-light, #fff);
+}

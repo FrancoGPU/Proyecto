@@ -1,33 +1,65 @@
-
-
 /* Contenedor principal del formulario */
 form {
     background-color: #ffffff;
-    padding: 20px 30px;
+    padding: 20px 30px; /* Reducir padding horizontal si es necesario, o mantenerlo */
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra un poco más pronunciada */
     width: 100%;
-    max-width: 400px;
+    max-width: 400px; /* O 450px si quieres un poco más de espacio */
     text-align: center;
+    margin: 2rem auto; /* Añadir margen para centrar el formulario en la página */
 }
 
 /* Título del formulario */
-form h1 {
-    font-size: 1.8rem;
+form h2 { /* Asumo que el <h2> es el título principal del formulario dentro de .register-container */
+    font-size: 1.8rem; /* O 2rem para más impacto */
     color: #333333;
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* Más espacio debajo del título */
+}
+
+/* Estilo para los grupos de formulario */
+.form-group {
+    margin-bottom: 20px; /* Aumentar el espacio entre grupos de formulario */
+    text-align: left; /* Alinea el contenido del grupo a la izquierda */
+}
+
+/* Estilo para el texto de ayuda (labels) */
+form label {
+    font-size: 0.9rem; /* Ligeramente más pequeño o mantener 1rem si se prefiere */
+    color: #4A4A4A; /* Un gris un poco más oscuro para mejor contraste */
+    display: block; /* Asegura que la etiqueta ocupe su propia línea */
+    margin-bottom: 8px; /* Espacio entre la etiqueta y el input */
+    font-weight: 500; /* Un poco más de peso a la fuente */
 }
 
 /* Estilo para los campos de entrada */
+form input[type="email"], /* Aplicar a email específicamente si es necesario, o generalizar */
 form input[type="text"],
 form input[type="password"] {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #cccccc;
+    padding: 12px 15px; /* Aumentar el padding para un campo más "aireado" */
+    margin: 0; /* Quitar margen superior/inferior del input, ya que .form-group lo maneja */
+    border: 1px solid #D1D1D1; /* Un borde un poco más suave */
     border-radius: 5px;
     font-size: 1rem;
+    box-sizing: border-box; /* Importante para que el padding no aumente el ancho total */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición para el foco */
 }
+
+form input[type="email"]:focus,
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+    border-color: #e50914; /* Color del borde al enfocar */
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15); /* Sombra exterior sutil al enfocar */
+    outline: none; /* Quitar el outline por defecto del navegador */
+}
+
+/* Placeholder styling */
+form input::placeholder {
+    color: #A0A0A0; /* Color más suave para el placeholder */
+    font-style: italic;
+}
+
 
 /* Botón de registro */
 form button {
