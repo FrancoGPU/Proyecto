@@ -1,0 +1,12 @@
+@startuml
+package "Frontend" {
+  [HTML Pages] --> [CSS Styles]
+  [HTML Pages] --> [JavaScript Components]
+}
+
+package "Backend" {
+  [Server] --> [Database]
+}
+
+[Frontend] --> [Backend]
+@enduml

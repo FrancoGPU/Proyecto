@@ -1,0 +1,15 @@
+@startuml
+actor Usuario
+participant Browser
+participant Server
+participant Database
+
+Usuario -> Browser: Accede a /login.html
+Browser -> Server: Solicita página de inicio de sesión
+Server -> Browser: Devuelve login.html
+Usuario -> Browser: Ingresa credenciales y envía formulario
+Browser -> Server: POST /api/login
+Server -> Database: Verifica credenciales
+Database -> Server: Respuesta (éxito o error)
+Server -> Browser: Respuesta (éxito o error)
+@enduml

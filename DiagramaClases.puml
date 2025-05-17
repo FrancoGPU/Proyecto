@@ -1,0 +1,45 @@
+@startuml
+class Server {
+  - app: Express
+  - pool: Pool
+  + startServer()
+  + handleRoutes()
+}
+
+class Database {
+  - user: string
+  - password: string
+  - host: string
+  - database: string
+  + connect()
+  + query(sql)
+}
+
+class User {
+  - email: string
+  - password: string
+  + register()
+  + login()
+}
+
+class Movie {
+  - title: string
+  - genre: string
+  - releaseDate: Date
+  - showtimes: array
+  + getMovies()
+  + getUpcoming()
+}
+
+class Combo {
+  - name: string
+  - description: string
+  - price: number
+  + getCombos()
+}
+
+Server --> Database
+Server --> User
+Server --> Movie
+Server --> Combo
+@enduml

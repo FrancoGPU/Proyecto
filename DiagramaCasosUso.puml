@@ -1,0 +1,13 @@
+@startuml
+actor Usuario
+actor Administrador
+
+Usuario --> (Ver películas en cartelera)
+Usuario --> (Comprar boletos)
+Usuario --> (Iniciar sesión)
+Usuario --> (Registrarse)
+Usuario --> (Ver combos)
+
+Administrador --> (Gestionar películas)
+Administrador --> (Gestionar combos)
+@enduml
