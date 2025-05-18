@@ -23,15 +23,31 @@
 }
 
 .seats-container {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 columnas de asientos */
-    gap: 1rem; /* Aumenta el espacio entre los asientos */
-    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column; /* Apila las filas verticalmente */
+    align-items: center; /* Centra las filas si no ocupan todo el ancho */
+    gap: 5px; /* Espacio entre filas */
+}
+
+.seat-row {
+    display: flex; /* Alinea la etiqueta de fila y los asientos horizontalmente */
+    align-items: center;
+    gap: 5px; /* Espacio entre la etiqueta y los asientos, y entre los asientos */
+}
+
+.seat-label {
+    /* Estilos específicos para la etiqueta de la fila si es necesario */
+    /* Por ejemplo, un ancho fijo si quieres alinear todas las etiquetas */
+    width: 30px; 
+    text-align: center;
+    font-weight: bold;
+    /* Asegúrate que herede o tenga los estilos de .seat.space si es necesario */
+    /* La clase .seat.space ya se aplica desde JS, por lo que debería estar bien */
 }
 
 .seat {
-    width: 100%;
-    aspect-ratio: 1;
+    width: 30px; /* Cambiado de 100% a un valor fijo */
+    aspect-ratio: 1; /* Mantiene el asiento cuadrado */
     border-radius: 4px;
     background-color: var(--gray-light);
     cursor: pointer;
@@ -138,7 +154,7 @@
     }
 
     .seats-container {
-        grid-template-columns: repeat(5, 1fr); /* Reduce a 5 columnas en pantallas pequeñas */
+        grid-template-columns: repeat(5, 1fr); /* Esto cambia .seats-container a grid */
     }
 
     .screen {
@@ -148,9 +164,8 @@
 
 @media (max-width: 480px) {
     .seats-container {
-        grid-template-columns: repeat(4, 1fr); /* Reduce a 4 columnas en pantallas muy pequeñas */
+        grid-template-columns: repeat(4, 1fr); /* Esto cambia .seats-container a grid */
     }
-
     .btn-primary {
         font-size: 0.9rem; /* Reduce el tamaño del botón */
         padding: 0.6rem 1rem;

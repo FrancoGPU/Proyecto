@@ -1,4 +1,3 @@
-/* Estilos para la sección de boleta */
 .boleta-section {
     max-width: 600px;
     margin: 0 auto;
@@ -43,6 +42,36 @@
 
 .btn-primary:hover {
     background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Contenedor para los botones de acción */
+.actions-container {
+    margin-top: var(--space-lg); /* Espacio arriba de los botones */
+    display: flex;
+    justify-content: center; /* Centra los botones si no ocupan todo el ancho */
+    gap: var(--space-md);    /* Espacio entre los botones */
+    flex-wrap: wrap;         /* Permite que los botones pasen a la siguiente línea en pantallas pequeñas */
+}
+
+/* Estilo para el botón secundario */
+.btn-secondary {
+    background-color: var(--gray-medium, #6c757d); /* Color gris, con fallback si la variable no existe */
+    color: var(--white, #ffffff);
+    border: 1px solid var(--gray-dark, #5a6268); /* Borde ligeramente más oscuro */
+    padding: var(--space-sm);
+    border-radius: 50px; /* Mismo radio que el botón primario */
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+    text-decoration: none; /* En caso de que se use una etiqueta <a> */
+}
+
+.btn-secondary:hover {
+    background-color: var(--gray-dark, #5a6268);
+    color: var(--white, #ffffff);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }

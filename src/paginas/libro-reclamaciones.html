@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Reclamaciones - GOCINE</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        /* Estilos básicos para el formulario (puedes reutilizar/extender los de contacto.css o styles.css) */
+        .reclamaciones-form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .reclamaciones-form-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        .form-section-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.25rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-submit-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary, #e50914);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1.5rem;
+        }
+        .form-submit-btn:hover {
+            background-color: #c40812;
+        }
+    </style>
+</head>
+<body>
+    <header class="cine-cabecera">
+        <!-- Cabecera dinámica o estática -->
+    </header>
+
+    <main class="main-content">
+        <div class="reclamaciones-form-container">
+            <h2><i class="fas fa-book"></i> Libro de Reclamaciones</h2>
+            <p style="text-align:center; font-size:0.9rem; color:#666;">Conforme a lo establecido en el Código de Protección y Defensa del Consumidor – Ley N° 29571</p>
+            
+            <form id="reclamacionesForm">
+                <h3 class="form-section-title">1. Identificación del Consumidor Reclamante</h3>
+                <div class="form-group">
+                    <label for="recNombre">Nombre Completo:</label>
+                    <input type="text" id="recNombre" name="recNombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="recDocumento">N° Documento (DNI/CE):</label>
+                    <input type="text" id="recDocumento" name="recDocumento" required>
+                </div>
+                <div class="form-group">
+                    <label for="recDomicilio">Domicilio:</label>
+                    <input type="text" id="recDomicilio" name="recDomicilio" required>
+                </div>
+                <div class="form-group">
+                    <label for="recTelefono">Teléfono:</label>
+                    <input type="tel" id="recTelefono" name="recTelefono">
+                </div>
+                <div class="form-group">
+                    <label for="recEmail">Correo Electrónico:</label>
+                    <input type="email" id="recEmail" name="recEmail" required>
+                </div>
+
+                <h3 class="form-section-title">2. Identificación del Bien Contratado</h3>
+                <div class="form-group">
+                    <label for="recBienServicio">Producto o Servicio:</label>
+                    <input type="text" id="recBienServicio" name="recBienServicio" placeholder="Ej: Entrada película X, Combo Y" required>
+                </div>
+                <div class="form-group">
+                    <label for="recMonto">Monto Reclamado (S/.):</label>
+                    <input type="number" id="recMonto" name="recMonto" step="0.01" placeholder="Si aplica">
+                </div>
+                <div class="form-group">
+                    <label for="recDescripcionBien">Descripción:</label>
+                    <textarea id="recDescripcionBien" name="recDescripcionBien" placeholder="Detalles del producto o servicio motivo del reclamo/queja"></textarea>
+                </div>
+
+                <h3 class="form-section-title">3. Detalle de la Reclamación y Pedido del Consumidor</h3>
+                <div class="form-group">
+                    <label for="recTipo">Tipo:</label>
+                    <select id="recTipo" name="recTipo" required>
+                        <option value="RECLAMO">RECLAMO (Disconformidad relacionada a los productos o servicios)</option>
+                        <option value="QUEJA">QUEJA (Disconformidad no relacionada a los productos o servicios; o malestar o descontento respecto a la atención al público)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="recDetalle">Detalle del Reclamo/Queja:</label>
+                    <textarea id="recDetalle" name="recDetalle" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="recPedido">Pedido del Consumidor:</label>
+                    <textarea id="recPedido" name="recPedido" placeholder="Ej: Devolución del dinero, cambio del producto, etc."></textarea>
+                </div>
+                
+                <p style="font-size:0.8rem; color:#555; margin-top:1rem;">
+                    <strong>RECLAMO:</strong> Disconformidad relacionada a los productos o servicios.<br>
+                    <strong>QUEJA:</strong> Disconformidad no relacionada a los productos o servicios; o malestar o descontento respecto a la atención al público.<br>
+                    La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.
+                    El proveedor deberá dar respuesta al reclamo en un plazo no mayor a quince (15) días hábiles improrrogables.
+                </p>
+
+                <button type="submit" class="form-submit-btn">Enviar Reclamación</button>
+            </form>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="/js/components/cabecera.js"></script>
+    <script src="/js/components/piePagina.js"></script>
+    <script src="/js/paginas/libro-reclamaciones.js"></script>
+</body>
+</html>

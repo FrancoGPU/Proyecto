@@ -445,7 +445,7 @@ app.delete('/api/admin/combos/:id', isAdmin, async (req, res) => {
 // --- Ruta Principal y Manejadores de Error ---
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/paginas/index.html")); // Ajusta a tu página de inicio
+  res.sendFile(path.join(__dirname, "src/paginas/prueba.html")); // Ajusta a tu página de inicio
 });
 
 // Middleware para manejar rutas no encontradas (404)

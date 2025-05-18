@@ -122,6 +122,7 @@
                 <p>Bienvenido al panel de administración.</p>
 
                 <!-- Sección de Gestión de Películas -->
+                 <!-- Sección de Gestión de Películas -->
                 <section class="admin-section" id="movies-management">
                     <h2>Gestionar Películas</h2>
                     <button class="btn-add" id="add-movie-btn">Añadir Nueva Película</button>
@@ -130,7 +131,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Título</th>
-                                <th>Director</th>
+                                <th>Género</th>
                                 <th>Estreno</th>
                                 <th>Acciones</th>
                             </tr>
@@ -165,39 +166,33 @@
     </main>
 
     <!-- Modal para Añadir/Editar Película -->
+    <!-- Modal para Añadir/Editar Película -->
     <div id="movie-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-movie-modal">&times;</span>
             <h3 id="movie-modal-title">Añadir Película</h3>
             <form id="movie-form">
-                <!-- ... campos del formulario de película ... -->
                 <input type="hidden" id="movie-id" name="id">
+
                 <label for="movie-title">Título:</label>
                 <input type="text" id="movie-title" name="title" required>
 
                 <label for="movie-description">Descripción:</label>
                 <textarea id="movie-description" name="description" required></textarea>
 
-                <label for="movie-image_url">URL de Imagen:</label>
-                <input type="text" id="movie-image_url" name="image_url">
+                <label for="movie-image">URL de Imagen:</label>
+                <input type="text" id="movie-image" name="image">
 
                 <label for="movie-release_date">Fecha de Estreno:</label>
                 <input type="date" id="movie-release_date" name="release_date">
 
-                <label for="movie-director">Director:</label>
-                <input type="text" id="movie-director" name="director">
-
-                <label for="movie-duration_minutes">Duración (minutos):</label>
-                <input type="number" id="movie-duration_minutes" name="duration_minutes">
-
                 <label for="movie-genre">Género:</label>
                 <input type="text" id="movie-genre" name="genre">
                 
-                <label for="movie-trailer_url">URL del Tráiler (YouTube Embed):</label>
-                <input type="text" id="movie-trailer_url" name="trailer_url">
+                <label for="movie-showtimes">Horarios (separados por coma):</label>
+                <input type="text" id="movie-showtimes" name="showtimes">
 
-                <label for="movie-rating">Calificación (ej. PG-13):</label>
-                <input type="text" id="movie-rating" name="rating">
+                <!-- Campos eliminados: director, duration_minutes, trailer_url, rating -->
 
                 <div class="modal-buttons">
                     <button type="button" id="cancel-movie-form">Cancelar</button>
@@ -223,8 +218,8 @@
                 <label for="combo-price">Precio:</label>
                 <input type="number" id="combo-price" name="price" step="0.01" required>
 
-                <label for="combo-image_url">URL de Imagen:</label>
-                <input type="text" id="combo-image_url" name="image_url">
+                <label for="combo-image">URL de Imagen:</label> <!-- CAMBIADO: for="combo-image" -->
+                <input type="text" id="combo-image" name="image"> <!-- CAMBIADO: id="combo-image" name="image" -->
                 
                 <div class="modal-buttons">
                     <button type="button" id="cancel-combo-form">Cancelar</button>

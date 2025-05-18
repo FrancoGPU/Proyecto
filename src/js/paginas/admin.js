@@ -67,10 +67,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             moviesTableBody.innerHTML = ''; // Limpiar tabla
             movies.forEach(movie => {
                 const row = moviesTableBody.insertRow();
+                // Updated columns to display: ID, Título, Género, Estreno
                 row.innerHTML = `
                     <td>${movie.id}</td>
-                    <td>${movie.title}</td>
-                    <td>${movie.director || 'N/A'}</td>
+                    <td>${movie.title || 'N/A'}</td>
+                    <td>${movie.genre || 'N/A'}</td>
                     <td>${movie.release_date ? new Date(movie.release_date).toLocaleDateString() : 'N/A'}</td>
                     <td class="actions-cell">
                         <button class="btn-edit" data-id="${movie.id}" data-type="movie">Editar</button>
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         } catch (error) {
             console.error('Error cargando películas para admin:', error);
+            // Ensure the colspan matches the new number of visible columns (ID, Título, Género, Estreno + Acciones = 5)
             moviesTableBody.innerHTML = '<tr><td colspan="5">Error al cargar películas.</td></tr>';
         }
     }
@@ -90,22 +92,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (movie) {
             currentEditingMovieId = movie.id;
             movieModalTitle.textContent = 'Editar Película';
-            document.getElementById('movie-id').value = movie.id; // Asegúrate que este campo exista en el form si lo usas
+            document.getElementById('movie-id').value = movie.id; 
             document.getElementById('movie-title').value = movie.title || '';
-            document.getElementById('movie-description').value = movie.description || '';
-            document.getElementById('movie-image_url').value = movie.image_url || '';
+            document.getElementById('movie-description').value = movie.description || ''; // Matches schema
+            document.getElementById('movie-image').value = movie.image || ''; // Changed from image_url to image, matches schema
             document.getElementById('movie-release_date').value = movie.release_date ? movie.release_date.split('T')[0] : '';
-            document.getElementById('movie-director').value = movie.director || '';
-            document.getElementById('movie-duration_minutes').value = movie.duration_minutes || '';
-            document.getElementById('movie-genre').value = movie.genre || '';
-            document.getElementById('movie-trailer_url').value = movie.trailer_url || '';
-            document.getElementById('movie-rating').value = movie.rating || '';
+            document.getElementById('movie-genre').value = movie.genre || ''; // Matches schema
+            // Populate showtimes (assuming input with id="movie-showtimes")
+            // Showtimes is an array in DB, display as comma-separated string
+            document.getElementById('movie-showtimes').value = movie.showtimes ? movie.showtimes.join(', ') : '';
+
+            // Removed fields not in the provided schema: director, duration_minutes, trailer_url, rating
+            // document.getElementById('movie-director').value = movie.director || ''; // REMOVED
+            // document.getElementById('movie-duration_minutes').value = movie.duration_minutes || ''; // REMOVED
+            // document.getElementById('movie-trailer_url').value = movie.trailer_url || ''; // REMOVED
+            // document.getElementById('movie-rating').value = movie.rating || ''; // REMOVED
         } else {
             currentEditingMovieId = null;
             movieModalTitle.textContent = 'Añadir Nueva Película';
+            // Ensure all fields, including new ones like showtimes, are cleared for a new movie
+            document.getElementById('movie-description').value = '';
+            document.getElementById('movie-image').value = '';
+            document.getElementById('movie-genre').value = '';
+            document.getElementById('movie-showtimes').value = '';
         }
         movieModal.style.display = 'block';
     }
+
 
     function closeMovieModal() {
         if (movieModal) movieModal.style.display = 'none';
@@ -135,10 +148,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             const formData = new FormData(movieForm);
             const movieData = Object.fromEntries(formData.entries());
 
-            if (movieData.duration_minutes) movieData.duration_minutes = parseInt(movieData.duration_minutes, 10);
-            else delete movieData.duration_minutes; 
+            // Removed processing for duration_minutes as it's no longer a field
+            // if (movieData.duration_minutes) movieData.duration_minutes = parseInt(movieData.duration_minutes, 10);
+            // else delete movieData.duration_minutes; 
 
             if (!movieData.release_date) delete movieData.release_date;
+
+            // Convert showtimes from comma-separated string to array of strings
+            if (movieData.showtimes && typeof movieData.showtimes === 'string') {
+                movieData.showtimes = movieData.showtimes.split(',')
+                                         .map(s => s.trim())
+                                         .filter(s => s.length > 0);
+            } else if (!movieData.showtimes || movieData.showtimes === "") { // Handle empty or non-existent input
+                movieData.showtimes = []; // Send empty array if no showtimes
+            }
+
 
             const method = currentEditingMovieId ? 'PUT' : 'POST';
             const url = currentEditingMovieId ? `/api/admin/movies/${currentEditingMovieId}` : '/api/admin/movies';
@@ -147,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const response = await fetch(url, {
                     method: method,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(movieData)
+                    body: JSON.stringify(movieData) // movieData now aligns with the new schema
                 });
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -199,7 +223,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     }
-    // --- Fin Gestión de Películas ---
 
     // --- Gestión de Combos ---
     async function loadAdminCombos() {
@@ -237,14 +260,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (combo) {
             currentEditingComboId = combo.id;
             comboModalTitle.textContent = 'Editar Combo';
-            document.getElementById('combo-id').value = combo.id; // Asegúrate que este campo exista en el form si lo usas
+            document.getElementById('combo-id').value = combo.id; 
             document.getElementById('combo-name').value = combo.name || '';
             document.getElementById('combo-description').value = combo.description || '';
             document.getElementById('combo-price').value = combo.price || '';
-            document.getElementById('combo-image_url').value = combo.image_url || '';
+            document.getElementById('combo-image').value = combo.image || ''; // CAMBIADO: 'combo-image' y combo.image
         } else {
             currentEditingComboId = null;
             comboModalTitle.textContent = 'Añadir Nuevo Combo';
+            // Asegúrate de que el campo de imagen también se limpie si no se resetea bien con form.reset() para este caso
+            document.getElementById('combo-image').value = ''; // CAMBIADO: 'combo-image'
         }
         comboModal.style.display = 'block';
     }
@@ -275,10 +300,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         comboForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(comboForm);
-            const comboData = Object.fromEntries(formData.entries());
+            const comboData = Object.fromEntries(formData.entries()); // Esto ahora creará comboData.image
 
             if (comboData.price) comboData.price = parseFloat(comboData.price);
             else delete comboData.price;
+
+            // Si el campo de imagen está vacío, podrías querer enviar null o un string vacío.
+            // FormData lo tratará como un string vacío si el input está vacío.
+            // Si tu columna 'image' en la BD permite NULL y prefieres NULL en lugar de string vacío:
+            if (comboData.image === '') {
+                // delete comboData.image; // Para que no se envíe y el backend lo trate como undefined, que podría ser NULL
+                // O explícitamente:
+                // comboData.image = null; // Si el backend está preparado para manejar null
+            }
 
             const method = currentEditingComboId ? 'PUT' : 'POST';
             const url = currentEditingComboId ? `/api/admin/combos/${currentEditingComboId}` : '/api/admin/combos';
@@ -287,7 +321,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const response = await fetch(url, {
                     method: method,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(comboData)
+                    body: JSON.stringify(comboData) // comboData ahora tendrá la propiedad 'image'
                 });
                 if (!response.ok) {
                     const errorData = await response.json();

@@ -9,6 +9,7 @@
     top: 0;
     z-index: 99; /* Asegura que la cabecera esté por encima de otros elementos */
     box-shadow: var(--shadow-sm); /* Sombra para dar profundidad */
+    padding-bottom: 0; /* Si tenías padding aquí, ajústalo o remuévelo */
 }
 
 /* Contenedor interno de la cabecera, organiza los elementos en un diseño flexible */
@@ -27,6 +28,78 @@
     align-items: center;
     gap: var(--space-sm); /* Espaciado entre los íconos */
     position: relative;
+}
+
+/* Estilos para el Carrusel */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  /* max-width: 100%; Ya está implícito con width: 100% */
+  overflow: hidden; /* MUY IMPORTANTE para el efecto de deslizamiento */
+  background-color: #000;
+}
+
+.carousel-track { /* NUEVO */
+  display: flex; /* Organiza los slides en una fila */
+  transition: transform 0.5s ease-in-out; /* La animación de deslizamiento */
+  /* El ancho se calculará con JS o será 100% * número de slides */
+}
+
+.carousel-slide {
+  /* display: none; Ya no se usa para ocultar/mostrar */
+  min-width: 100%; /* Cada slide ocupa el ancho completo del contenedor */
+  box-sizing: border-box; /* Para que el padding/border no afecte el ancho total */
+  text-align: center;
+  position: relative; /* Para que el caption se posicione correctamente dentro */
+}
+
+.carousel-slide a.carousel-image-link {
+  display: block; /* Hace que el enlace ocupe todo el ancho disponible */
+  width: 100%;
+  height: 100%; 
+}
+
+.carousel-slide a.carousel-image-link img {
+  display: block; /* Para asegurar que la imagen se comporte bien dentro del enlace */
+  width: 100%;
+  height: 100%; 
+  max-height: 300px; /* Mantén o ajusta esta altura */
+  object-fit: cover; /* Mantiene el object-fit que tenías */
+}
+
+.btn-carousel:hover {
+  background-color: #f40612; /* Un rojo un poco más brillante al pasar el mouse */
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 2em;
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%; /* Hace los botones redondos */
+  width: 50px; /* Ancho fijo */
+  height: 50px; /* Alto fijo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-control.prev {
+  left: 15px;
+}
+
+.carousel-control.next {
+  right: 15px;
+}
+
+.carousel-control:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* Estilos generales para enlaces */
@@ -117,81 +190,217 @@ a {
 }
 
 /* piePagina */
-/* Estilos para el pie de página del sitio web */
-.cine-piePagina {
-    background-color: var(--secondary); /* Fondo del pie de página */
-    color: --text-light; /* Color del texto */
-    padding: var(--space-lg); /* Espaciado interno */
-    margin-top: 1lm; /* Margen superior */
+.site-footer {
+    background-color: var(--secondary, #000000); /* Usa la variable de la cabecera, con fallback a negro */
+    color: var(--footer-text-color, #ffffff); /* Texto principal blanco */
+    font-size: 0.875rem; /* 14px */
+    margin-top: 2rem;
 }
 
-.piePagina-content{
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md, 1rem);
+}
+
+/* --- Barra Superior (Social y App Download) --- */
+.footer-top-bar {
+    background-color: var(--secondary, #000000); /* Usa la variable de la cabecera, con fallback a negro */
+    padding: var(--space-sm, 0.75rem) 0;
+    border-bottom: 1px solid var(--footer-border-color, #333333); /* Borde gris oscuro */
+}
+
+.footer-top-bar .footer-container {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Mantenemos esto por si se añaden otros elementos directos al container */
     align-items: center;
+    gap: var(--space-md, 1rem);
+}
+
+.footer-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg, 1.5rem); /* Aumentamos un poco el gap si se desea más separación */
+    flex-grow: 1; /* Permite que este contenedor ocupe el espacio disponible */
+    justify-content: space-around; /* Distribuye los enlaces dentro de este contenedor */
+}
+
+.footer-social-links .social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs, 0.25rem);
+    color: var(--footer-link-color, #ffffff); /* Enlaces blancos */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-social-links .social-link i {
+    color: var(--primary, #e50914); /* Iconos en rojo (o el color primario que tengas) */
+    font-size: 1.2rem;
+}
+
+.footer-social-links .social-link .social-username {
+    font-weight: normal;
+    font-size: 0.8rem;
+    display: block; /* Para que esté debajo del nombre de la red */
+    color: var(--footer-text-secondary-color, #cccccc); /* Texto secundario gris claro */
+}
+
+.footer-app-download {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm, 0.5rem);
+}
+.footer-app-download span {
+    font-weight: bold;
+    margin-right: var(--space-sm, 0.5rem);
+}
+.footer-app-download img {
+    height: 35px; /* Ajusta según el tamaño de tus badges */
+    width: auto;
+}
+
+/* --- Contenido Principal del Footer (Logo y Columnas de Enlaces) --- */
+.footer-main-content {
+    padding: var(--space-lg, 2rem) 0;
+    border-bottom: 1px solid var(--footer-border-color, #333333); /* Borde gris oscuro */
+}
+
+.footer-main-content .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-lg, 2rem);
+}
+
+.footer-logo-area {
+    flex-basis: 200px; /* Espacio para el logo */
+    flex-shrink: 0;
+}
+.footer-logo { /* Estilos para el logo en el footer si es diferente al header */
+    font-size: 2.5rem; /* Ajusta según tu logo */
+    /* color: var(--primary, #cc0000); */ /* Hereda de .logo */
+    position: relative; /* Asegura que sea el contexto de posicionamiento para ::before */
+}
+.footer-logo .logo-go {
+    color: var(--primary, #e50914); /* GO en color primario (rojo) */
+}
+.footer-logo .logo-cine {
+    color: var(--footer-logo-cine-color, #ffffff); /* CINE en blanco */
+}
+
+/* Nueva regla para el pseudo-elemento ::before del logo del footer */
+.footer-logo::before {
+    pointer-events: none; /* Evita que el pseudo-elemento intercepte clics */
+}
+
+.footer-links-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md, 1.5rem); /* Espacio entre columnas */
+    flex-grow: 1;
+    justify-content: space-around; /* Distribuye las columnas */
+}
+
+.footer-column {
+    min-width: 150px; /* Ancho mínimo para cada columna */
+}
+
+.footer-column h4 {
+    font-size: 0.9rem; /* 14.4px */
+    font-weight: bold;
+    margin-bottom: var(--space-sm, 0.75rem);
+    color: var(--footer-heading-color, #ffffff); /* Encabezados de columna blancos */
+    text-transform: uppercase;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: var(--space-xs, 0.4rem);
+}
+
+.footer-column ul li a {
+    color: var(--footer-link-color, #ffffff); /* Enlaces de lista blancos */
+    text-decoration: none;
+    font-size: 0.85rem; /* 13.6px */
+}
+
+.footer-column ul li a:hover {
+    color: var(--primary, #e50914); /* Color primario (rojo) al pasar el mouse */
+    text-decoration: underline;
+}
+
+.footer-column ul li a i { /* Para el icono del libro de reclamaciones */
+    margin-right: var(--space-xs, 0.25rem);
+}
+
+
+/* --- Barra Inferior (Copyright/Legal) --- */
+.footer-bottom-bar {
+    padding: var(--space-sm, 0.75rem) 0;
+    background-color: var(--secondary, #000000); /* Usa la variable de la cabecera, con fallback a negro */
+}
+
+.footer-bottom-bar .footer-container {
     text-align: center;
-    margin-top: 20px;
-    z-index: 100000; /* Asegura que el pie de página esté por encima de otros elementos */
-    color: var(--text-light); /* Color del texto */
+    font-size: 0.75rem; /* 12px */
+    color: var(--footer-text-secondary-color, #cccccc); /* Texto secundario gris claro */
+}
+.footer-bottom-bar p {
+    margin: 0.25rem 0;
 }
 
-/* Contenedor principal del pie de página */
-.piePagina-container {
-    display: flex; /* Divide en dos columnas */
-    justify-content: space-between; /* Espaciado entre las columnas */
-    align-items: flex-start; /* Alinea los elementos al inicio */
-    gap: 20px; /* Espaciado entre las columnas */
-    color: aliceblue;
+
+/* Media Queries para responsividad */
+@media (max-width: 992px) {
+    .footer-links-section {
+        justify-content: flex-start; /* Alinea columnas a la izquierda en pantallas medianas */
+    }
+    .footer-column {
+        flex-basis: calc(50% - 1rem); /* Dos columnas en pantallas medianas */
+        min-width: 0; /* Reset min-width */
+    }
 }
 
-/* Sección izquierda: Texto */
-.piePagina-texto {
-    flex: 1; /* Ocupa el espacio disponible */
-    color: var(--text-light); /* Color del texto */
-    font-size: 1rem; /* Aumenta el tamaño de la fuente */
-    line-height: 1.8; /* Mejora la separación entre líneas */
-    margin-bottom: 10px; /* Espaciado entre párrafos */
+@media (max-width: 768px) {
+    .footer-top-bar .footer-container,
+    .footer-main-content .footer-container {
+        flex-direction: column;
+        align-items: center; /* Centra los elementos en pantallas pequeñas */
+        text-align: center;
+    }
+    .footer-social-links {
+        justify-content: center;
+        margin-bottom: var(--space-md, 1rem);
+    }
+    .footer-app-download {
+        justify-content: center;
+    }
+    .footer-logo-area {
+        margin-bottom: var(--space-lg, 1.5rem);
+    }
+    .footer-links-section {
+        width: 100%;
+        justify-content: space-around;
+    }
+    .footer-column {
+        flex-basis: calc(50% - 1rem); /* Mantiene dos columnas si es posible */
+        text-align: left; /* Alinea texto de columnas a la izquierda */
+    }
 }
 
-.piePagina-texto h2 {
-    font-size: 1.8rem; /* Tamaño más grande para el encabezado */
-    color: var(--primary); /* Color destacado */
-    margin-bottom: 15px; /* Espaciado inferior */
+@media (max-width: 480px) {
+    .footer-column {
+        flex-basis: 100%; /* Una columna en pantallas muy pequeñas */
+        margin-bottom: var(--space-md, 1rem);
+    }
+    .footer-column:last-child {
+        margin-bottom: 0;
+    }
 }
-
-.piePagina-texto h3 {
-    font-size: 1.5rem; /* Tamaño más grande para el subtítulo */
-    color: var(--text-light); /* Color destacado */
-    margin-bottom: 10px; /* Espaciado inferior */
-}
-
-.piePagina-texto p {
-    margin-bottom: 10px; /* Espaciado entre párrafos */
-    color: var(--primary); 
-}
-
-.piePagina-texto strong {
-    color: var(--text-light); 
-    font-weight: bold; /* Negrita */
-}
-
-/* Sección derecha: Iconos */
-.piePagina-iconos {
-    display: flex; /* Alinea los íconos horizontalmente */
-    flex-wrap: wrap; /* Permite que los íconos se ajusten si no hay espacio */
-    gap: 15px; /* Espaciado entre los íconos */
-}
-
-.piePagina-iconos img {
-    width: 40px; /* Tamaño uniforme para los íconos */
-    height: 40px;
-    transition: transform 0.3s ease; /* Efecto de hover */
-}
-
-.piePagina-iconos img:hover {
-    transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el cursor */
-}
-
-.icono-facebook img {
-    background-color: white;
-  }

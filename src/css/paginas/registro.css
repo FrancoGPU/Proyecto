@@ -1,89 +1,115 @@
-/* Contenedor principal del formulario */
-form {
-    background-color: #ffffff;
-    padding: 20px 30px; /* Reducir padding horizontal si es necesario, o mantenerlo */
+body { /* Aplicamos el fondo a toda la página */
+    background-image: url('https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/6190eace-e15a-491f-a460-ca22861f11d0/IMG_20250516_175130_GVPWNV.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh; /* Asegura que el body cubra toda la altura */
+    margin: 0; /* Quita márgenes por defecto del body */
+    font-family: var(--font-sans); /* Asumiendo que tienes esto en styles.css */
+}
+
+/* Estilos para la sección de registro */
+.register-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    padding: 2rem; 
+    box-sizing: border-box;
+}
+
+/* Contenedor del formulario (el recuadro semitransparente) */
+.register-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente para legibilidad */
+    padding: 3rem; 
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra un poco más pronunciada */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra un poco más pronunciada */
+    max-width: 500px; 
     width: 100%;
-    max-width: 400px; /* O 450px si quieres un poco más de espacio */
     text-align: center;
-    margin: 2rem auto; /* Añadir margen para centrar el formulario en la página */
+}
+
+/* Formulario en sí (transparente, ya que .register-container maneja el fondo) */
+.register-form {
+    background-color: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0; /* El centrado y espaciado lo maneja .register-container y .register-section */
+    width: 100%;
+    gap: 1.5rem; /* Espacio entre los elementos del formulario */
 }
 
 /* Título del formulario */
-form h2 { /* Asumo que el <h2> es el título principal del formulario dentro de .register-container */
-    font-size: 1.8rem; /* O 2rem para más impacto */
-    color: #333333;
-    margin-bottom: 25px; /* Más espacio debajo del título */
+.register-container h2 {
+    font-size: 2rem; /* Tamaño del título */
+    color: #333; /* Color oscuro para el título */
+    margin-bottom: 1rem; /* Espacio debajo del título */
+    font-weight: bold; /* Un poco más de peso */
 }
 
 /* Estilo para los grupos de formulario */
 .form-group {
-    margin-bottom: 20px; /* Aumentar el espacio entre grupos de formulario */
+    margin-bottom: 25px; /* Espacio entre grupos de formulario */
     text-align: left; /* Alinea el contenido del grupo a la izquierda */
 }
 
-/* Estilo para el texto de ayuda (labels) */
-form label {
-    font-size: 0.9rem; /* Ligeramente más pequeño o mantener 1rem si se prefiere */
-    color: #4A4A4A; /* Un gris un poco más oscuro para mejor contraste */
-    display: block; /* Asegura que la etiqueta ocupe su propia línea */
-    margin-bottom: 8px; /* Espacio entre la etiqueta y el input */
-    font-weight: 500; /* Un poco más de peso a la fuente */
+/* Estilo para las etiquetas (labels) */
+.register-form label {
+    font-size: 0.95rem; 
+    color: #444; /* Color de la etiqueta */
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 500; 
 }
 
 /* Estilo para los campos de entrada */
-form input[type="email"], /* Aplicar a email específicamente si es necesario, o generalizar */
-form input[type="text"],
-form input[type="password"] {
+.register-form input[type="email"],
+.register-form input[type="password"] {
     width: 100%;
-    padding: 12px 15px; /* Aumentar el padding para un campo más "aireado" */
-    margin: 0; /* Quitar margen superior/inferior del input, ya que .form-group lo maneja */
-    border: 1px solid #D1D1D1; /* Un borde un poco más suave */
-    border-radius: 5px;
+    padding: 0.8rem; /* Padding dentro del input */
+    margin: 0; 
+    border: 1px solid #ccc; /* Borde sutil */
+    border-radius: 4px; /* Bordes redondeados para los inputs */
     font-size: 1rem;
-    box-sizing: border-box; /* Importante para que el padding no aumente el ancho total */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición para el foco */
+    box-sizing: border-box; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+    color: var(--text-dark); /* Color del texto dentro del input */
 }
 
-form input[type="email"]:focus,
-form input[type="text"]:focus,
-form input[type="password"]:focus {
-    border-color: #e50914; /* Color del borde al enfocar */
-    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15); /* Sombra exterior sutil al enfocar */
-    outline: none; /* Quitar el outline por defecto del navegador */
+.register-form input[type="email"]:focus,
+.register-form input[type="password"]:focus {
+    border-color: #e50914; 
+    box-shadow: 0 0 0 3.5px rgba(229, 9, 20, 0.2); /* Sombra al enfocar, un poco más grande */
+    outline: none; 
 }
 
 /* Placeholder styling */
-form input::placeholder {
-    color: #A0A0A0; /* Color más suave para el placeholder */
+.register-form input::placeholder {
+    color: #999; /* Color del placeholder */
     font-style: italic;
 }
 
-
 /* Botón de registro */
-form button {
-    background-color: #e50914;
+.register-form button[type="submit"] { /* Selector más específico */
+    background-color: #e50914; /* Color de fondo del botón (rojo GOCINE) */
     color: #ffffff;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 1rem;
+    padding: 14px 20px; /* Padding del botón */
+    border-radius: 6px; /* Bordes redondeados para el botón */
+    font-size: 1.05rem; /* Tamaño de fuente del botón */
+    font-weight: 500;
     cursor: pointer;
     width: 100%;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+    margin-top: 15px; /* Espacio arriba del botón */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 }
 
-form button:hover {
-    background-color: #b20710;
+.register-form button[type="submit"]:hover {
+    background-color: #c40812; /* Un rojo un poco más oscuro al pasar el mouse */
 }
 
-/* Estilo para el texto de ayuda */
-form label {
-    font-size: 0.9rem;
-    color: #555555;
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
+.register-form button[type="submit"]:active {
+    transform: scale(0.98); /* Efecto de clic */
 }

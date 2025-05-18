@@ -1,18 +1,29 @@
+body { /* Aplicamos el fondo a toda la página */
+    background-image: url('https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/6190eace-e15a-491f-a460-ca22861f11d0/IMG_20250516_175130_GVPWNV.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh; /* Asegura que el body cubra toda la altura */
+    margin: 0; /* Quita márgenes por defecto del body */
+    font-family: var(--font-sans); /* Asumiendo que tienes esto en styles.css */
+}
+
 .login-section {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Mantener la altura completa de la pantalla */
-    background-color: var(--bg-light);
-    padding: 25rem; /* Espaciado alrededor */
+    min-height: 100vh; 
+    padding: 2rem; 
+    box-sizing: border-box;
 }
 
 .login-container {
-    background-color: white;
-    padding: 3rem; /* Espaciado interno */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente para legibilidad */
+    padding: 3rem; 
     border-radius: 8px;
-    box-shadow: var(--shadow-md);
-    max-width: 500px; /* Ancho máximo */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra un poco más pronunciada */
+    max-width: 500px; 
     width: 100%;
     text-align: center;
 }

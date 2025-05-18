@@ -39,10 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Generar butacas
         rows.forEach(row => {
+            const rowDiv = document.createElement('div'); // Nuevo contenedor para la fila
+            rowDiv.className = 'seat-row'; // Clase para el contenedor de la fila
+
             const rowLabel = document.createElement('div');
-            rowLabel.className = 'seat space';
+            rowLabel.className = 'seat space seat-label'; // Añadida clase 'seat-label' para posible estilo específico
             rowLabel.textContent = row;
-            seatsContainer.appendChild(rowLabel);
+            rowDiv.appendChild(rowLabel); // Añadir la etiqueta de fila al contenedor de la fila
 
             for (let i = 1; i <= 10; i++) {
                 const seat = document.createElement('div');
@@ -50,14 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 seat.textContent = i;
                 seat.dataset.seatNumber = `${row}${i}`;
 
-                if (Math.random() < 0.2) {
+                if (Math.random() < 0.2) { // Simula asientos ocupados
                     seat.classList.add('reserved');
                 } else {
                     seat.addEventListener('click', () => toggleSeatSelection(seat));
                 }
 
-                seatsContainer.appendChild(seat);
+                rowDiv.appendChild(seat); // Añadir la butaca al contenedor de la fila
             }
+            seatsContainer.appendChild(rowDiv); // Añadir el contenedor de la fila completo al mapa de asientos
         });
     }
 
@@ -104,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('selectedSeats', selectedSeats.join(','));
         localStorage.setItem('totalPrice', totalPrice);
 
-        // Redirigir a confirmacion.html
         window.location.href = '../paginas/combos.html';
     });
 });

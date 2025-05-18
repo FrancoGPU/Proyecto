@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("scripts.js cargado correctamente");
-  fetchMovies(); // Cargar las películas iniciales (cartelera)
+  //fetchMovies(); // Cargar las películas iniciales (cartelera)
 
    const promotionsButton = document.getElementById("promotions-button");
   const nowShowingButton = document.getElementById("now-showing-button");
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearMovieList() {
     const movieList = document.getElementById("movie-list");
     if (movieList) movieList.innerHTML = "";
-    const upcomingList = document.getElementById("upcoming-list");
+    const upcomingList = document.getElementById("upcoming-list"); // Asegúrate que esta lista también se limpie
     if (upcomingList) upcomingList.innerHTML = "";
   }
 
@@ -225,16 +225,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     upcomingButton.addEventListener("click", () => {
       activateButton(upcomingButton, nowShowingButton, promotionsButton);
-      if (movieSection) movieSection.style.display = "block";
+      if (movieSection) movieSection.style.display = "block"; // Asegúrate que la sección de películas esté visible
       if (comboSection) comboSection.style.display = "none";
       clearMovieList();
-      fetch("/api/upcoming")
+      fetch("/api/upcoming") // Asume que este es tu endpoint para próximas películas
         .then((response) => {
           if (!response.ok) throw new Error("Error al cargar las películas próximas");
           return response.json();
         })
         .then((data) => {
-          displayMovies(data); // Mostrar las películas próximas
+          // Asumimos que tienes una función displayMovies que puede manejar estos datos
+          // o que fetchMovies puede ser adaptada. Por ahora, llamaremos a displayMovies.
+          // Si displayMovies no existe o no es adecuada, necesitarás crear/ajustar una.
+          if (typeof displayMovies === "function") {
+            displayMovies(data, 'upcoming-list'); // Pasamos el ID del contenedor si es diferente
+          } else {
+            console.error("La función displayMovies no está definida o no es adecuada para 'upcoming'.");
+            // Podrías tener una lógica similar a fetchMovies pero para 'upcoming-list'
+          }
         })
         .catch((error) => console.error("Error al cargar las películas próximas:", error));
     });
@@ -248,8 +256,115 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Asegurarse de que ambas secciones estén visibles al cargar la página
-  if (comboSection) comboSection.style.display = "none";
+  // if (comboSection) comboSection.style.display = "none"; // Esta línea ya no es necesaria aquí, se maneja por defecto
+
+  // --- Lógica para manejar la sección activa desde la URL ---
+  function handleSectionFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const section = urlParams.get('section');
+
+    if (section === 'upcoming' && upcomingButton) {
+      upcomingButton.click();
+    } else if (section === 'promotions' && promotionsButton) {
+      promotionsButton.click();
+    } else if (section === 'now-showing' && nowShowingButton) {
+      nowShowingButton.click();
+    } else {
+      // Por defecto, si no hay parámetro o es desconocido, activar "Cartelera"
+      if (nowShowingButton) {
+        nowShowingButton.click();
+      } else {
+        // Fallback si el botón no existe, aunque debería
+        if (movieSection) movieSection.style.display = "block";
+        if (comboSection) comboSection.style.display = "none";
+        clearMovieList();
+        fetchMovies();
+      }
+    }
+  }
+
+  // Lógica del Carrusel
+  const carouselContainer = document.querySelector('.carousel-container');
+  const track = document.querySelector('.carousel-track');
+  const slides = track ? Array.from(track.children) : [];
+  const prevButton = document.querySelector('.carousel-control.prev');
+  const nextButton = document.querySelector('.carousel-control.next');
+  let currentSlide = 0;
+  let slideInterval;
+  let slideWidth = 0;
+
+  function updateSlideWidthAndPosition() {
+    if (slides.length > 0 && carouselContainer && track) {
+      slideWidth = carouselContainer.offsetWidth;
+      // Asegurar que cada slide tenga el ancho correcto (opcional si min-width:100% es suficiente)
+      // slides.forEach(slide => slide.style.width = `${slideWidth}px`);
+      // Establecer el ancho del track para contener todos los slides (opcional si flex maneja bien)
+      // track.style.width = `${slideWidth * slides.length}px`;
+      showSlide(currentSlide, false); // Reposicionar sin animación al redimensionar
+    }
+  }
+
+  function showSlide(index, animate = true) {
+    if (!track || slides.length === 0) return;
+
+    if (!animate) {
+      track.style.transition = 'none'; // Desactivar animación temporalmente
+    } else {
+      track.style.transition = 'transform 0.5s ease-in-out'; // Reactivar animación
+    }
+
+    const offset = -index * slideWidth;
+    track.style.transform = `translateX(${offset}px)`;
+
+    // Forzar un reflow si se desactivó la transición, para que se aplique al instante
+    if (!animate) {
+        // eslint-disable-next-line no-unused-expressions
+        track.offsetHeight; // Forzar reflow
+        track.style.transition = 'transform 0.5s ease-in-out'; // Restaurar para futuras animaciones
+    }
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  if (slides.length > 0) {
+    updateSlideWidthAndPosition(); // Calcular ancho inicial y posicionar
+
+    window.addEventListener('resize', updateSlideWidthAndPosition); // Actualizar en redimensionamiento
+
+    if (prevButton && nextButton) {
+      prevButton.addEventListener('click', () => {
+        prevSlide();
+        resetInterval();
+      });
+
+      nextButton.addEventListener('click', () => {
+        nextSlide();
+        resetInterval();
+      });
+    }
+
+    function startInterval() {
+      slideInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+    }
+
+    function resetInterval() {
+      clearInterval(slideInterval);
+      startInterval();
+    }
+
+    startInterval(); // Iniciar el cambio automático
+  }
 
   // Llamar para verificar el estado de login al cargar la página
   checkLoginStatusAndUpdateUI();
+  // Llamar para manejar la sección desde la URL después de que todo esté configurado
+  handleSectionFromURL();
 });
