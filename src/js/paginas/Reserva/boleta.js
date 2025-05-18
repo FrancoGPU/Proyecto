@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToHomeButton = document.getElementById('back-to-home');
     if (backToHomeButton) {
         backToHomeButton.addEventListener('click', () => {
-            window.location.href = 'prueba.html'; // O la página de inicio que corresponda
+            window.location.href = '/paginas/prueba.html'; // O la página de inicio que corresponda
         });
     }
 

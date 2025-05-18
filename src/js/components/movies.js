@@ -40,7 +40,7 @@ function displayMovies(movies) {
     `;
 
     movieCard.addEventListener("click", () => {
-      window.location.href = `/paginas/horarios.html?movie=${encodeURIComponent(movie.title)}`;
+      window.location.href = `/paginas/Reserva/horarios.html?movie=${encodeURIComponent(movie.title)}`;
     });
 
     movieList.appendChild(movieCard);

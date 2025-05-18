@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             document.querySelectorAll('.btn-primary').forEach((btn) => btn.classList.remove('selected'));
                             button.classList.add('selected');
                             localStorage.setItem('selectedShowtime', time);
-                            window.location.href = '../paginas/butacas.html';
+                            window.location.href = '/paginas/Reserva/butacas.html';
                         });
 
                         showtimesContainer.appendChild(button);

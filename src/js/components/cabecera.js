@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cabeceraElement = document.querySelector('header');
     if (cabeceraElement) {
-        fetch('../components/cabecera.html')
+        fetch('/components/cabecera.html') // Cambiado aquí
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al cargar el componente de cabecera');

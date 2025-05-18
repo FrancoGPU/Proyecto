@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Opción de Panel de Administrador si el rol es 'admin'
       if (userData.role === 'admin') { // Asume que userData tiene 'role'
         const adminPanelLink = document.createElement('a');
-        adminPanelLink.href = '/paginas/admin.html'; // TODO: Crear esta página de admin
+        adminPanelLink.href = '/paginas/Administracion/admin.html'; // TODO: Crear esta página de admin
         adminPanelLink.textContent = 'Panel Admin';
         userDropdownMenu.appendChild(adminPanelLink);
       }
@@ -146,12 +146,12 @@ document.addEventListener("DOMContentLoaded", () => {
       userIcon.classList.remove('logged-in');
 
       const loginLink = document.createElement('a');
-      loginLink.href = '/paginas/login.html';
+      loginLink.href = '/paginas/Autenticacion/login.html';
       loginLink.textContent = 'Iniciar Sesión';
       userDropdownMenu.appendChild(loginLink);
 
       const registerLink = document.createElement('a');
-      registerLink.href = '/paginas/register.html';
+      registerLink.href = '/paginas/Autenticacion/registro.html';
       registerLink.textContent = 'Registrarse';
       userDropdownMenu.appendChild(registerLink);
     }

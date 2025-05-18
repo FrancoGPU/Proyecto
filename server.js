@@ -451,7 +451,7 @@ app.get("/", (req, res) => {
 // Middleware para manejar rutas no encontradas (404)
 // Debe ir después de todas tus rutas específicas
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, 'src/paginas/404.html'));
+  res.status(404).sendFile(path.join(__dirname, 'src/paginas/Error/404.html'));
 });
 
 // Middleware de manejo de errores global

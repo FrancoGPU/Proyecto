@@ -1,4 +1,31 @@
-/* Estilos para el logo */
+/* Estilos para el enlace del logo */
+.logo-link {
+    display: inline-block; /* Para que el enlace se ajuste al tamaño de la imagen */
+    text-decoration: none;
+    flex-shrink: 0; /* Evita que el logo se encoja en un contenedor flex */
+}
+
+/* Estilos para la imagen del logo */
+.logo-img {
+    height: 120px; /* Ajusta esta altura según sea necesario */
+    width: 180px; /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina espacio extra debajo de la imagen */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Transiciones suaves */
+}
+
+/* Efecto de hover sutil para la imagen */
+.logo-link:hover .logo-img {
+    transform: scale(1.05); /* Agranda ligeramente la imagen */
+    filter: brightness(1.1); /* Aumenta ligeramente el brillo */
+}
+
+/* Eliminamos los estilos anteriores para .logo, .logo-go, .logo-cine y sus efectos :hover, ::before, ::after
+   ya que ahora estamos usando una imagen.
+   Si deseas mantener algún efecto visual similar, necesitarías recrearlo
+   específicamente para la imagen o su contenedor.
+*/
+
+/*
 .logo {
     font-size: 3rem;
     font-weight: 800;
@@ -24,7 +51,6 @@
     transition: all 0.5s ease;
 }
 
-/* Efecto de foco de cine */
 .logo::before {
     content: '';
     position: absolute;
@@ -44,7 +70,6 @@
     opacity: 1;
 }
 
-/* Efecto de levantamiento */
 .logo:hover .logo-go {
     transform: translateY(-5px);
     text-shadow: 0 5px 10px rgba(97, 49, 129, 0.247);
@@ -55,7 +80,6 @@
     text-shadow: 0 5px 10px rgba(113, 52, 119, 0.4);
 }
 
-/* Línea decorativa */
 .logo::after {
     content: '';
     position: absolute;
@@ -75,3 +99,4 @@
     transform: scaleX(1);
     transform-origin: left;
 }
+*/

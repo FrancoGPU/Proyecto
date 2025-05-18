@@ -24,11 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="footer-main-content">
                 <div class="footer-container">
-                    <div class="footer-logo-area">
-                        <!-- Puedes poner tu logo aquí, similar al h1 de la cabecera -->
-                        <h1 class="logo footer-logo">
-                           <span class="logo-go">GO</span><span class="logo-cine">CINE</span>
-                        </h1>
+                    <div class="cabecera-container">
+                        <a href="/paginas/prueba.html" class="logo-link">
+                        <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
+                        </a>
                     </div>
                     <nav class="footer-links-section">
                         <div class="footer-column">
@@ -42,15 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="footer-column">
                             <h4>SOBRE GOCINE</h4>
                             <ul>
-                                <li><a href="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/34e2cb18-caf3-455f-a7c8-5ac8265fef7f/TerminosYCondiciones_HOXHXP.pdf" target="_blank">Términos y condiciones</a></li>
-                                <li><a href="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/beec857c-7765-49b6-a393-f9003dda981a/POLITICAS_DE_PRIVACIDAD_1_CMAZIK.pdf" target="_blank">Política de Protección de Datos Personales</a></li>
+                                <li><a href="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/d22be539-9124-4872-bf9c-31588ce1e448/TerminosYCondiciones_HOXHXP_QGQVLG.pdf" target="_blank">Términos y condiciones</a></li>
+                                <li><a href="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/16630a0c-0ebc-4652-aeed-58d385fcf44b/POLITICAS_DE_PRIVACIDAD_1_CMAZIK_AHVSIT.pdf" target="_blank">Política de Protección de Datos Personales</a></li>
                             </ul>
                         </div>
                         <div class="footer-column">
                             <h4>CONTACTO</h4>
                             <ul>
-                                <li><a href="/paginas/contacto.html">Escríbenos</a></li>
-                                <li><a href="/paginas/libro-reclamaciones.html"><i class="fas fa-book"></i> Libro de reclamaciones</a></li>
+                                <li><a href="/paginas/Soporte/contacto.html">Escríbenos</a></li>
+                                <li><a href="/paginas/Soporte/libro-reclamaciones.html"><i class="fas fa-book"></i> Libro de reclamaciones</a></li>
                             </ul>
                         </div>
                     </nav>
