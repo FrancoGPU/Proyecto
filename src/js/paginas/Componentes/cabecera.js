@@ -21,14 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const userIcon = userButton ? userButton.querySelector("i.fas.fa-user") : null;
                 const userDropdownMenu = cabeceraElement.querySelector("#user-dropdown-menu");
 
-                // --- Cart Elements ---
-                const cartButton = cabeceraElement.querySelector("#cart-button");
-                const cartDropdownMenu = cabeceraElement.querySelector("#cart-dropdown-menu");
-                const cartDropdownItemsContainer = cabeceraElement.querySelector("#cart-dropdown-items");
-                const cartDropdownSubtotal = cabeceraElement.querySelector("#cart-dropdown-subtotal");
-                const cartCheckoutButton = cabeceraElement.querySelector("#cart-checkout-button");
-                // const cartItemCountBadge = cabeceraElement.querySelector("#cart-item-count"); // Already handled by cart.js's updateCartIconCount
-
                 // --- Search Bar Logic (Conditional Display) ---
                 if (searchBarContainer && searchBar && searchSubmit) {
                     // Show search bar only on prueba.html (or your main page)
@@ -86,103 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     checkLoginStatusAndUpdateUI();
                 }
-
-                // --- Cart Dropdown Logic ---
-                if (cartButton && cartDropdownMenu && cartDropdownItemsContainer && cartDropdownSubtotal && cartCheckoutButton) {
-                    cartButton.addEventListener("click", (event) => {
-                        event.stopPropagation();
-                        const isVisible = cartDropdownMenu.style.display === "block";
-                        cartDropdownMenu.style.display = isVisible ? "none" : "block";
-                        if (!isVisible) {
-                            renderCartDropdown(); // Re-render cart when opening
-                        }
-                    });
-
-                    cartCheckoutButton.addEventListener("click", () => {
-                        window.location.href = '/paginas/Reserva/confirmacion.html';
-                        cartDropdownMenu.style.display = "none";
-                    });
-
-                    // Close dropdown if clicked outside
-                    window.addEventListener("click", (event) => {
-                        if (cartDropdownMenu.style.display === "block" &&
-                            !cartButton.contains(event.target) &&
-                            !cartDropdownMenu.contains(event.target)) {
-                            cartDropdownMenu.style.display = "none";
-                        }
-                    });
-                     window.addEventListener('keydown', (event) => {
-                        if (event.key === 'Escape' && cartDropdownMenu.style.display === 'block') {
-                            cartDropdownMenu.style.display = 'none';
-                        }
-                    });
-                }
-
-                function renderCartDropdown() {
-                    if (!cartDropdownItemsContainer || !cartDropdownSubtotal) return;
-
-                    // Ensure cart.js functions are available
-                    if (typeof getCart !== 'function' || typeof getCartTotal !== 'function' || typeof removeFromCart !== 'function' || typeof updateQuantity !== 'function') {
-                        console.error("Funciones del carrito (getCart, getCartTotal, etc.) no están definidas. Asegúrate que cart.js esté cargado.");
-                        cartDropdownItemsContainer.innerHTML = '<p class="cart-error-message">Error al cargar el carrito.</p>';
-                        return;
-                    }
-
-                    const cartItems = getCart();
-                    cartDropdownItemsContainer.innerHTML = ''; // Clear previous items
-
-                    if (cartItems.length === 0) {
-                        cartDropdownItemsContainer.innerHTML = '<p class="cart-empty-message">Tu carrito está vacío.</p>';
-                    } else {
-                        const ul = document.createElement('ul');
-                        ul.classList.add('cart-dropdown-list');
-                        cartItems.forEach(item => {
-                            const li = document.createElement('li');
-                            li.classList.add('cart-dropdown-item');
-                            li.innerHTML = `
-                                <img src="${item.image}" alt="${item.name}" class="cart-dropdown-item-image">
-                                <div class="cart-dropdown-item-details">
-                                    <span class="item-name">${item.name}</span>
-                                    <span class="item-price">S/.${parseFloat(item.price).toFixed(2)}</span>
-                                </div>
-                                <div class="cart-dropdown-item-actions">
-                                    <input type="number" value="${item.quantity}" min="1" class="item-quantity-input" data-id="${item.id}" data-type="${item.type || 'combo'}">
-                                    <button class="btn-remove-item" data-id="${item.id}" data-type="${item.type || 'combo'}">&times;</button>
-                                </div>
-                            `;
-                            ul.appendChild(li);
-                        });
-                        cartDropdownItemsContainer.appendChild(ul);
-
-                        // Add event listeners for quantity changes and remove buttons
-                        ul.querySelectorAll('.item-quantity-input').forEach(input => {
-                            input.addEventListener('change', (event) => {
-                                const itemId = event.target.dataset.id;
-                                const itemType = event.target.dataset.type;
-                                const newQuantity = parseInt(event.target.value, 10);
-                                if (newQuantity >= 0) { // Allow 0 to remove
-                                    updateQuantity(itemId, newQuantity, itemType);
-                                    renderCartDropdown(); // Re-render to reflect changes (including removal if quantity is 0)
-                                    updateCartIconCount(); // from cart.js
-                                } else {
-                                    event.target.value = getCart().find(i => i.id === itemId && i.type === itemType)?.quantity || 1; // Reset if invalid
-                                }
-                            });
-                        });
-                        ul.querySelectorAll('.btn-remove-item').forEach(button => {
-                            button.addEventListener('click', (event) => {
-                                const itemId = event.target.dataset.id;
-                                const itemType = event.target.dataset.type;
-                                removeFromCart(itemId, itemType);
-                                renderCartDropdown(); // Re-render
-                                updateCartIconCount(); // from cart.js
-                            });
-                        });
-                    }
-                    cartDropdownSubtotal.textContent = getCartTotal().toFixed(2);
-                }
-                // Initial call to set cart count on load (already done by cart.js, but good for consistency if cart.js changes)
-                if (typeof updateCartIconCount === 'function') updateCartIconCount();
 
                 async function checkLoginStatusAndUpdateUI() {
                     if (!userButton || !userDropdownMenu || !userIcon) {
