@@ -55,6 +55,16 @@ node server.js
 
 El servidor estará disponible en: [http://localhost:3000](http://localhost:3000)
 
+### 6. Acceder a la Aplicación
+Una vez que el servidor esté corriendo, abre tu navegador web y ve a la siguiente dirección para acceder a la página principal de GOCINE:
+```
+http://localhost:3000
+```
+También puedes acceder a otras páginas específicas como:
+*   Panel de Administración (requiere inicio de sesión como admin): `http://localhost:3000/paginas/Administracion/admin.html`
+*   Iniciar Sesión: `http://localhost:3000/paginas/Autenticacion/login.html`
+*   Registro: `http://localhost:3000/paginas/Autenticacion/registro.html`
+
 ## Estructura del Proyecto 📂
 
 ```
