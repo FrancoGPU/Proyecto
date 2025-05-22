@@ -11,8 +11,8 @@ const pgSession = require('connect-pg-simple')(session); // Para almacenar sesio
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: '1gocine12@gmail.com', // Tu dirección de Gmail
-    pass: 'dwcc haia lsur xqor' // La contraseña de aplicación que generaste
+    user: '1gocine12@gmail.com', 
+    pass: 'dwcc haia lsur xqor'
   }
 });
 
@@ -35,7 +35,7 @@ app.use(session({
     tableName: 'user_sessions', // Nombre de la tabla para sesiones (asegúrate que exista)
     createTableIfMissing: true // Opcional: Intentará crear la tabla si no existe
   }),
-  secret: 'GOCINE123456', // ¡¡¡CAMBIA ESTO POR UN SECRETO FUERTE Y ÚNICO!!!
+  secret: 'GOCINE123456',
   resave: false, // No guardar la sesión si no se modificó
   saveUninitialized: false, // No crear sesión hasta que algo se almacene
   cookie: {
@@ -92,32 +92,49 @@ app.get("/api/combos", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body; // Añadir username
 
-  if (!email || !password) {
-    return res.status(400).json({ message: "Correo y contraseña son requeridos." });
+  if (!email || !password || !username) { // Validar username
+    return res.status(400).json({ message: "Nombre de usuario, correo y contraseña son requeridos." });
   }
   if (password.length < 6) {
     return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres." });
   }
+  if (username.length < 3 || username.length > 50) {
+    return res.status(400).json({ message: "El nombre de usuario debe tener entre 3 y 50 caracteres." });
+  }
+  // Validar que el username no contenga espacios o caracteres especiales (opcional, pero recomendado)
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+    return res.status(400).json({ message: "El nombre de usuario solo puede contener letras, números y guiones bajos (_)." });
+  }
 
   try {
-    const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-    if (existingUser.rows.length > 0) {
+    const existingUserByEmail = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (existingUserByEmail.rows.length > 0) {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
+    const existingUserByUsername = await pool.query("SELECT * FROM users WHERE username = $1", [username]); // Verificar username
+    if (existingUserByUsername.rows.length > 0) {
+      return res.status(400).json({ message: "El nombre de usuario ya está en uso." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    // La columna 'role' tomará el valor 'usuario' por defecto si así se definió en la BD
-    // o puedes especificarlo:
     const newUser = await pool.query(
-      "INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id, email, role",
-      [email, hashedPassword, 'usuario'] // Asigna 'usuario' por defecto
+      "INSERT INTO users (email, password, username, role) VALUES ($1, $2, $3, $4) RETURNING id, email, username, role", // Añadir username
+      [email, hashedPassword, username, 'usuario']
     );
-    // No iniciar sesión automáticamente al registrar, o si lo haces, crea la sesión aquí.
     res.status(201).json({ message: "Usuario registrado exitosamente." });
   } catch (err) {
     console.error("Error al registrar el usuario:", err.message);
+    if (err.code === '23505') { // Código de error para violación de unicidad en PostgreSQL
+        if (err.constraint && err.constraint.includes('username')) {
+            return res.status(400).json({ message: "El nombre de usuario ya está en uso." });
+        }
+        if (err.constraint && err.constraint.includes('email')) {
+            return res.status(400).json({ message: "El correo electrónico ya está registrado." });
+        }
+    }
     res.status(500).json({ message: "Error interno del servidor." });
   }
 });
@@ -135,27 +152,28 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ message: "Correo o contraseña incorrectos." });
     }
 
-    const user = userResult.rows[0]; // Este es tu usuario autenticado
+    const user = userResult.rows[0];
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: "Correo o contraseña incorrectos." });
     }
 
-    // Crear la sesión del usuario
     req.session.user = {
       id: user.id,
       email: user.email,
+      username: user.username, // Añadir username a la sesión
       role: user.role 
     };
-    req.session.loggedIn = true; // Asegúrate de establecer loggedIn en true
+    req.session.loggedIn = true;
 
-    console.log('Login exitoso para:', user.email, 'Rol:', user.role); // Log para depuración
+    console.log('Login exitoso para:', user.email, 'Usuario:', user.username, 'Rol:', user.role);
     res.status(200).json({
-        success: true, // Es buena práctica incluir un booleano de éxito
+        success: true,
         message: "Inicio de sesión exitoso.",
         user: { 
             id: user.id,
             email: user.email,
+            username: user.username, // Añadir username a la respuesta
             role: user.role
         }
     });
@@ -441,8 +459,50 @@ app.delete('/api/admin/combos/:id', isAdmin, async (req, res) => {
   }
 });
 
+// --- Endpoints de Administración de Usuarios (Protegidos por isAdmin) ---
 
-// --- Ruta Principal y Manejadores de Error ---
+// GET todos los usuarios (para administración)
+// GET todos los usuarios (para administración)
+app.get('/api/admin/users', isAdmin, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, username, email, role FROM users ORDER BY id ASC'); // Añadir username
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error al obtener usuarios para admin:', err.message);
+    res.status(500).json({ message: 'Error interno del servidor al obtener usuarios.' });
+  }
+});
+
+// PUT actualizar el rol de un usuario
+app.put('/api/admin/users/:userId/role', isAdmin, async (req, res) => {
+  const { userId } = req.params;
+  const { role } = req.body;
+
+  if (!role || (role !== 'admin' && role !== 'usuario')) {
+    return res.status(400).json({ message: "Rol inválido. Debe ser 'admin' o 'usuario'." });
+  }
+
+  if (req.session.user && parseInt(userId, 10) === req.session.user.id) {
+    return res.status(403).json({ message: 'No puedes cambiar tu propio rol a través de esta interfaz.' });
+  }
+
+  try {
+    const result = await pool.query(
+      'UPDATE users SET role = $1 WHERE id = $2 RETURNING id, username, email, role', // Añadir username al RETURNING
+      [role, userId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado para actualizar rol.' });
+    }
+    res.json({ message: 'Rol del usuario actualizado exitosamente.', user: result.rows[0] });
+  } catch (err) {
+    console.error(`Error al actualizar rol del usuario ${userId}:`, err.message);
+    res.status(500).json({ message: 'Error interno del servidor al actualizar el rol.' });
+  }
+});
+
+
+// --- Ruta Principal y Manejadores de Error 
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/paginas/prueba.html")); // Ajusta a tu página de inicio

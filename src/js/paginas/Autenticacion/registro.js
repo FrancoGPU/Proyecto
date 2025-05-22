@@ -4,8 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const username = document.getElementById('username').value.trim(); // Obtener username
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
+
+        if (!username) { // Validación simple en frontend
+            alert('Por favor, ingresa un nombre de usuario.');
+            return;
+        }
 
         try {
             const response = await fetch('/api/register', {
@@ -13,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ username, email, password }), // Enviar username
             });
 
             const result = await response.json();

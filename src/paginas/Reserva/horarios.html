@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <header></header> <!-- La cabecera se cargará dinámicamente -->
-
+    <header class="cine-cabecera">
+    <!-- Contenido de la cabecera (logo, búsqueda, menú de usuario) se cargará dinámicamente por cabecera.js -->
+    <!-- Dejar vacío o con un placeholder si se desea -->
+    </header>
     <main class="main-content">
         <section class="schedule-selection">
             <h2 class="schedule-title">Selecciona un horario para <span id="movie-title"></span></h2>
@@ -19,9 +21,8 @@
     </main>
 
     <footer></footer> <!-- El pie de página se cargará dinámicamente -->
-
-    <script src="/js/components/cabecera.js"></script>
-    <script src="/js/components/piePagina.js"></script>
     <script src="/js/paginas/Reserva/horarios.js"></script>
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
 </body>
 </html>

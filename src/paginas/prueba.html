@@ -12,36 +12,11 @@
   </head>
   <body class="index-page">
     <header class="cine-cabecera">
-      <div class="cabecera-container">
-        <a href="/paginas/prueba.html" class="logo-link">
-            <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
-        </a>
-        <div class="cabecera-actions">
-          <div class="search-bar-container">
-            <input
-              type="text"
-              id="search-bar"
-              class="search-bar"
-              placeholder="Buscar películas..."
-            />
-            <button id="search-submit" class="btn-icon" aria-label="Buscar">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-          <!-- Contenedor para el botón y el menú -->
-          <div class="user-menu-container"> 
-            <button id="user-button" class="btn-icon" aria-label="Cuenta">
-              <i class="fas fa-user"></i>
-            </button>
-            <!-- Menú desplegable -->
-            <div id="user-dropdown-menu" class="dropdown-menu"> 
-              <a href="/paginas/login.html">Iniciar Sesión</a>
-              <a href="/paginas/register.html">Registrarse</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="carousel-container">
+      <!-- Contenido de la cabecera (logo, búsqueda, menú de usuario) se cargará dinámicamente por cabecera.js -->
+    </header>
+
+    <!-- Carousel and Navigation Buttons are now outside the main header -->
+    <section class="carousel-container">
         <div class="carousel-track">
           <div class="carousel-slide">
             <a href="/ruta/a/la/pagina-de-promocion-1" class="carousel-image-link">
@@ -53,12 +28,14 @@
               <img src="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/6190eace-e15a-491f-a460-ca22861f11d0/IMG_20250516_175130_GVPWNV.png" alt="Descripción de la imagen 2" />
             </a>
           </div>
+          <!-- Add more slides as needed -->
         </div>
         <button class="carousel-control prev" aria-label="Anterior">&#10094;</button>
         <button class="carousel-control next" aria-label="Siguiente">&#10095;</button>
-      </section>
-      <nav class="button-container">
-        <button id="now-showing-button" class="cine-nav-button active">
+    </section>
+
+    <nav class="button-container">
+        <button id="now-showing-button" class="cine-nav-button active"> <!-- Default active -->
           <i class="fas fa-film"></i> Cartelera
         </button>
         <button id="upcoming-button" class="cine-nav-button">
@@ -67,22 +44,19 @@
         <button id="promotions-button" class="cine-nav-button promotions-only">
           <i class="fas fa-tags"></i> Promociones
         </button>
-      </nav>
-    </header>
+    </nav>
 
     <main class="main-content">
       <section id="movie-section" class="movie-section">
         <div id="movie-list" class="movie-grid">
-          <!-- Las películas se cargarán dinámicamente aquí -->
+          <!-- Las películas en cartelera se cargarán dinámicamente aquí -->
+        </div>
+        <div id="upcoming-list" class="movie-grid" style="display: none;">
+            <!-- Las películas próximas se cargarán dinámicamente aquí -->
         </div>
       </section>
-      <section id="upcoming-section" class="upcoming-section">
-        <div id="upcoming-list" class="movie-grid">
-          <!-- Las películas próximas se cargarán dinámicamente aquí -->
-        </div>
-      </section>
-      <section id="combo-section" class="combo-section">
-        <div id="combo-list" class="movie-grid">
+      <section id="combo-section" class="combo-section" style="display: none;">
+        <div id="combo-list" class="movie-grid"> <!-- Assuming combos use movie-grid style -->
           <!-- Los combos se cargarán dinámicamente aquí -->
         </div>
       </section>
@@ -91,10 +65,13 @@
     <footer></footer>
     <!-- El pie de página se cargará dinámicamente -->
 
-    <script src="../js/components/piePagina.js"></script>
-    <script src="../js/scripts.js"></script>
-    <script src="../js/components/autenticacion.js"></script>
-    <script src="../js/components/movies.js"></script>
+    <script src="/js/components/cart.js"></script> <!-- Load cart.js first -->
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
+    <script src="/js/components/movies.js"></script> <!-- Contains displayMovies and potentially fetchMovies -->
+    <!-- <script src="/js/components/autenticacion.js"></script> --> <!-- If still needed -->
+    <script src="/js/scripts.js"></script> <!-- Main logic for prueba.html content -->
+
   </body>
   <!--Start of Tawk.to Script-->
 <script type="text/javascript">
@@ -102,7 +79,7 @@
   (function(){
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
   s1.async=true;
-  s1.src='https://embed.tawk.to/681e7b52531ac91914e8c860/1iqrh3efp';
+  s1.src='https://embed.tawk.to/681e7b52531ac91914e8c860/1iqrh3efp'; // Example Tawk.to ID
   s1.charset='UTF-8';
   s1.setAttribute('crossorigin','*');
   s0.parentNode.insertBefore(s1,s0);
