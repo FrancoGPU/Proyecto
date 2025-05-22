@@ -8,47 +8,44 @@
     <link rel="stylesheet" href="/css/paginas/Reserva/confirmacion.css">
 </head>
 <body>
-    <header></header> <!-- La cabecera se cargará dinámicamente -->
+    <header class="cine-cabecera"></header>
 
     <main class="main-content">
         <section class="confirmation-section">
             <h2>Confirmación de Compra</h2>
-            <div class="purchase-summary">
-                <h3>Resumen de tu compra</h3>
-                <p><strong>Película:</strong> <span id="movie-name"></span></p>
-                <p><strong>Butacas:</strong> <span id="seats"></span></p>
-                <p><strong>Total:</strong> <span id="total-price"></span></p>
+            
+            <div id="booking-details-summary">
+                <h3>Resumen de Película</h3>
+                <!-- Detalles de la película y asientos se cargarán aquí si aplica -->
+                <p><strong>Película:</strong> <span id="confirm-movie-title"></span></p>
+                <p><strong>Horario:</strong> <span id="confirm-movie-time"></span></p>
+                <p><strong>Asientos:</strong> <span id="confirm-selected-seats"></span></p>
+                <p><strong>Total Película:</strong> S/.<span id="confirm-movie-total"></span></p>
             </div>
-            <div class="combo-summary">
-                <h3>Combo Seleccionado</h3>
-                <div id="combo-details">
-                    <!-- Los detalles del combo se cargarán dinámicamente aquí -->
+
+            <div id="cart-summary-container">
+                <h3>Resumen de Productos Adicionales</h3>
+                <div id="cart-items-list">
+                    <!-- Los artículos del carrito se mostrarán aquí -->
                 </div>
+                <p><strong>Subtotal Productos:</strong> S/.<span id="cart-subtotal">0.00</span></p>
             </div>
 
-            <form class="payment-form" id="payment-form">
-                <h3>Detalles de Pago</h3>
-                <label for="card-name">Nombre en la tarjeta:</label>
-                <input type="text" id="card-name" name="card-name" placeholder="Nombre completo" required>
+            <div id="final-total-summary">
+                <h3>Total General de la Compra</h3>
+                <p><strong>Total General:</strong> S/.<span id="grand-total">0.00</span></p>
+            </div>
 
-                <label for="card-number">Número de tarjeta:</label>
-                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
-
-                <label for="expiry-date">Fecha de expiración:</label>
-                <input type="month" id="expiry-date" name="expiry-date" required>
-
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
-
-                <button type="submit" class="btn-primary">Realizar Pago</button>
-            </form>
+            <button id="proceed-to-payment-button" class="btn-primary">Proceder al Pago</button>
+            <button id="cancel-booking-button" class="btn-secondary">Cancelar</button>
         </section>
     </main>
 
-    <footer></footer> <!-- El pie de página se cargará dinámicamente -->
+    <footer></footer>
 
-    <script src="/js/components/cabecera.js"></script>
-    <script src="/js/components/piePagina.js"></script>
+    <script src="/js/components/cart.js"></script>
     <script src="/js/paginas/Reserva/confirmacion.js"></script>
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
 </body>
 </html>

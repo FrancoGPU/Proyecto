@@ -76,7 +76,8 @@
     background-color: var(--primary-dark);
 }
 
-#continue-button {
+/* Styles for the continue to confirmation button */
+#continue-to-confirmation-button {
     background-color: #f74a3a; /* Color de fondo */
     color: #fff; /* Color del texto */
     border: none; /* Sin bordes */
@@ -86,14 +87,17 @@
     font-weight: bold; /* Texto en negrita */
     cursor: pointer; /* Cambiar el cursor al pasar */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones */
+    display: block; /* Para centrarlo si es necesario o darle un ancho */
+    margin: 20px auto; /* Margen superior/inferior y centrado horizontal */
+    width: fit-content; /* Ajustar el ancho al contenido */
 }
 
-#continue-button:hover {
+#continue-to-confirmation-button:hover {
     background-color: #ff3122; /* Color de fondo al pasar el mouse */
     transform: scale(1.05); /* Efecto de agrandamiento */
 }
 
-#continue-button:active {
+#continue-to-confirmation-button:active {
     background-color: #ff1500; /* Color de fondo al hacer clic */
     transform: scale(0.95); /* Efecto de reducción */
 }

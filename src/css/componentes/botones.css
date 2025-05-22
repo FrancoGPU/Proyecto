@@ -119,3 +119,51 @@
   background-color: var(--primary-dark, #c0392b); /* Un color de hover, ajusta si es necesario */
   color: var(--text-light, #fff);
 }
+
+.cart-hidden {
+  display: none;
+}
+
+/* Estilos básicos para el carrito (personaliza según necesites) */
+#shopping-cart-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px; /* o el ancho que prefieras */
+  height: 100%;
+  background-color: white;
+  border-left: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  z-index: 1000; /* Asegúrate que esté por encima de otros elementos */
+  overflow-y: auto;
+}
+
+#cart-items-list .cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#cart-items-list .cart-item img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+#cart-items-list .cart-item-details {
+  flex-grow: 1;
+}
+
+#cart-items-list .cart-item-controls button {
+  margin-left: 5px;
+}
+
+.cart-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

@@ -154,7 +154,7 @@
     }
 
     .seats-container {
-        grid-template-columns: repeat(5, 1fr); /* Esto cambia .seats-container a grid */
+    grid-template-columns: repeat(5, 1fr); /* Esto cambia .seats-container a grid */
     }
 
     .screen {
@@ -164,7 +164,7 @@
 
 @media (max-width: 480px) {
     .seats-container {
-        grid-template-columns: repeat(4, 1fr); /* Esto cambia .seats-container a grid */
+    grid-template-columns: repeat(4, 1fr); /* Esto cambia .seats-container a grid */
     }
     .btn-primary {
         font-size: 0.9rem; /* Reduce el tamaño del botón */

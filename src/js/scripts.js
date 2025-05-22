@@ -1,20 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("scripts.js cargado correctamente");
-  //fetchMovies(); // Cargar las películas iniciales (cartelera)
+  console.log("scripts.js cargado correctamente (main content)");
 
-   const promotionsButton = document.getElementById("promotions-button");
+  // --- Elements for main content sections (Cartelera, Próximamente, Promociones) ---
+  const promotionsButton = document.getElementById("promotions-button");
   const nowShowingButton = document.getElementById("now-showing-button");
   const upcomingButton = document.getElementById("upcoming-button");
   const comboSection = document.getElementById("combo-section");
   const movieSection = document.getElementById("movie-section");
-  // const upcomingSection = document.getElementById("upcoming-section"); // Si la tienes
-  const searchBar = document.getElementById("search-bar");
-  const searchSubmit = document.getElementById("search-submit");
-  
-  const userButton = document.getElementById("user-button");
-  const userIcon = userButton ? userButton.querySelector("i.fas.fa-user") : null; // Obtener el ícono
-  const userDropdownMenu = document.getElementById("user-dropdown-menu");
+  const upcomingSection = document.getElementById("upcoming-section"); // Ensure this ID exists if used
 
+  // --- Helper Functions for Main Content ---
   function activateButton(activeButton, ...inactiveButtons) {
     if (activeButton) activeButton.classList.add("active");
     inactiveButtons.forEach((button) => {
@@ -25,238 +20,169 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearMovieList() {
     const movieList = document.getElementById("movie-list");
     if (movieList) movieList.innerHTML = "";
-    const upcomingList = document.getElementById("upcoming-list"); // Asegúrate que esta lista también se limpie
+    const upcomingList = document.getElementById("upcoming-list");
     if (upcomingList) upcomingList.innerHTML = "";
   }
 
-  function loadCombos() {
-    const comboList = document.getElementById("combo-list");
-    if (!comboList) return;
+  function loadCombos() { // This function is used for "Promociones" tab in prueba.html
+    const comboList = document.getElementById("combo-list"); // This is inside #combo-section
+    if (!comboList) {
+        console.warn("Elemento #combo-list no encontrado para cargar promociones/combos.");
+        return;
+    }
 
-    fetch("/api/combos")
+    fetch("/api/combos") // Assuming promotions are also fetched from /api/combos
       .then((response) => {
-        if (!response.ok) throw new Error("Error al cargar los combos");
+        if (!response.ok) throw new Error("Error al cargar las promociones/combos");
         return response.json();
       })
-      .then((combos) => {
-        comboList.innerHTML = ""; // Limpiar la lista de combos
-        combos.forEach((combo) => {
-          const comboCard = document.createElement("div");
-          comboCard.classList.add("combo-card");
+      .then((items) => {
+        comboList.innerHTML = ""; 
+        if (items.length === 0) {
+            comboList.innerHTML = '<p>No hay promociones disponibles en este momento.</p>';
+            return;
+        }
+        items.forEach((item) => {
+          const itemCard = document.createElement("div");
+          itemCard.classList.add("movie-card"); 
 
-          comboCard.innerHTML = `
-            <img src="${combo.image}" alt="${combo.name}">
-            <h3>${combo.name}</h3>
-            <p>${combo.description}</p>
-            <p class="price">S/.${parseFloat(combo.price).toFixed(2)}</p>
+          itemCard.innerHTML = `
+            <div class="movie-image-container">
+                <img src="${item.image}" alt="${item.name}" class="movie-image">
+            </div>
+            <div class="movie-info">
+                <h3 class="movie-title">${item.name}</h3>
+                <p class="movie-description">${item.description}</p>
+                <p class="price">S/.${parseFloat(item.price).toFixed(2)}</p>
+                <button class="btn-add-to-cart btn-primary" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" data-image="${item.image}">Añadir al Carrito</button>
+            </div>
           `;
+          comboList.appendChild(itemCard);
+        });
 
-          comboList.appendChild(comboCard);
+        // Add event listeners to new buttons
+        comboList.querySelectorAll('.btn-add-to-cart').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const product = {
+                    id: event.target.dataset.id,
+                    name: event.target.dataset.name,
+                    price: parseFloat(event.target.dataset.price),
+                    image: event.target.dataset.image,
+                    type: 'promotion' // Or 'combo' if they are the same items
+                };
+                 // Ensure cart.js's addToCart is accessible
+                if (typeof addToCart === "function") {
+                    addToCart(product);
+                } else {
+                    console.error('addToCart function is not defined. Make sure cart.js is loaded before scripts.js or is globally available.');
+                }
+            });
         });
       })
-      .catch((error) => console.error("Error al cargar los combos:", error));
-  }
-
-  // Función para realizar la búsqueda
-  function performSearch() {
-    const query = searchBar.value.trim().toLowerCase();
-    const movieList = document.getElementById("movie-list");
-    if (movieList) {
-      const movies = Array.from(movieList.children);
-      movies.forEach((movie) => {
-        const title = movie.querySelector("h3")?.textContent.toLowerCase() || "";
-        movie.style.display = title.includes(query) ? "block" : "none";
-      });
-    }
-  }
-
-  // --- Lógica de Autenticación y Menú de Usuario ---
-  async function checkLoginStatusAndUpdateUI() {
-    if (!userButton || !userDropdownMenu || !userIcon) {
-        console.warn("Elementos del menú de usuario no encontrados. No se actualizará el estado de login.");
-        return;
-    }
-    try {
-      // Asume que tienes un endpoint que devuelve el estado de la sesión
-      // Ejemplo de respuesta esperada: { loggedIn: true, user: { email: 'user@example.com', role: 'user' } }
-      // o { loggedIn: false }
-      const response = await fetch('/api/session/status'); // CAMBIA ESTE ENDPOINT SI ES NECESARIO
-      if (!response.ok) {
-        // Si el endpoint falla pero no es un 401/403 (no logueado), podría ser un error de servidor
-        console.error('Error al obtener estado de sesión:', response.status);
-        updateUserMenu(false); // Asumir no logueado si hay error
-        return;
-      }
-      const data = await response.json();
-      updateUserMenu(data.loggedIn, data.user);
-    } catch (error) {
-      console.error('Error en checkLoginStatusAndUpdateUI:', error);
-      updateUserMenu(false); // Asumir no logueado si hay error de red
-    }
-  }
-
-  function updateUserMenu(isLoggedIn, userData = null) {
-    if (!userDropdownMenu || !userIcon) return;
-
-    userDropdownMenu.innerHTML = ''; // Limpiar opciones previas
-
-    if (isLoggedIn && userData) {
-      userIcon.classList.add('logged-in'); // Clase para cambiar color del icono vía CSS
-
-      // Opcional: Mostrar email del usuario
-      const userEmailDisplay = document.createElement('div');
-      userEmailDisplay.classList.add('dropdown-user-email'); // Necesitarás CSS para esta clase
-      userEmailDisplay.textContent = userData.email; // Asume que userData tiene 'email'
-      userDropdownMenu.appendChild(userEmailDisplay);
-      
-      // Opción de Panel de Administrador si el rol es 'admin'
-      if (userData.role === 'admin') { // Asume que userData tiene 'role'
-        const adminPanelLink = document.createElement('a');
-        adminPanelLink.href = '/paginas/Administracion/admin.html'; // TODO: Crear esta página de admin
-        adminPanelLink.textContent = 'Panel Admin';
-        userDropdownMenu.appendChild(adminPanelLink);
-      }
-
-      const logoutLink = document.createElement('a');
-      logoutLink.href = '#'; // Evitar navegación, manejar con JS
-      logoutLink.textContent = 'Cerrar Sesión';
-      logoutLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        userDropdownMenu.style.display = 'none'; // Ocultar menú inmediatamente
-        try {
-          // Asume que tienes un endpoint para logout
-          const logoutResponse = await fetch('/api/logout', { method: 'POST' }); // CAMBIA ESTE ENDPOINT SI ES NECESARIO
-          if (logoutResponse.ok) {
-            // alert('Cierre de sesión exitoso.'); // Opcional
-            checkLoginStatusAndUpdateUI(); // Actualizar UI después del logout
-            // Opcional: Redirigir a la página principal o de login
-            // window.location.href = '/paginas/prueba.html'; 
-          } else {
-            const errorData = await logoutResponse.json();
-            alert(`Error al cerrar sesión: ${errorData.message || 'Error desconocido'}`);
-          }
-        } catch (err) {
-          console.error('Error en la solicitud de logout:', err);
-          alert('Error al intentar cerrar sesión.');
+      .catch((error) => {
+        console.error("Error al cargar las promociones/combos:", error);
+        if (comboList) {
+            comboList.innerHTML = '<p>Error al cargar promociones. Intente más tarde.</p>';
         }
       });
-      userDropdownMenu.appendChild(logoutLink);
-
-    } else {
-      userIcon.classList.remove('logged-in');
-
-      const loginLink = document.createElement('a');
-      loginLink.href = '/paginas/Autenticacion/login.html';
-      loginLink.textContent = 'Iniciar Sesión';
-      userDropdownMenu.appendChild(loginLink);
-
-      const registerLink = document.createElement('a');
-      registerLink.href = '/paginas/Autenticacion/registro.html';
-      registerLink.textContent = 'Registrarse';
-      userDropdownMenu.appendChild(registerLink);
-    }
-
-    // Re-asignar listeners para cerrar el menú al hacer clic en los nuevos enlaces (excepto logout)
-    userDropdownMenu.querySelectorAll('a').forEach(link => {
-        if (link.textContent !== 'Cerrar Sesión') { // El de logout ya maneja su cierre
-            link.addEventListener('click', () => {
-                userDropdownMenu.style.display = 'none';
-            });
-        }
-    });
   }
-
-  // Funcionalidad de la barra de búsqueda
-  if (searchBar && searchSubmit) {
-    // Buscar al hacer clic en el botón de búsqueda
-    searchSubmit.addEventListener("click", performSearch);
-
-    // Buscar al presionar Enter en el campo de búsqueda
-    searchBar.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Evitar el envío del formulario si está dentro de uno
-        performSearch();
-      }
-    });
-  }
-
-  // Funcionalidad del botón de usuario
-  if (userButton && userDropdownMenu) {
-    userButton.addEventListener("click", (event) => {
-      event.stopPropagation(); 
-      const isVisible = userDropdownMenu.style.display === "block";
-      userDropdownMenu.style.display = isVisible ? "none" : "block";
-    });
-
-    // Cerrar el menú si se hace clic en un enlace dentro de él
-    userDropdownMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            userDropdownMenu.style.display = 'none';
-        });
-    });
-
-    // Opcional: Cerrar el menú si se hace clic fuera de él
-    window.addEventListener("click", (event) => {
-      // Asegurarse que el clic no fue en el botón ni dentro del menú
-      if (userDropdownMenu.style.display === "block" && 
-          !userButton.contains(event.target) && 
-          !userDropdownMenu.contains(event.target)) {
-        userDropdownMenu.style.display = "none";
-      }
-    });
-
-    // Opcional: Cerrar el menú si se presiona la tecla Escape
-    window.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && userDropdownMenu.style.display === 'block') {
-            userDropdownMenu.style.display = 'none';
-        }
-    });
-  }
-
-  // Función para mostrar las películas
+  
+  
+  // --- Event Listeners for Main Content Navigation ---
   if (nowShowingButton && upcomingButton && promotionsButton) {
     nowShowingButton.addEventListener("click", () => {
       activateButton(nowShowingButton, upcomingButton, promotionsButton);
       if (movieSection) movieSection.style.display = "block";
+      // Correctly hide upcoming-list when now-showing is active
+      if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "none"; 
+      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "grid"; 
       if (comboSection) comboSection.style.display = "none";
       clearMovieList();
-      fetchMovies(); // Volver a cargar las películas de cartelera
+      if (typeof fetchMovies === "function") { 
+        fetchMovies(); 
+      } else {
+        console.warn("fetchMovies function is not defined.");
+      }
     });
 
     upcomingButton.addEventListener("click", () => {
       activateButton(upcomingButton, nowShowingButton, promotionsButton);
-      if (movieSection) movieSection.style.display = "block"; // Asegúrate que la sección de películas esté visible
+      if (movieSection) movieSection.style.display = "block";
+      
+      const upcomingListElement = document.getElementById("upcoming-list");
+      if (upcomingListElement) {
+        upcomingListElement.style.display = "grid";
+        console.log("Upcoming list element display set to grid:", upcomingListElement);
+      } else {
+        console.error("#upcoming-list element not found!");
+        return; // Stop if the list element doesn't exist
+      }
+
+      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "none";
       if (comboSection) comboSection.style.display = "none";
-      clearMovieList();
-      fetch("/api/upcoming") // Asume que este es tu endpoint para próximas películas
+      
+      console.log("Clearing movie lists for upcoming section...");
+      clearMovieList(); // This clears both movie-list and upcoming-list
+
+      console.log("Fetching /api/upcoming...");
+      fetch("/api/upcoming")
         .then((response) => {
-          if (!response.ok) throw new Error("Error al cargar las películas próximas");
+          console.log("/api/upcoming response status:", response.status);
+          if (!response.ok) {
+            console.error('Error fetching upcoming movies:', response.status, response.statusText);
+            return response.text().then(text => { // Try to get error body
+              throw new Error(`Error al cargar las películas próximas (${response.status}): ${text}`);
+            });
+          }
           return response.json();
         })
         .then((data) => {
-          // Asumimos que tienes una función displayMovies que puede manejar estos datos
-          // o que fetchMovies puede ser adaptada. Por ahora, llamaremos a displayMovies.
-          // Si displayMovies no existe o no es adecuada, necesitarás crear/ajustar una.
-          if (typeof displayMovies === "function") {
-            displayMovies(data, 'upcoming-list'); // Pasamos el ID del contenedor si es diferente
+          console.log("Data received from /api/upcoming:", JSON.stringify(data, null, 2));
+          
+          if (!upcomingListElement) { // Double check, though we checked above
+              console.error("Cannot display upcoming movies: #upcoming-list element is null after fetch.");
+              return;
+          }
+
+          if (!data || data.length === 0) {
+            console.warn("No upcoming movies found or data is empty from /api/upcoming.");
+            upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">No hay películas próximas disponibles en este momento.</p>';
+            console.log("Upcoming list innerHTML after 'no movies' message:", upcomingListElement.innerHTML);
+          } else if (typeof displayMovies === "function") { 
+            console.log("Calling displayMovies for upcoming-list with data:", data);
+            displayMovies(data, 'upcoming-list'); 
+            console.log("Upcoming list innerHTML after displayMovies call:", upcomingListElement.innerHTML);
+            if (upcomingListElement.children.length === 0) {
+                console.warn("displayMovies was called for upcoming-list, but the list is still empty. Check displayMovies function.");
+                // Optionally, add a message here too if displayMovies doesn't populate
+                // upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">Hubo un problema al mostrar las películas próximas.</p>';
+            }
           } else {
-            console.error("La función displayMovies no está definida o no es adecuada para 'upcoming'.");
-            // Podrías tener una lógica similar a fetchMovies pero para 'upcoming-list'
+            console.warn("displayMovies function is not defined. Cannot display upcoming movies.");
+            upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">Error al mostrar películas próximas (función de visualización no disponible).</p>';
+            console.log("Upcoming list innerHTML after 'displayMovies not defined' message:", upcomingListElement.innerHTML);
           }
         })
-        .catch((error) => console.error("Error al cargar las películas próximas:", error));
+        .catch((error) => {
+            console.error("Error al cargar o procesar las películas próximas:", error);
+            if (upcomingListElement) {
+                upcomingListElement.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: red;">Error al cargar las películas próximas. ${error.message}. Intente más tarde.</p>`;
+                console.log("Upcoming list innerHTML after CATCH block:", upcomingListElement.innerHTML);
+            } else {
+                console.error("Cannot display error message: #upcoming-list element is null in catch block.");
+            }
+        });
     });
 
     promotionsButton.addEventListener("click", () => {
       activateButton(promotionsButton, nowShowingButton, upcomingButton);
       if (movieSection) movieSection.style.display = "none";
-      if (comboSection) comboSection.style.display = "block";
-      loadCombos(); // Cargar los combos dinámicamente
+      if (comboSection) comboSection.style.display = "block"; // Or "grid" if it uses movie-grid
+      loadCombos();
     });
+  } else {
+    console.warn("Botones de navegación de contenido principal (Cartelera, Próximamente, Promociones) no encontrados.");
   }
-
-  // Asegurarse de que ambas secciones estén visibles al cargar la página
-  // if (comboSection) comboSection.style.display = "none"; // Esta línea ya no es necesaria aquí, se maneja por defecto
 
   // --- Lógica para manejar la sección activa desde la URL ---
   function handleSectionFromURL() {
@@ -270,20 +196,18 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (section === 'now-showing' && nowShowingButton) {
       nowShowingButton.click();
     } else {
-      // Por defecto, si no hay parámetro o es desconocido, activar "Cartelera"
       if (nowShowingButton) {
-        nowShowingButton.click();
-      } else {
-        // Fallback si el botón no existe, aunque debería
-        if (movieSection) movieSection.style.display = "block";
-        if (comboSection) comboSection.style.display = "none";
-        clearMovieList();
-        fetchMovies();
+        nowShowingButton.click(); // Default to "Cartelera"
+      } else if (typeof fetchMovies === "function") {
+         if (movieSection) movieSection.style.display = "block";
+         if (comboSection) comboSection.style.display = "none";
+         clearMovieList();
+         fetchMovies();
       }
     }
   }
 
-  // Lógica del Carrusel
+  // --- Lógica del Carrusel ---
   const carouselContainer = document.querySelector('.carousel-container');
   const track = document.querySelector('.carousel-track');
   const slides = track ? Array.from(track.children) : [];
@@ -296,75 +220,66 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateSlideWidthAndPosition() {
     if (slides.length > 0 && carouselContainer && track) {
       slideWidth = carouselContainer.offsetWidth;
-      // Asegurar que cada slide tenga el ancho correcto (opcional si min-width:100% es suficiente)
-      // slides.forEach(slide => slide.style.width = `${slideWidth}px`);
-      // Establecer el ancho del track para contener todos los slides (opcional si flex maneja bien)
-      // track.style.width = `${slideWidth * slides.length}px`;
-      showSlide(currentSlide, false); // Reposicionar sin animación al redimensionar
+      showSlide(currentSlide, false); 
     }
   }
 
   function showSlide(index, animate = true) {
     if (!track || slides.length === 0) return;
-
     if (!animate) {
-      track.style.transition = 'none'; // Desactivar animación temporalmente
+      track.style.transition = 'none';
     } else {
-      track.style.transition = 'transform 0.5s ease-in-out'; // Reactivar animación
+      track.style.transition = 'transform 0.5s ease-in-out';
     }
-
     const offset = -index * slideWidth;
     track.style.transform = `translateX(${offset}px)`;
-
-    // Forzar un reflow si se desactivó la transición, para que se aplique al instante
     if (!animate) {
         // eslint-disable-next-line no-unused-expressions
-        track.offsetHeight; // Forzar reflow
-        track.style.transition = 'transform 0.5s ease-in-out'; // Restaurar para futuras animaciones
+        track.offsetHeight; 
+        track.style.transition = 'transform 0.5s ease-in-out';
     }
   }
 
-  function nextSlide() {
+  function nextSlideAuto() {
     currentSlide = (currentSlide + 1) % slides.length;
     showSlide(currentSlide);
   }
 
-  function prevSlide() {
+  function prevSlideManual() {
     currentSlide = (currentSlide - 1 + slides.length) % slides.length;
     showSlide(currentSlide);
+    resetInterval();
+  }
+  function nextSlideManual() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+    resetInterval();
   }
 
-  if (slides.length > 0) {
-    updateSlideWidthAndPosition(); // Calcular ancho inicial y posicionar
 
-    window.addEventListener('resize', updateSlideWidthAndPosition); // Actualizar en redimensionamiento
+  if (slides.length > 0) {
+    updateSlideWidthAndPosition();
+    window.addEventListener('resize', updateSlideWidthAndPosition);
 
     if (prevButton && nextButton) {
-      prevButton.addEventListener('click', () => {
-        prevSlide();
-        resetInterval();
-      });
-
-      nextButton.addEventListener('click', () => {
-        nextSlide();
-        resetInterval();
-      });
+      prevButton.addEventListener('click', prevSlideManual);
+      nextButton.addEventListener('click', nextSlideManual);
     }
 
     function startInterval() {
-      slideInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+      clearInterval(slideInterval); // Clear existing interval before starting a new one
+      slideInterval = setInterval(nextSlideAuto, 5000);
     }
 
     function resetInterval() {
       clearInterval(slideInterval);
       startInterval();
     }
-
-    startInterval(); // Iniciar el cambio automático
+    startInterval();
+  } else {
+      // console.warn("Carrusel no encontrado o sin slides.");
   }
 
-  // Llamar para verificar el estado de login al cargar la página
-  checkLoginStatusAndUpdateUI();
-  // Llamar para manejar la sección desde la URL después de que todo esté configurado
-  handleSectionFromURL();
+  // --- Initial calls ---
+  handleSectionFromURL(); // Handle section based on URL params after everything is set up
 });

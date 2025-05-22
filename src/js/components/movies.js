@@ -1,6 +1,12 @@
-function displayMovies(movies) {
-  const movieList = document.getElementById("movie-list");
-  movieList.innerHTML = ""; // Limpiar el contenedor de películas
+function displayMovies(movies, listId = "movie-list") { // Add listId parameter with a default
+  const targetList = document.getElementById(listId);
+
+  if (!targetList) {
+    console.error(`Element with ID "${listId}" not found. Cannot display movies.`);
+    return;
+  }
+
+  targetList.innerHTML = ""; // Limpiar el contenedor de películas específico
 
   movies.forEach((movie) => {
     const movieCard = document.createElement("article");
@@ -23,7 +29,7 @@ function displayMovies(movies) {
         <p class="movie-release">Estreno: ${formattedDate}</p>
         <p class="movie-description">${movie.description}</p>
         ${
-          movie.showtimes && Array.isArray(movie.showtimes)
+          movie.showtimes && Array.isArray(movie.showtimes) && movie.showtimes.length > 0
             ? `<div class="movie-showtimes">
                  <strong>Horarios:</strong>
                  <br>
@@ -39,11 +45,15 @@ function displayMovies(movies) {
       </div>
     `;
 
+    // Only add click listener if it's not for upcoming movies, 
+    // or if upcoming movies should also link to horarios.html
+    // For now, let's assume all movie cards should be clickable.
     movieCard.addEventListener("click", () => {
-      window.location.href = `/paginas/Reserva/horarios.html?movie=${encodeURIComponent(movie.title)}`;
+      // Consider if upcoming movies should also go to horarios.html or a different page
+      window.location.href = `/paginas/Reserva/horarios.html?movie=${encodeURIComponent(movie.title)}&id=${movie.id}`; // Added movie.id for better targeting
     });
 
-    movieList.appendChild(movieCard);
+    targetList.appendChild(movieCard);
   });
 }
 
@@ -56,7 +66,7 @@ function fetchMovies() {
       return response.json();
     })
     .then((movies) => {
-      displayMovies(movies);
+      displayMovies(movies, "movie-list"); // Explicitly pass "movie-list"
     })
     .catch((error) => console.error("Error al obtener las películas:", error));
 }

@@ -1,75 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Recuperar datos desde localStorage
-    const movieName = localStorage.getItem('movieTitle');
-    const seats = localStorage.getItem('selectedSeats');
-    const totalPrice = parseFloat(localStorage.getItem('totalPrice')) || 0; // Convertir a número o inicializar en 0
-    const showtime = localStorage.getItem('selectedShowtime'); // Recuperar el horario seleccionado
-    const comboList = document.getElementById('combo-list');
-    const continueButton = document.getElementById('continue-button');
+    const combosListContainer = document.getElementById('combos-list-container');
 
-    // Mostrar los datos recuperados (opcional, si necesitas mostrarlos en el HTML)
-    console.log('Película:', movieName);
-    console.log('Butacas:', seats);
-    console.log('Precio acumulado:', totalPrice);
-    console.log('Horario:', showtime);
-
-    // Función para cargar los combos dinámicamente
-    async function loadCombos() {
-        if (!comboList) return;
-
-        try {
-            const response = await fetch('/api/combos');
-            if (!response.ok) throw new Error('Error al cargar los combos');
-
-            let combos = await response.json();
-
-            // Ordenar los combos por id para garantizar el orden correcto
-            combos.sort((a, b) => a.id - b.id);
-
-            comboList.innerHTML = ''; // Limpiar la lista de combos
-            combos.forEach((combo) => {
-                const comboCard = document.createElement('div');
-                comboCard.classList.add('combo-card');
-
-                comboCard.innerHTML = `
-                    <img src="${combo.image}" alt="${combo.name}">
-                    <h3>${combo.name}</h3>
-                    <p>${combo.description}</p>
-                    <p class="price">S/.${parseFloat(combo.price).toFixed(2)}</p>
-                    <button class="select-combo" data-combo='${JSON.stringify(combo)}'>Seleccionar</button>
-                `;
-
-                comboList.appendChild(comboCard);
-            });
-
-            // Agregar eventos a los botones de selección
-            document.querySelectorAll('.select-combo').forEach((button) => {
-                button.addEventListener('click', (e) => {
-                    const selectedCombo = JSON.parse(e.target.dataset.combo);
-                    const updatedTotalPrice = totalPrice + parseFloat(selectedCombo.price);
-
-                    // Guardar el combo seleccionado y el precio actualizado en localStorage
-                    localStorage.setItem('selectedCombo', JSON.stringify(selectedCombo));
-                    localStorage.setItem('totalPrice', updatedTotalPrice.toFixed(2));
-
-                    // Redirigir a confirmacion.html
-                    window.location.href = 'confirmacion.html';
-                });
-            });
-        } catch (error) {
-            console.error('Error al cargar los combos:', error);
-            comboList.innerHTML = '<p>Error al cargar los combos. Intenta nuevamente más tarde.</p>';
-        }
+    if (!combosListContainer) {
+        console.error('El contenedor para la lista de combos no fue encontrado.');
+        return;
     }
 
-    // Cargar los combos al cargar la página
-    loadCombos();
+    fetch('/api/combos')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al cargar los combos: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(combos => {
+            if (combos.length === 0) {
+                combosListContainer.innerHTML = '<p>No hay combos disponibles en este momento.</p>';
+                return;
+            }
+            displayCombos(combos);
+        })
+        .catch(error => {
+            console.error('Error en fetch /api/combos:', error);
+            combosListContainer.innerHTML = '<p>Hubo un error al cargar los combos. Intente más tarde.</p>';
+        });
 
-    // Manejar el botón para continuar sin seleccionar un combo
-    if (continueButton) {
-        continueButton.addEventListener('click', () => {
-            // Redirigir a confirmacion.html sin guardar un combo
-            window.location.href = 'confirmacion.html';
+    function displayCombos(combos) {
+        combosListContainer.innerHTML = ''; // Clear previous content
+        combos.forEach(combo => {
+            const comboCard = document.createElement('div');
+            comboCard.classList.add('movie-card'); // Re-use movie-card styling or create combo-card styles
+
+            comboCard.innerHTML = `
+                <div class="movie-image-container">
+                    <img src="${combo.image}" alt="${combo.name}" class="movie-image">
+                </div>
+                <div class="movie-info">
+                    <h3 class="movie-title">${combo.name}</h3>
+                    <p class="movie-description">${combo.description}</p>
+                    <p class="price">S/.${parseFloat(combo.price).toFixed(2)}</p>
+                    <button class="btn-add-to-cart btn-primary" data-id="${combo.id}" data-name="${combo.name}" data-price="${combo.price}" data-image="${combo.image}">Añadir al Carrito</button>
+                </div>
+            `;
+            combosListContainer.appendChild(comboCard);
+        });
+
+        // Add event listeners to new buttons
+                combosListContainer.querySelectorAll('.btn-add-to-cart').forEach(button => {            button.addEventListener('click', (event) => {
+                const product = {
+                    id: event.target.dataset.id,
+                    name: event.target.dataset.name,
+                    price: parseFloat(event.target.dataset.price),
+                    image: event.target.dataset.image,
+                    type: 'combo' // Explicitly set type
+                };
+                // Ensure cart.js's addToCart is accessible, or import it if using modules
+                if (typeof addToCart === "function") {
+                    addToCart(product);
+                } else {
+                    console.error('addToCart function is not defined. Make sure cart.js is loaded.');
+                }
+            });
+        });
+    }
+
+    // Add navigation button listener
+    const goToConfirmationButton = document.getElementById('go-to-confirmation-btn');
+    if (goToConfirmationButton) {
+        goToConfirmationButton.addEventListener('click', () => {
+            window.location.href = '/paginas/Reserva/confirmacion.html';
         });
     }
 });

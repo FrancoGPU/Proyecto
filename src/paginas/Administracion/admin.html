@@ -5,107 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador - GOCINE</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-        /* Estilos específicos para admin.html si son necesarios */
-        .admin-container {
-            padding: var(--space-lg, 2rem);
-            max-width: 1200px; /* Aumentar ancho para tablas */
-            margin: var(--space-lg, 2rem) auto;
-            background-color: var(--background-light, #fff);
-            border-radius: var(--border-radius-md, 8px);
-            box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1));
-        }
-        .admin-container h1, .admin-container h2 {
-            color: var(--primary, #d9534f);
-            margin-bottom: var(--space-md, 1rem);
-            text-align: center;
-        }
-        .admin-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-        .protected-content {
-            display: block; /* Visible por defecto, se mostrará con JS si es admin */
-        }
-        /* Estilos para tablas y formularios */
-        .admin-section {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .actions-cell button {
-            margin-right: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .btn-edit { background-color: #ffc107; color: black; border: none; }
-        .btn-delete { background-color: #dc3545; color: white; border: none; }
-        .btn-add {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        /* Formulario Modal (simple) */
-        .modal {
-            display: none; /* Oculto por defecto */
-            position: fixed;
-            z-index: 1060;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 700px;
-            border-radius: 8px;
-        }
-        .modal-content h3 { margin-top: 0; }
-        .modal-content label { display: block; margin-top: 10px; }
-        .modal-content input[type="text"],
-        .modal-content input[type="date"],
-        .modal-content input[type="number"],
-        .modal-content textarea {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .modal-content textarea { resize: vertical; min-height: 80px; }
-        .modal-buttons { margin-top: 20px; text-align: right; }
-        .modal-buttons button { padding: 10px 15px; margin-left: 10px; }
-        .close-button { float: right; font-size: 1.5rem; font-weight: bold; cursor: pointer; }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="/css/paginas/Administracion/admin.css">
 </head>
 <body class="admin-page">
     <header class="cine-cabecera">
@@ -120,8 +21,6 @@
             </div>
             <div class="protected-content" id="admin-main-content">
                 <p>Bienvenido al panel de administración.</p>
-
-                <!-- Sección de Gestión de Películas -->
                  <!-- Sección de Gestión de Películas -->
                 <section class="admin-section" id="movies-management">
                     <h2>Gestionar Películas</h2>
@@ -161,11 +60,29 @@
                     </table>
                 </section>
 
+                <!-- Sección de Gestión de Usuarios -->
+                <section class="admin-section" id="users-management">
+                    <h2>Gestionar Usuarios</h2>
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre de Usuario</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Las filas de usuarios se insertarán aquí -->
+                        </tbody>
+                    </table>
+                </section>
+
             </div>
         </div>
     </main>
 
-    <!-- Modal para Añadir/Editar Película -->
     <!-- Modal para Añadir/Editar Película -->
     <div id="movie-modal" class="modal">
         <div class="modal-content">
@@ -229,12 +146,33 @@
         </div>
     </div>
 
+    <!-- Modal para Cambiar Rol de Usuario -->
+    <div id="user-role-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-user-role-modal">&times;</span>
+            <h3 id="user-role-modal-title">Cambiar Rol de Usuario</h3>
+            <form id="user-role-form">
+                <input type="hidden" id="user-id-role" name="id">
+                <p>Usuario: <strong id="user-role-username"></strong></p>
+                <label for="user-role-select">Rol:</label>
+                <select id="user-role-select" name="role">
+                    <option value="user">Usuario</option>
+                    <option value="admin">Administrador</option>
+                </select>
+                <div class="modal-buttons">
+                    <button type="button" id="cancel-user-role-form">Cancelar</button>
+                    <button type="submit" id="save-user-role-btn">Guardar Rol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <!-- El pie de página se puede cargar dinámicamente o estar fijo -->
     </footer>
 
-    <script src="/js/components/cabecera.js"></script>
-    <script src="/js/components/piePagina.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
     <script src="/js/paginas/Administracion/admin.js"></script>
 </body>
 </html>

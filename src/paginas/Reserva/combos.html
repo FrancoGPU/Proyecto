@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Combos GOCINE</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/paginas/combos.css"> <!-- Add specific CSS if needed -->
 </head>
-<header></header> <!-- La cabecera se cargará dinámicamente -->
-<body>
+<body> <!-- Moved header and footer inside body -->
+    <header class="cine-cabecera"></header>
+
     <main class="main-content">
-        <section id="combo-section" class="combo-section">
-            <h2>Combos de Dulcería</h2>
-            <div id="combo-list" class="combo-grid">
-                <!-- Los combos se cargarán dinámicamente aquí -->
+        <section class="combos-page-section">
+            <h1>Nuestros Combos</h1>
+            <div id="combos-list-container" class="movie-grid">
+                <!-- Combos se cargarán aquí por combos.js -->
             </div>
-            <button id="continue-button" class="btn-primary">Continuar sin combo</button>
+            <div class="combos-navigation" style="text-align: center; margin-top: 20px;">
+                <button id="go-to-confirmation-btn" class="btn-primary">Ver Carrito y Continuar</button>
+            </div>
         </section>
     </main>
+
+    <footer></footer>
+
+    <script src="/js/components/cart.js"></script> <!-- Include cart script -->
+    <script src="/js/paginas/Reserva/combos.js"></script>
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
 </body>
-<footer></footer> <!-- El pie de página se cargará dinámicamente -->
-<script src="/js/components/cabecera.js"></script>
-<script src="/js/components/piePagina.js"></script>
-<script src="/js/paginas/Reserva/combos.js"></script>
 </html>

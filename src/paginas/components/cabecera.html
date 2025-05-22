@@ -1,0 +1,43 @@
+<div class="cabecera-container">
+    <a href="/paginas/prueba.html" class="logo-link">
+        <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
+    </a>
+    <div class="cabecera-actions">
+        <!-- Search bar container: display is controlled by cabecera.js -->
+        <div class="search-bar-container" style="display: none;">
+            <input type="text" id="search-bar" class="search-bar" placeholder="Buscar películas..." />
+            <button id="search-submit" class="btn-icon" aria-label="Buscar">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        
+        <!-- Cart Icon and Dropdown -->
+        <div class="cart-icon-container">
+            <button id="cart-button" class="btn-icon" aria-label="Carrito">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-item-count" class="cart-count-badge">0</span>
+            </button>
+            <div id="cart-dropdown-menu" class="dropdown-menu cart-dropdown">
+                <h4>Tu Carrito</h4>
+                <div id="cart-dropdown-items">
+                    <!-- Cart items will be populated here by cabecera.js -->
+                    <p class="cart-empty-message">Tu carrito está vacío.</p>
+                </div>
+                <div class="cart-dropdown-summary">
+                    <strong>Subtotal: S/.<span id="cart-dropdown-subtotal">0.00</span></strong>
+                </div>
+                <button id="cart-checkout-button" class="btn-primary btn-block">Ver Carrito y Pagar</button>
+            </div>
+        </div>
+
+        <!-- User menu container -->
+        <div class="user-menu-container">
+            <button id="user-button" class="btn-icon" aria-label="Cuenta">
+                <i class="fas fa-user"></i> <!-- Icon will get 'logged-in' class via JS -->
+            </button>
+            <div id="user-dropdown-menu" class="dropdown-menu">
+                <!-- Links for login/register or user email/logout will be populated by cabecera.js -->
+            </div>
+        </div>
+    </div>
+</div>

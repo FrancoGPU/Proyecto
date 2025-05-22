@@ -26,6 +26,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentEditingComboId = null;
 
+    // Elementos para gestión de usuarios
+    const usersManagementSection = document.getElementById('users-management');
+    const usersTableBody = document.getElementById('users-table-body');
+    const userRoleModal = document.getElementById('user-role-modal');
+    const userRoleModalTitle = document.getElementById('user-role-modal-title'); // Aunque no se usa para cambiar título, es bueno tenerlo
+    const closeUserRoleModalBtn = document.getElementById('close-user-role-modal');
+    const userRoleForm = document.getElementById('user-role-form');
+    const cancelUserRoleFormBtn = document.getElementById('cancel-user-role-form');
+    const userRoleUsernameDisplay = document.getElementById('user-role-username');
+    const userRoleSelect = document.getElementById('user-role-select');
+    let currentEditingUserIdForRole = null;
+    let currentSessionUserId = null; // Para evitar que el admin se quite su propio rol accidentalmente
+
     // Verificar si el usuario es administrador
     if (!adminMessage || !adminMainContent) {
         console.error("Elementos base de admin no encontrados.");
@@ -40,9 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (sessionData.loggedIn && sessionData.user && sessionData.user.role === 'admin') {
             adminMessage.style.display = 'none';
             adminMainContent.style.display = 'block';
+            currentSessionUserId = sessionData.user.id; // Guardar el ID del admin actual
             console.log('Acceso de administrador concedido.');
             loadAdminMovies(); // Cargar películas al iniciar
             loadAdminCombos(); // Cargar combos al iniciar
+            loadAdminUsers(); // Cargar usuarios al iniciar
         } else {
             adminMessage.innerHTML = '<p style="color: red;">Acceso denegado. Solo los administradores pueden ver esta página. Serás redirigido.</p>';
             setTimeout(() => { window.location.href = '/paginas/login.html'; }, 3000);
@@ -52,6 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         adminMessage.innerHTML = '<p style="color: red;">Error al verificar permisos. Inténtalo más tarde.</p>';
         setTimeout(() => { window.location.href = '/paginas/prueba.html'; }, 3000);
     }
+
 
     // --- Gestión de Películas ---
     async function loadAdminMovies() {
@@ -374,4 +390,110 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
     // --- Fin Gestión de Combos ---
+
+    // --- Gestión de Usuarios ---
+    async function loadAdminUsers() {
+        if (!usersTableBody) {
+            console.warn("Elemento usersTableBody no encontrado. Saltando carga de usuarios.");
+            return;
+        }
+        try {
+            const response = await fetch('/api/admin/users'); 
+            if (!response.ok) throw new Error('Error al cargar usuarios');
+            const users = await response.json();
+            
+            usersTableBody.innerHTML = ''; 
+            users.forEach(user => {
+                const row = usersTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.username || 'N/A'}</td>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${user.role || 'N/A'}</td>
+                    <td class="actions-cell">
+                        <button class="btn-edit-role" data-id="${user.id}" data-username="${user.username}" data-role="${user.role}" ${user.id === currentSessionUserId ? 'disabled title="No puedes cambiar tu propio rol"' : ''}>Cambiar Rol</button>
+                    </td>
+                `;
+            });
+        } catch (error) {
+            console.error('Error cargando usuarios para admin:', error);
+            usersTableBody.innerHTML = '<tr><td colspan="5">Error al cargar usuarios.</td></tr>';
+        }
+    }
+
+    function openUserRoleModal(user) {
+        if (!userRoleModal || !userRoleForm || !userRoleUsernameDisplay || !userRoleSelect) return;
+        userRoleForm.reset();
+        currentEditingUserIdForRole = user.id;
+        document.getElementById('user-id-role').value = user.id;
+        userRoleUsernameDisplay.textContent = user.username;
+        userRoleSelect.value = user.role;
+        userRoleModal.style.display = 'block';
+    }
+
+    function closeUserRoleModal() {
+        if (userRoleModal) userRoleModal.style.display = 'none';
+        currentEditingUserIdForRole = null;
+    }
+
+    if (closeUserRoleModalBtn) {
+        closeUserRoleModalBtn.addEventListener('click', closeUserRoleModal);
+    }
+    if (cancelUserRoleFormBtn) {
+        cancelUserRoleFormBtn.addEventListener('click', closeUserRoleModal);
+    }
+    if (userRoleModal) {
+        window.addEventListener('click', (event) => {
+            if (event.target === userRoleModal) {
+                closeUserRoleModal();
+            }
+        });
+    }
+
+    if (userRoleForm) {
+        userRoleForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!currentEditingUserIdForRole) return;
+
+            const newRole = userRoleSelect.value;
+
+            try {
+                const response = await fetch(`/api/admin/users/${currentEditingUserIdForRole}/role`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: newRole })
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `Error al actualizar rol del usuario`);
+                }
+                alert(`Rol del usuario actualizado exitosamente.`);
+                closeUserRoleModal();
+                loadAdminUsers(); 
+            } catch (error) {
+                console.error('Error actualizando rol del usuario:', error);
+                alert(`Error al actualizar rol: ${error.message}`);
+            }
+        });
+    }
+
+    if (usersTableBody) {
+        usersTableBody.addEventListener('click', async (event) => {
+            const target = event.target;
+            if (target.classList.contains('btn-edit-role')) {
+                const userId = target.dataset.id;
+                const username = target.dataset.username;
+                const currentRole = target.dataset.role;
+                if (userId && username && currentRole) {
+                    if (userId === String(currentSessionUserId)) {
+                        alert("No puedes cambiar tu propio rol desde esta interfaz.");
+                        return;
+                    }
+                    openUserRoleModal({ id: userId, username: username, role: currentRole });
+                }
+            }
+        });
+    }
+    // --- Fin Gestión de Usuarios ---
+
 });
