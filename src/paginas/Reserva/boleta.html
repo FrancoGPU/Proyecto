@@ -1,88 +1,169 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boleta de Compra - GOCINE</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/paginas/Reserva/boleta.css">
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/paginas/Reserva/boleta.css" />
     <!-- Librerías para QR y PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <header class="cine-cabecera">
-    <!-- Contenido de la cabecera (logo, búsqueda, menú de usuario) se cargará dinámicamente por cabecera.js -->
-    <!-- Dejar vacío o con un placeholder si se desea -->
+      <!-- Contenido de la cabecera (logo, búsqueda, menú de usuario) se cargará dinámicamente por cabecera.js -->
+      <!-- Dejar vacío o con un placeholder si se desea -->
     </header>
 
     <main class="main-content">
-        <section class="boleta-section">
-            <h2>Boleta de Compra</h2>
-            <div class="boleta-details">
-                <p><strong>Película:</strong> <span id="movie-name"></span></p>
-                <p><strong>Butacas:</strong> <span id="seats"></span></p>
-                <p><strong>Total Pagado:</strong> <span id="total-price"></span></p>
-                <p><strong>Fecha de Compra:</strong> <span id="purchase-date"></span></p>
-            </div>
-            <div class="combo-details">
-                <h3>Combo Seleccionado</h3>
-                <div id="combo-summary">
-                    <!-- Los detalles del combo se cargarán dinámicamente aquí -->
-                </div>
-            </div>
-            <div class="actions-container">
-                <button id="download-pdf-button" class="btn-primary">Descargar Boleta en PDF</button>
-                <button id="back-to-home" class="btn-secondary">Regresar al Inicio</button>
-            </div>
-        </section>
+      <section class="boleta-section">
+        <h2>Boleta de Compra</h2>
+        <div class="boleta-details">
+          <p><strong>Película:</strong> <span id="movie-name"></span></p>
+          <p><strong>Butacas:</strong> <span id="seats"></span></p>
+          <p><strong>Total Pagado:</strong> <span id="total-price"></span></p>
+          <p>
+            <strong>Fecha de Compra:</strong> <span id="purchase-date"></span>
+          </p>
+        </div>
+        <div class="combo-details">
+          <h3>Combo Seleccionado</h3>
+          <div id="combo-summary">
+            <!-- Los detalles del combo se cargarán dinámicamente aquí -->
+          </div>
+        </div>
+        <div class="actions-container">
+          <button id="download-pdf-button" class="btn-primary">
+            Descargar Boleta en PDF
+          </button>
+          <button id="back-to-home" class="btn-secondary">
+            Regresar al Inicio
+          </button>
+        </div>
+      </section>
     </main>
 
-    <footer></footer> <!-- El pie de página se cargará dinámicamente -->
+    <footer></footer>
+    <!-- El pie de página se cargará dinámicamente -->
 
     <!-- Plantilla PDF Simplificada y Visible para Depuración Inicial -->
-    <div id="boleta-pdf-template" style="display: none; width: 4in; border: 1px solid #ccc; padding: 15px; background-color: white; font-family: 'Arial', sans-serif; font-size: 10pt; box-sizing: border-box;">
-    <div style="text-align: center; margin-bottom: 10px;">
-        <h2 style="margin: 0 0 5px 0; color: red; font-size: 20pt; font-weight: bold;">GOCINE</h2>
-        <p style="margin: 0; font-size: 10pt;">Boleta de Entrada</p>
-    </div>
-    <hr style="border: none; border-top: 1px solid black; margin: 12px 0;">
-    
-    <p style="margin: 5px 0;"><strong>Película:</strong> <span id="pdf-new-movie-name"></span></p>
-    <p style="margin: 5px 0;"><strong>Butacas:</strong> <span id="pdf-new-seats"></span></p>
-    <p style="margin: 5px 0;"><strong>Total Pagado:</strong> <span id="pdf-new-total-price"></span></p>
-    <p style="margin: 5px 0; margin-bottom: 10px;"><strong>ID Boleta:</strong> <span id="pdf-new-boleta-id"></span></p>
+    <div
+      id="boleta-pdf-template"
+      style="
+        display: none;
+        width: 4in;
+        border: 1px solid #ccc;
+        padding: 15px;
+        background-color: white;
+        font-family: 'Arial', sans-serif;
+        font-size: 10pt;
+        box-sizing: border-box;
+      "
+    >
+      <div style="text-align: center; margin-bottom: 10px">
+        <h2
+          style="
+            margin: 0 0 5px 0;
+            color: red;
+            font-size: 20pt;
+            font-weight: bold;
+          "
+        >
+          GOCINE
+        </h2>
+        <p style="margin: 0; font-size: 10pt">Boleta de Entrada</p>
+      </div>
+      <hr style="border: none; border-top: 1px solid black; margin: 12px 0" />
 
-    <!-- NUEVA SECCIÓN DE DESGLOSE DE PRECIOS -->
-    <div id="pdf-price-breakdown" style="margin-top: 10px; margin-bottom: 0px; clear:both; font-size: 9pt;">
-        <p style="margin: 3px 0;">Costo Entradas: <span style="float:right;">S/. <span id="pdf-ticket-cost-value"></span></span></p>
-        <div id="pdf-combo-cost-line" style="clear:both;">
-            <!-- Se llenará dinámicamente si hay combo: -->
-            <!-- <p style="margin: 3px 0;">Costo Combo: <span style="float:right;">S/. <span id="pdf-combo-cost-value"></span></span></p> -->
+      <p style="margin: 5px 0">
+        <strong>Película:</strong> <span id="pdf-new-movie-name"></span>
+      </p>
+      <p style="margin: 5px 0">
+        <strong>Butacas:</strong> <span id="pdf-new-seats"></span>
+      </p>
+      <p style="margin: 5px 0">
+        <strong>Total Pagado:</strong> <span id="pdf-new-total-price"></span>
+      </p>
+      <p style="margin: 5px 0; margin-bottom: 10px">
+        <strong>ID Boleta:</strong> <span id="pdf-new-boleta-id"></span>
+      </p>
+
+      <!-- NUEVA SECCIÓN DE DESGLOSE DE PRECIOS -->
+      <div
+        id="pdf-price-breakdown"
+        style="
+          margin-top: 10px;
+          margin-bottom: 0px;
+          clear: both;
+          font-size: 9pt;
+        "
+      >
+        <p style="margin: 3px 0">
+          Costo Entradas:
+          <span style="float: right"
+            >S/. <span id="pdf-ticket-cost-value"></span
+          ></span>
+        </p>
+        <div id="pdf-combo-cost-line" style="clear: both">
+          <!-- Se llenará dinámicamente si hay combo: -->
+          <!-- <p style="margin: 3px 0;">Costo Combo: <span style="float:right;">S/. <span id="pdf-combo-cost-value"></span></span></p> -->
         </div>
-    </div>
-    <hr style="border: none; border-top: 1px solid black; margin: 8px 0; clear:both;">
-    <p style="margin: 5px 0; font-weight: bold;">Total Pagado: <span style="float:right;">S/. <span id="pdf-summary-total-amount"></span></span></p>
-    <!-- El id pdf-new-total-price se mantiene para el total final -->
-    
-    <div id="pdf-new-combo-details" style="margin-top: 10px; margin-bottom: 10px; padding-top: 8px; border-top: 1px dashed #666;">
+      </div>
+      <hr
+        style="
+          border: none;
+          border-top: 1px solid black;
+          margin: 8px 0;
+          clear: both;
+        "
+      />
+      <p style="margin: 5px 0; font-weight: bold">
+        Total Pagado:
+        <span style="float: right"
+          >S/. <span id="pdf-summary-total-amount"></span
+        ></span>
+      </p>
+      <!-- El id pdf-new-total-price se mantiene para el total final -->
+
+      <div
+        id="pdf-new-combo-details"
+        style="
+          margin-top: 10px;
+          margin-bottom: 10px;
+          padding-top: 8px;
+          border-top: 1px dashed #666;
+        "
+      >
         <!-- Los detalles del combo (solo texto) se insertarán aquí -->
+      </div>
+
+      <div
+        style="
+          text-align: center;
+          margin-top: 10px;
+          padding-top: 8px;
+          border-top: 1px dashed #666;
+        "
+      >
+        <p style="margin: 0 0 5px 0; font-size: 9pt">Código QR:</p>
+        <canvas
+          id="pdf-new-qr-canvas"
+          style="width: 80px; height: 80px; display: block; margin: 0 auto"
+        ></canvas>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid black; margin: 12px 0" />
+      <div style="text-align: center; font-size: 8pt">
+        <p style="margin: 0">Gracias por su compra</p>
+        <p style="margin: 0">
+          GOCINE &copy; <span id="pdf-new-boleta-year"></span>
+        </p>
+      </div>
     </div>
-    
-    <div style="text-align: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #666;">
-        <p style="margin: 0 0 5px 0; font-size: 9pt;">Código QR:</p>
-        <canvas id="pdf-new-qr-canvas" style="width: 80px; height: 80px; display: block; margin: 0 auto;"></canvas>
-    </div>
-    
-    <hr style="border: none; border-top: 1px solid black; margin: 12px 0;">
-    <div style="text-align: center; font-size: 8pt;">
-        <p style="margin: 0;">Gracias por su compra</p>
-        <p style="margin: 0;">GOCINE &copy; <span id="pdf-new-boleta-year"></span></p>
-    </div>
-</div>
 
     <script src="/js/paginas/Reserva/boleta.js"></script>
     <script src="/js/paginas/Componentes/cabecera.js"></script>
     <script src="/js/paginas/Componentes/piePagina.js"></script>
-</body>
+  </body>
 </html>

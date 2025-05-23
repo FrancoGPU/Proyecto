@@ -101,3 +101,31 @@
     background-color: #ff1500; /* Color de fondo al hacer clic */
     transform: scale(0.95); /* Efecto de reducción */
 }
+
+/* Estilo para el botón de continuar sin combo */
+#continue-button {
+    background-color: var(--primary); /* Color de fondo principal */
+    color: white; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 1rem; /* Tamaño de fuente */
+    font-weight: bold; /* Texto en negrita */
+    cursor: pointer; /* Cambiar el cursor al pasar */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones */
+    display: block; /* Para centrarlo */
+    margin: 20px auto; /* Margen superior/inferior y centrado horizontal */
+    width: fit-content; /* Ajustar el ancho al contenido */
+    box-shadow: var(--shadow-md); /* Sombra para dar profundidad */
+}
+
+#continue-button:hover {
+    background-color: var(--primary-dark); /* Color de fondo al pasar el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento */
+}
+
+#continue-button:active {
+    background-color: var(--primary-light); /* Color de fondo al hacer clic */
+    transform: scale(0.95); /* Efecto de reducción */
+}
+
