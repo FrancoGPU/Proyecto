@@ -105,10 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (isLoggedIn && userData) {
                         userIcon.classList.add('logged-in');
-                        const userEmailDisplay = document.createElement('div');
-                        userEmailDisplay.classList.add('dropdown-user-email');
-                        userEmailDisplay.textContent = userData.email;
-                        userDropdownMenu.appendChild(userEmailDisplay);
+                        const userDisplay = document.createElement('div');
+                        userDisplay.classList.add('dropdown-user-email'); // Reutilizamos la clase existente para el estilo
+                        userDisplay.textContent = userData.username || userData.email; // Priorizar username, fallback a email
+                        userDropdownMenu.appendChild(userDisplay);
 
                         if (userData.role === 'admin') {
                             const adminPanelLink = document.createElement('a');

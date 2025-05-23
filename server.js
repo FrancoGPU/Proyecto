@@ -141,46 +141,40 @@ app.post("/api/register", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) {
-    return res.status(400).json({ message: "Correo y contraseña son requeridos." });
+    return res.status(400).json({ message: "Email y contraseña son requeridos." });
   }
-
   try {
-    const userResult = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-    if (userResult.rows.length === 0) {
-      return res.status(401).json({ message: "Correo o contraseña incorrectos." });
+    const result = await pool.query(
+      "SELECT id, username, email, password, role FROM users WHERE email = $1", // Añadido username a la selección
+      [email]
+    );
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "Credenciales inválidas." });
     }
-
-    const user = userResult.rows[0];
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-      return res.status(401).json({ message: "Correo o contraseña incorrectos." });
+    const user = result.rows[0];
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      return res.status(401).json({ message: "Credenciales inválidas." });
     }
-
     req.session.user = {
       id: user.id,
       email: user.email,
-      username: user.username, // Añadir username a la sesión
-      role: user.role 
+      username: user.username, // Guardar username en la sesión
+      role: user.role,
     };
-    req.session.loggedIn = true;
-
-    console.log('Login exitoso para:', user.email, 'Usuario:', user.username, 'Rol:', user.role);
-    res.status(200).json({
-        success: true,
-        message: "Inicio de sesión exitoso.",
-        user: { 
-            id: user.id,
-            email: user.email,
-            username: user.username, // Añadir username a la respuesta
-            role: user.role
-        }
+    res.json({
+      message: "Inicio de sesión exitoso.",
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username, // Devolver username en la respuesta de login
+        role: user.role,
+      },
     });
-
   } catch (err) {
-    console.error("Error al iniciar sesión:", err.message);
-    res.status(500).json({ success: false, message: "Error interno del servidor." });
+    console.error("Error en el inicio de sesión:", err.message);
+    res.status(500).json({ message: "Error interno del servidor." });
   }
 });
 
@@ -239,7 +233,7 @@ app.post('/api/recuperar', async (req, res) => {
 
   } catch (err) {
     console.error('Error en /api/recuperar:', err.message);
-    res.status(500).json({ message: 'Error interno del servidor.' });
+    res.status(500).json({ message: 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.' });
   }
 });
 
@@ -280,15 +274,20 @@ app.post('/api/restablecer-contrasena', async (req, res) => {
 });
 
 // Endpoint para verificar el estado de la sesión (útil para el frontend)
-app.get('/api/session/status', (req, res) => {
-    if (req.session.loggedIn && req.session.user) {
-        res.json({ 
-            loggedIn: true, 
-            user: req.session.user 
-        });
-    } else {
-        res.json({ loggedIn: false });
-    }
+app.get("/api/session/status", (req, res) => {
+  if (req.session.user) {
+    res.json({
+      loggedIn: true,
+      user: {
+        id: req.session.user.id,
+        email: req.session.user.email,
+        username: req.session.user.username, // Asegurar que username se envía
+        role: req.session.user.role,
+      },
+    });
+  } else {
+    res.json({ loggedIn: false });
+  }
 });
 
 
@@ -319,38 +318,41 @@ app.get("/api/admin/movies/:id", isAdmin, async (req, res) => {
 });
 
 app.post("/api/admin/movies", isAdmin, async (req, res) => {
-  const { title, description, image, release_date, director, duration_minutes, genre, trailer_url, rating } = req.body;
+  const { title, genre, release_date, description, image, showtimes } = req.body;
   if (!title || !description) {
     return res.status(400).json({ message: "Título y descripción son requeridos." });
   }
   try {
     const result = await pool.query(
-      `INSERT INTO movies (title, description, image, release_date, director, duration_minutes, genre, trailer_url, rating)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO movies (title, genre, release_date, description, image, showtimes)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [title, description, image, release_date, director, duration_minutes, genre, trailer_url, rating]
+      [title, genre, release_date, description, image, showtimes] // showtimes se envía como array desde admin.js
     );
     res.status(201).json({ message: "Película añadida exitosamente", movie: result.rows[0] });
   } catch (err) {
     console.error("Error al añadir la película:", err.message);
-    res.status(500).send("Error interno del servidor");
+    // Enviar respuesta JSON en caso de error también
+    res.status(500).json({ message: "Error interno del servidor al añadir la película." });
   }
 });
 
 app.put("/api/admin/movies/:id", isAdmin, async (req, res) => {
   const { id } = req.params;
-  const { title, description, image, release_date, director, duration_minutes, genre, trailer_url, rating } = req.body;
+  const { title, genre, release_date, description, image, showtimes } = req.body;
   if (!title || !description) {
     return res.status(400).json({ message: "Título y descripción son requeridos." });
   }
   try {
+    // Consulta SQL corregida:
+    // 1. "SETtitle" corregido a "SET title".
+    // 2. Placeholders de parámetros corregidos: showtimes es $6, id es $7.
     const result = await pool.query(
       `UPDATE movies
-       SET title = $1, description = $2, image = $3, release_date = $4, director = $5,
-           duration_minutes = $6, genre = $7, trailer_url = $8, rating = $9
-       WHERE id = $10
+       SET title = $1, genre = $2, release_date = $3, description = $4, image = $5, showtimes = $6
+       WHERE id = $7
        RETURNING *`,
-      [title, description, image, release_date, director, duration_minutes, genre, trailer_url, rating, id]
+      [title, genre, release_date, description, image, showtimes, id] // showtimes se envía como array desde admin.js
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Película no encontrada para actualizar" });
@@ -358,7 +360,8 @@ app.put("/api/admin/movies/:id", isAdmin, async (req, res) => {
     res.json({ message: "Película actualizada exitosamente", movie: result.rows[0] });
   } catch (err) {
     console.error("Error al actualizar la película:", err.message);
-    res.status(500).send("Error interno del servidor");
+    // Enviar respuesta JSON en caso de error también
+    res.status(500).json({ message: "Error interno del servidor al actualizar la película." });
   }
 });
 

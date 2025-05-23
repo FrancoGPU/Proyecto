@@ -45,11 +45,7 @@ function displayMovies(movies, listId = "movie-list") { // Add listId parameter 
       </div>
     `;
 
-    // Only add click listener if it's not for upcoming movies, 
-    // or if upcoming movies should also link to horarios.html
-    // For now, let's assume all movie cards should be clickable.
     movieCard.addEventListener("click", () => {
-      // Consider if upcoming movies should also go to horarios.html or a different page
       window.location.href = `/paginas/Reserva/horarios.html?movie=${encodeURIComponent(movie.title)}&id=${movie.id}`; // Added movie.id for better targeting
     });
 
@@ -66,7 +62,7 @@ function fetchMovies() {
       return response.json();
     })
     .then((movies) => {
-      displayMovies(movies, "movie-list"); // Explicitly pass "movie-list"
+      displayMovies(movies, "movie-list"); 
     })
     .catch((error) => console.error("Error al obtener las películas:", error));
 }

@@ -65,6 +65,7 @@ body { /* Aplicamos el fondo a toda la página */
 }
 
 /* Estilo para los campos de entrada */
+.register-form input[type="text"],
 .register-form input[type="email"],
 .register-form input[type="password"] {
     width: 100%;
@@ -78,6 +79,7 @@ body { /* Aplicamos el fondo a toda la página */
     color: var(--text-dark); /* Color del texto dentro del input */
 }
 
+.register-form input[type="text"]:focus,
 .register-form input[type="email"]:focus,
 .register-form input[type="password"]:focus {
     border-color: #e50914; 
@@ -112,4 +114,9 @@ body { /* Aplicamos el fondo a toda la página */
 
 .register-form button[type="submit"]:active {
     transform: scale(0.98); /* Efecto de clic */
+}
+
+.account-already {
+    color: var(--primary);
+    text-decoration: none;
 }
