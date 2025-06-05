@@ -6,33 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Restablecer Contraseña - GOCINE</title>
     <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="/css/paginas/login.css" /> <!-- Puedes reutilizar o crear estilos específicos -->
+    <link rel="stylesheet" href="/css/paginas/Autenticacion/restablecer-contrasena.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <header class="cine-cabecera"></header>
 <!-- La cabecera se cargará dinámicamente -->
 
 <body>
     <main class="main-content">
-        <section class="login-section">
-            <div class="login-container">
+        <section class="restablecer-section">
+            <div class="restablecer-container">
                 <h2>Restablecer Contraseña</h2>
                 <form id="reset-password-form">
-                    <div class="form-group">
-                        <label for="new-password">Nueva Contraseña</label>
-                        <input type="password" id="new-password" name="new-password" placeholder="********"
-                            required />
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirmar Nueva Contraseña</label>
-                        <input type="password" id="confirm-password" name="confirm-password" placeholder="********"
-                            required />
-                    </div>
-                    <button type="submit" class="btn-primary">Restablecer Contraseña</button>
+                    <label for="new-password">Nueva Contraseña</label>
+                    <input type="password" id="new-password" name="new-password" placeholder="********" required />
+                    <label for="confirm-password">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="********" required />
+                    <button type="submit">Restablecer Contraseña</button>
                 </form>
                 <p id="message" class="message-text"></p>
-                <p class="login-text">
-                    ¿Recordaste tu contraseña? <a href="login.html" class="btn-secondary">Inicia sesión</a>
-                </p>
+                <div class="login-text">
+                    ¿Recordaste tu contraseña? <a href="login.html">Inicia sesión</a>
+                </div>
             </div>
         </section>
     </main>

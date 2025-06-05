@@ -112,11 +112,13 @@ a {
 /* Contenido principal */
 /* Estilos para el área principal del contenido */
 .main-content {
-    min-height: calc(100vh - var(--cabecera-height) - var(--piePagina-height)); /* Altura mínima ajustada al viewport */
-    display: flex;
-    flex-direction: column; /* Organiza los elementos en columna */
-    justify-content: center; /* Centra el contenido verticalmente */
-    align-items: center; /* Centra el contenido horizontalmente */
+    min-height: calc(100vh - var(--cabecera-height) - var(--piePagina-height));
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: block;
+    padding: 0 1.5rem 2rem 1.5rem;
+    box-sizing: border-box;
 }
 
 /* Estilos para las secciones con encabezado dentro del contenido principal */

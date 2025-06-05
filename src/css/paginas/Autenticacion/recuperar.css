@@ -1,0 +1,129 @@
+/* Estilos para la página de Recuperar Contraseña */
+body {
+  background: #fff;
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.recuperar-container {
+  max-width: 420px;
+  margin: 80px auto 0 auto;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(211,47,47,0.13), 0 2px 8px rgba(0,0,0,0.04);
+  padding: 56px 40px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.7s;
+}
+
+.recuperar-container::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, #d32f2f 60%, transparent 100%);
+  opacity: 0.09;
+  z-index: 0;
+}
+
+.recuperar-container h2 {
+  color: #d32f2f;
+  font-size: 2.2rem;
+  margin-bottom: 22px;
+  font-weight: 900;
+  z-index: 1;
+  text-align: left;
+  width: 100%;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.recuperar-container label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #222;
+  display: block;
+  z-index: 1;
+  text-align: left;
+  width: 100%;
+  font-size: 1.08rem;
+}
+
+.recuperar-container input[type="email"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 9px;
+  margin-bottom: 22px;
+  font-size: 1.08rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  z-index: 1;
+  background: #fafbfc;
+  box-shadow: 0 1px 2px rgba(211,47,47,0.03);
+}
+
+.recuperar-container input[type="email"]:focus {
+  border: 1.5px solid #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 2px #fbe9e7;
+}
+
+.recuperar-container button, .recuperar-container input[type="submit"] {
+  width: 100%;
+  background: linear-gradient(90deg, #d32f2f 60%, #e57373 100%);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 15px 0;
+  font-size: 1.13rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background 0.2s, box-shadow 0.2s;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(211,47,47,0.10);
+  letter-spacing: 0.5px;
+}
+
+.recuperar-container button:hover, .recuperar-container input[type="submit"]:hover {
+  background: linear-gradient(90deg, #b71c1c 60%, #d32f2f 100%);
+  box-shadow: 0 4px 16px rgba(211,47,47,0.13);
+}
+
+.recuperar-container .enlace-login {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 1.04rem;
+  z-index: 1;
+}
+
+.recuperar-container .enlace-login a {
+  color: #d32f2f;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.recuperar-container .enlace-login a:hover {
+  text-decoration: underline;
+  color: #b71c1c;
+}
+
+@media (max-width: 600px) {
+  .recuperar-container {
+    max-width: 98vw;
+    padding: 24px 8px 18px 8px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
