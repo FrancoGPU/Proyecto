@@ -22,9 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceElement.textContent = !isNaN(totalPrice) ? `S/.${totalPrice.toFixed(2)}` : 'S/.0.00';
     }
 
-    // Mostrar los detalles del combo seleccionado
+    // Mostrar los detalles de todos los combos seleccionados
     const comboDetailsElement = document.getElementById('combo-details');
-    if (comboDetailsElement && selectedCombo) {
+    if (comboDetailsElement && selectedCombo && Array.isArray(selectedCombo) && selectedCombo.length > 0) {
+        comboDetailsElement.innerHTML = selectedCombo.map(c => `
+            <div style="margin-bottom:1rem;">
+                <h4>${c.name || c.nombre}</h4>
+                <img src="${c.image || c.imagen}" alt="${c.name || c.nombre}" style="width: 100px; height: auto;">
+                <p>${c.description || c.descripcion}</p>
+                <p class="price">S/.${parseFloat(c.price || c.precio).toFixed(2)}</p>
+            </div>
+        `).join('<hr>');
+    } else if (comboDetailsElement && selectedCombo && selectedCombo.name) {
         comboDetailsElement.innerHTML = `
             <h4>${selectedCombo.name}</h4>
             <img src="${selectedCombo.image}" alt="${selectedCombo.name}" style="width: 100px; height: auto;">
@@ -33,6 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     } else if (comboDetailsElement) {
         comboDetailsElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
+    }
+
+    // Mostrar productos del carrito (combos y dulcería)
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartDetailsElement = document.getElementById('cart-details');
+    if (cartDetailsElement) {
+        if (Array.isArray(cartItems) && cartItems.length > 0) {
+            let cartHTML = '<ul>';
+            cartItems.forEach(item => {
+                if (item.nombre && item.precio) {
+                    cartHTML += `<li>${item.nombre} - S/.${parseFloat(item.precio).toFixed(2)}</li>`;
+                }
+            });
+            cartHTML += '</ul>';
+            cartDetailsElement.innerHTML = cartHTML;
+        } else {
+            cartDetailsElement.innerHTML = '<p>No hay productos en el carrito.</p>';
+        }
     }
 
     // Manejar el formulario de pago

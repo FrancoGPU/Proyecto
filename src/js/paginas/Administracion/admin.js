@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadAdminMovies(); // Cargar películas al iniciar
       loadAdminCombos(); // Cargar combos al iniciar
       loadAdminUsers(); // Cargar usuarios al iniciar
+      // loadAdminDulceria(); // Cargar dulcería al iniciar (ELIMINADO DE AQUÍ)
     } else {
       adminMessage.innerHTML =
         '<p style="color: red;">Acceso denegado. Solo los administradores pueden ver esta página. Serás redirigido.</p>';
@@ -442,6 +443,145 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
   // --- Fin Gestión de Combos ---
+
+  // --- Gestión de Dulcería ---
+  const dulceriaTableBody = document.getElementById("dulceria-table-body");
+  const addDulceriaBtn = document.getElementById("add-dulceria-btn");
+  const dulceriaModal = document.getElementById("dulceria-modal");
+  const dulceriaModalTitle = document.getElementById("dulceria-modal-title");
+  const closeDulceriaModalBtn = document.getElementById("close-dulceria-modal");
+  const dulceriaForm = document.getElementById("dulceria-form");
+  const cancelDulceriaFormBtn = document.getElementById("cancel-dulceria-form");
+  let currentEditingDulceriaId = null;
+
+  async function loadAdminDulceria() {
+    if (!dulceriaTableBody) return;
+    try {
+      const response = await fetch("/api/admin/dulceria");
+      if (!response.ok) throw new Error("Error al cargar dulcería");
+      const productos = await response.json();
+      dulceriaTableBody.innerHTML = "";
+      productos.forEach((prod) => {
+        const row = dulceriaTableBody.insertRow();
+        row.innerHTML = `
+          <td>${prod.id}</td>
+          <td>${prod.nombre}</td>
+          <td>${prod.descripcion}</td>
+          <td>${parseFloat(prod.precio).toFixed(2)}</td>
+          <td><img src="${prod.imagen || ''}" alt="img" style="max-width:60px;max-height:40px;"></td>
+          <td class="actions-cell">
+            <button class="btn-edit" data-id="${prod.id}" data-type="dulceria">Editar</button>
+            <button class="btn-delete" data-id="${prod.id}" data-type="dulceria">Eliminar</button>
+          </td>
+        `;
+      });
+    } catch (error) {
+      console.error("Error cargando dulcería para admin:", error);
+      dulceriaTableBody.innerHTML = '<tr><td colspan="6">Error al cargar dulcería.</td></tr>';
+    }
+  }
+
+  function openDulceriaModal(prod = null) {
+    if (!dulceriaModal || !dulceriaForm || !dulceriaModalTitle) return;
+    dulceriaForm.reset();
+    if (prod) {
+      currentEditingDulceriaId = prod.id;
+      dulceriaModalTitle.textContent = "Editar Producto de Dulcería";
+      document.getElementById("dulceria-id").value = prod.id;
+      document.getElementById("dulceria-nombre").value = prod.nombre || "";
+      document.getElementById("dulceria-descripcion").value = prod.descripcion || "";
+      document.getElementById("dulceria-precio").value = prod.precio || "";
+      document.getElementById("dulceria-imagen").value = prod.imagen || "";
+    } else {
+      currentEditingDulceriaId = null;
+      dulceriaModalTitle.textContent = "Añadir Producto de Dulcería";
+    }
+    dulceriaModal.style.display = "block";
+  }
+
+  function closeDulceriaModal() {
+    if (dulceriaModal) dulceriaModal.style.display = "none";
+    currentEditingDulceriaId = null;
+  }
+
+  if (addDulceriaBtn) addDulceriaBtn.addEventListener("click", () => openDulceriaModal());
+  if (closeDulceriaModalBtn) closeDulceriaModalBtn.addEventListener("click", closeDulceriaModal);
+  if (cancelDulceriaFormBtn) cancelDulceriaFormBtn.addEventListener("click", closeDulceriaModal);
+  if (dulceriaModal) {
+    window.addEventListener("click", (event) => {
+      if (event.target === dulceriaModal) closeDulceriaModal();
+    });
+  }
+
+  if (dulceriaForm) {
+    dulceriaForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(dulceriaForm);
+      const prodData = Object.fromEntries(formData.entries());
+      if (prodData.precio) prodData.precio = parseFloat(prodData.precio);
+      else delete prodData.precio;
+      const method = currentEditingDulceriaId ? "PUT" : "POST";
+      const url = currentEditingDulceriaId
+        ? `/api/admin/dulceria/${currentEditingDulceriaId}`
+        : "/api/admin/dulceria";
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(prodData),
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Error al guardar producto de dulcería`);
+        }
+        alert(`Producto de dulcería ${currentEditingDulceriaId ? "actualizado" : "añadido"} exitosamente.`);
+        closeDulceriaModal();
+        loadAdminDulceria();
+      } catch (error) {
+        console.error("Error guardando producto de dulcería:", error);
+        alert(`Error al guardar producto de dulcería: ${error.message}`);
+      }
+    });
+  }
+
+  if (dulceriaTableBody) {
+    dulceriaTableBody.addEventListener("click", async (event) => {
+      const target = event.target;
+      const prodId = target.dataset.id;
+      const type = target.dataset.type;
+      if (type === "dulceria") {
+        if (target.classList.contains("btn-edit") && prodId) {
+          try {
+            const response = await fetch(`/api/admin/dulceria/${prodId}`);
+            if (!response.ok) throw new Error("No se pudo obtener el producto de dulcería para editar.");
+            const prod = await response.json();
+            openDulceriaModal(prod);
+          } catch (error) {
+            console.error("Error al obtener producto de dulcería para editar:", error);
+            alert(error.message);
+          }
+        } else if (target.classList.contains("btn-delete") && prodId) {
+          if (confirm("¿Estás seguro de que quieres eliminar este producto de dulcería?")) {
+            try {
+              const response = await fetch(`/api/admin/dulceria/${prodId}`, { method: "DELETE" });
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Error al eliminar el producto de dulcería.");
+              }
+              alert("Producto de dulcería eliminado exitosamente.");
+              loadAdminDulceria();
+            } catch (error) {
+              console.error("Error eliminando producto de dulcería:", error);
+              alert(`Error al eliminar producto de dulcería: ${error.message}`);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Llamar a la carga inicial de dulcería
+  loadAdminDulceria();
 
   // --- Gestión de Usuarios ---
   async function loadAdminUsers() {

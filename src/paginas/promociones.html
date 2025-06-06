@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promociones y Descuentos - GOCINE</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .promo-section { max-width: 900px; margin: 40px auto; padding: 2rem; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(211,47,47,0.10); }
+    .promo-title { color: #d32f2f; font-size: 2.2rem; font-weight: 900; margin-bottom: 1.5rem; text-align: center; }
+    .promo-list { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
+    .promo-card { background: #fafbfc; border-radius: 12px; box-shadow: 0 2px 8px rgba(211,47,47,0.07); padding: 1.5rem; max-width: 340px; flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
+    .promo-card img { width: 100%; border-radius: 10px; margin-bottom: 1rem; }
+    .promo-card h3 { color: #d32f2f; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .promo-card p { color: #333; font-size: 1rem; margin-bottom: 0.5rem; text-align: center; }
+    .promo-card .promo-descuento { color: #388e3c; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    @media (max-width: 700px) { .promo-list { flex-direction: column; align-items: center; } }
+  </style>
+</head>
+<body>
+  <header class="cine-cabecera"></header>
+  <main class="main-content">
+    <section class="promo-section">
+      <h1 class="promo-title"><i class="fas fa-tags"></i> Descuentos y Promociones</h1>
+      <div class="promo-list" id="promo-list">
+        <!-- Las promociones se cargarán aquí -->
+      </div>
+    </section>
+  </main>
+  <footer></footer>
+  <script src="/js/paginas/Componentes/cabecera.js"></script>
+  <script src="/js/paginas/Componentes/piePagina.js"></script>
+  <script>
+    // Ejemplo de promociones (puedes reemplazar por fetch a la BD en el futuro)
+    const promociones = [
+      {
+        titulo: "2x1 en Entradas Lunes y Martes",
+        descripcion: "Compra una entrada y llévate otra gratis en funciones seleccionadas.",
+        descuento: "2x1",
+        imagen: "/assets/images/avengers-kang.jpg"
+      },
+      {
+        titulo: "Combo Familiar con 20% de Descuento",
+        descripcion: "Aprovecha nuestro combo familiar con palomitas, refrescos y nachos a precio especial.",
+        descuento: "20% OFF",
+        imagen: "/assets/images/combo3.png"
+      },
+      {
+        titulo: "Sala Xtreme 4D: 15% para VIP",
+        descripcion: "Usuarios VIP obtienen 15% de descuento en funciones Xtreme 4D.",
+        descuento: "15% VIP",
+        imagen: "/assets/images/dark-knight.jpg"
+      }
+    ];
+    const promoList = document.getElementById('promo-list');
+    promociones.forEach(promo => {
+      const card = document.createElement('div');
+      card.className = 'promo-card';
+      card.innerHTML = `<img src="${promo.imagen}" alt="Promo"><h3>${promo.titulo}</h3><div class="promo-descuento">${promo.descuento}</div><p>${promo.descripcion}</p>`;
+      promoList.appendChild(card);
+    });
+  </script>
+</body>
+</html>

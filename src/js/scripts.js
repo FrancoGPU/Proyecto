@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const comboSection = document.getElementById("combo-section");
   const movieSection = document.getElementById("movie-section");
   const upcomingSection = document.getElementById("upcoming-section"); // Ensure this ID exists if used
+  const dulceriaButton = document.getElementById("dulceria-button");
+  const dulceriaSection = document.getElementById("dulceria-section");
 
   // --- Helper Functions for Main Content ---
   function activateButton(activeButton, ...inactiveButtons) {
@@ -68,102 +70,146 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
   }
-  
-  
+
+  function loadDulceria() {
+    const dulceriaList = document.getElementById("dulceria-list");
+    const combosList = document.getElementById("combos-list");
+    if (!dulceriaList || !combosList) {
+      console.warn("Contenedores de dulcería o combos no encontrados.");
+      return;
+    }
+    // Cargar productos individuales
+    fetch("/api/dulceria")
+      .then((response) => {
+        if (!response.ok) throw new Error("Error al cargar productos de dulcería");
+        return response.json();
+      })
+      .then((items) => {
+        dulceriaList.innerHTML = "";
+        if (items.length === 0) {
+          dulceriaList.innerHTML = '<p>No hay productos de dulcería disponibles.</p>';
+          return;
+        }
+        items.forEach((item) => {
+          const itemCard = document.createElement("div");
+          itemCard.classList.add("combo-card"); // Changed from movie-card to combo-card
+          itemCard.innerHTML = `
+            <div class="movie-image-container">
+                <img src="${item.imagen}" alt="${item.nombre}" class="movie-image">
+            </div>
+            <div class="movie-info">
+                <h3 class="movie-title">${item.nombre}</h3>
+                <p class="movie-description">${item.descripcion}</p>
+                <p class="price">S/.${parseFloat(item.precio).toFixed(2)}</p>
+                <!-- Aquí puedes agregar botón de carrito si lo deseas -->
+            </div>
+          `;
+          dulceriaList.appendChild(itemCard);
+        });
+      })
+      .catch((error) => {
+        dulceriaList.innerHTML = '<p>Error al cargar productos de dulcería.</p>';
+      });
+    // Cargar combos/promociones
+    fetch("/api/combos")
+      .then((response) => {
+        if (!response.ok) throw new Error("Error al cargar combos");
+        return response.json();
+      })
+      .then((items) => {
+        combosList.innerHTML = "";
+        if (items.length === 0) {
+          combosList.innerHTML = '<p>No hay combos disponibles.</p>';
+          return;
+        }
+        items.forEach((item) => {
+          const itemCard = document.createElement("div");
+          itemCard.classList.add("combo-card");
+          itemCard.innerHTML = `
+            <div class="movie-image-container">
+                <img src="${item.image}" alt="${item.name}" class="movie-image">
+            </div>
+            <div class="movie-info">
+                <h3 class="movie-title">${item.name}</h3>
+                <p class="movie-description">${item.description}</p>
+                <p class="price">S/.${parseFloat(item.price).toFixed(2)}</p>
+            </div>
+          `;
+          combosList.appendChild(itemCard);
+        });
+      })
+      .catch((error) => {
+        combosList.innerHTML = '<p>Error al cargar combos.</p>';
+      });
+  }
+
   // --- Event Listeners for Main Content Navigation ---
-  if (nowShowingButton && upcomingButton && promotionsButton) {
+  if (nowShowingButton && upcomingButton && dulceriaButton) {
     nowShowingButton.addEventListener("click", () => {
-      activateButton(nowShowingButton, upcomingButton, promotionsButton);
+      activateButton(nowShowingButton, upcomingButton, dulceriaButton);
       if (movieSection) movieSection.style.display = "block";
-      // Correctly hide upcoming-list when now-showing is active
-      if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "none"; 
-      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "grid"; 
       if (comboSection) comboSection.style.display = "none";
+      if (dulceriaSection) dulceriaSection.style.display = "none";
+      if (upcomingSection) upcomingSection.style.display = "none";
+      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "grid";
+      if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "none";
       clearMovieList();
-      if (typeof fetchMovies === "function") { 
-        fetchMovies(); 
+      if (typeof fetchMovies === "function") {
+        fetchMovies();
       } else {
         console.warn("fetchMovies function is not defined.");
       }
     });
 
     upcomingButton.addEventListener("click", () => {
-      activateButton(upcomingButton, nowShowingButton, promotionsButton);
+      activateButton(upcomingButton, nowShowingButton, dulceriaButton);
       if (movieSection) movieSection.style.display = "block";
-      
-      const upcomingListElement = document.getElementById("upcoming-list");
-      if (upcomingListElement) {
-        upcomingListElement.style.display = "grid";
-        console.log("Upcoming list element display set to grid:", upcomingListElement);
-      } else {
-        console.error("#upcoming-list element not found!");
-        return; // Stop if the list element doesn't exist
-      }
-
-      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "none";
       if (comboSection) comboSection.style.display = "none";
-      
-      console.log("Clearing movie lists for upcoming section...");
-      clearMovieList(); // This clears both movie-list and upcoming-list
-
-      console.log("Fetching /api/upcoming...");
+      if (dulceriaSection) dulceriaSection.style.display = "none";
+      if (upcomingSection) upcomingSection.style.display = "block";
+      if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "none";
+      if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "grid";
+      clearMovieList();
       fetch("/api/upcoming")
         .then((response) => {
-          console.log("/api/upcoming response status:", response.status);
           if (!response.ok) {
-            console.error('Error fetching upcoming movies:', response.status, response.statusText);
-            return response.text().then(text => { // Try to get error body
+            return response.text().then(text => {
               throw new Error(`Error al cargar las películas próximas (${response.status}): ${text}`);
             });
           }
           return response.json();
         })
         .then((data) => {
-          console.log("Data received from /api/upcoming:", JSON.stringify(data, null, 2));
-          
-          if (!upcomingListElement) { // Double check, though we checked above
-              console.error("Cannot display upcoming movies: #upcoming-list element is null after fetch.");
-              return;
+          const upcomingListElement = document.getElementById("upcoming-list");
+          if (!upcomingListElement) {
+            return;
           }
-
           if (!data || data.length === 0) {
-            console.warn("No upcoming movies found or data is empty from /api/upcoming.");
             upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">No hay películas próximas disponibles en este momento.</p>';
-            console.log("Upcoming list innerHTML after 'no movies' message:", upcomingListElement.innerHTML);
-          } else if (typeof displayMovies === "function") { 
-            console.log("Calling displayMovies for upcoming-list with data:", data);
-            displayMovies(data, 'upcoming-list'); 
-            console.log("Upcoming list innerHTML after displayMovies call:", upcomingListElement.innerHTML);
-            if (upcomingListElement.children.length === 0) {
-                console.warn("displayMovies was called for upcoming-list, but the list is still empty. Check displayMovies function.");
-                // Optionally, add a message here too if displayMovies doesn't populate
-                // upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">Hubo un problema al mostrar las películas próximas.</p>';
-            }
+          } else if (typeof displayMovies === "function") {
+            displayMovies(data, 'upcoming-list');
           } else {
-            console.warn("displayMovies function is not defined. Cannot display upcoming movies.");
             upcomingListElement.innerHTML = '<p style="text-align: center; width: 100%; padding: 20px; color: white;">Error al mostrar películas próximas (función de visualización no disponible).</p>';
-            console.log("Upcoming list innerHTML after 'displayMovies not defined' message:", upcomingListElement.innerHTML);
           }
         })
         .catch((error) => {
-            console.error("Error al cargar o procesar las películas próximas:", error);
-            if (upcomingListElement) {
-                upcomingListElement.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: red;">Error al cargar las películas próximas. ${error.message}. Intente más tarde.</p>`;
-                console.log("Upcoming list innerHTML after CATCH block:", upcomingListElement.innerHTML);
-            } else {
-                console.error("Cannot display error message: #upcoming-list element is null in catch block.");
-            }
+          const upcomingListElement = document.getElementById("upcoming-list");
+          if (upcomingListElement) {
+            upcomingListElement.innerHTML = `<p style=\"text-align: center; width: 100%; padding: 20px; color: red;\">Error al cargar las películas próximas. ${error.message}. Intente más tarde.</p>`;
+          }
         });
     });
 
-    promotionsButton.addEventListener("click", () => {
-      activateButton(promotionsButton, nowShowingButton, upcomingButton);
+    dulceriaButton.addEventListener("click", () => {
+      activateButton(dulceriaButton, nowShowingButton, upcomingButton);
       if (movieSection) movieSection.style.display = "none";
-      if (comboSection) comboSection.style.display = "block"; // Or "grid" if it uses movie-grid
-      loadCombos();
+      if (comboSection) comboSection.style.display = "none";
+      if (dulceriaSection) dulceriaSection.style.display = "block";
+      if (upcomingSection) upcomingSection.style.display = "none";
+      loadDulceria();
     });
   } else {
-    console.warn("Botones de navegación de contenido principal (Cartelera, Próximamente, Promociones) no encontrados.");
+    console.warn("Botones de navegación de contenido principal (Cartelera, Próximamente, Dulcería) no encontrados.");
   }
 
   // --- Lógica para manejar la sección activa desde la URL ---
@@ -173,8 +219,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (section === 'upcoming' && upcomingButton) {
       upcomingButton.click();
-    } else if (section === 'promotions' && promotionsButton) {
+    } else if (section === 'promotions' && promotionsButton) { // Este bloque puede eliminarse si "promotions" ya no se usa
       promotionsButton.click();
+    } else if (section === 'dulceria' && dulceriaButton) { // Añadido para manejar la sección dulceria
+      dulceriaButton.click();
     } else if (section === 'now-showing' && nowShowingButton) {
       nowShowingButton.click();
     } else {
@@ -264,4 +312,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Initial calls ---
   handleSectionFromURL(); // Handle section based on URL params after everything is set up
+
+  // Cambiar enlaces de combos.html a dulceria.html en la navegación principal y botones
+  // Actualiza el botón o enlace de combos en la navegación para que apunte a /paginas/Reserva/dulceria.html
+  // Si hay referencias en scripts.js, piePagina.js, cabecera.js, etc., actualízalas también
+  // Ejemplo para scripts.js:
+  // document.getElementById('dulceria-button').addEventListener('click', () => {
+  //   window.location.href = '/paginas/Reserva/dulceria.html';
+  // });
+  if (dulceriaButton && dulceriaSection) {
+    dulceriaButton.addEventListener("click", () => {
+      activateButton(dulceriaButton, nowShowingButton, upcomingButton);
+      if (movieSection) movieSection.style.display = "none";
+      if (comboSection) comboSection.style.display = "none";
+      if (dulceriaSection) dulceriaSection.style.display = "block";
+      loadDulceria();
+    });
+  }
+
+  function displayDulceria(items) {
+    const dulceriaContainer = document.getElementById('dulceria-individual');
+    dulceriaContainer.innerHTML = ''; // Limpiar contenido anterior
+
+    items.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.classList.add('combo-card'); // Usar la misma clase que los combos para consistencia
+        itemCard.innerHTML = `
+            <img src="${item.imagen}" alt="${item.nombre}" />
+            <div class="combo-info">
+                <h3>${item.nombre}</h3>
+                <p>${item.descripcion}</p>
+                <p class="precio">Precio: S/. ${parseFloat(item.precio).toFixed(2)}</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="${item.id_producto}" data-type="producto">Agregar al Carrito</button>
+            </div>
+        `;
+        dulceriaContainer.appendChild(itemCard);
+    });
+
+    // Añadir event listeners a los nuevos botones "Agregar al Carrito"
+    document.querySelectorAll('#dulceria-individual .add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const itemId = event.target.dataset.id;
+            const itemType = event.target.dataset.type; // 'producto'
+            // Necesitamos obtener los detalles del item para pasarlo a addToCart
+            // Asumimos que 'items' (la respuesta de la API) está accesible aquí o podemos buscarlo
+            const selectedItem = items.find(i => i.id_producto.toString() === itemId);
+            if (selectedItem) {
+                addToCart(selectedItem); // addToCart está definido en cart.js
+            } else {
+                console.error('Producto no encontrado para ID:', itemId);
+            }
+        });
+    });
+}
+
+  function displayCombos(combos) {
+    const combosContainer = document.getElementById('combos-container');
+    combosContainer.innerHTML = ''; // Limpiar el contenedor
+
+    combos.forEach(combo => {
+        const comboCard = document.createElement('div');
+        comboCard.classList.add('combo-card');
+        comboCard.innerHTML = `
+            <img src="${combo.imagen}" alt="${combo.nombre}" />
+            <div class="combo-info">
+                <h3>${combo.nombre}</h3>
+                <p>${combo.descripcion}</p>
+                <p class="precio">Precio: S/. ${parseFloat(combo.precio).toFixed(2)}</p>
+                <button class="btn btn-primary add-to-cart-btn" data-id="${combo.id_combo}" data-type="combo">Agregar al Carrito</button>
+            </div>
+        `;
+        combosContainer.appendChild(comboCard);
+    });
+
+    // Añadir event listeners a los nuevos botones "Agregar al Carrito" para combos
+    document.querySelectorAll('#combos-container .add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const itemId = event.target.dataset.id;
+            const itemType = event.target.dataset.type; // 'combo'
+            // Necesitamos obtener los detalles del combo para pasarlo a addToCart
+            const selectedCombo = combos.find(c => c.id_combo.toString() === itemId);
+            if (selectedCombo) {
+                addToCart(selectedCombo); // addToCart está definido en cart.js
+            } else {
+                console.error('Combo no encontrado para ID:', itemId);
+            }
+        });
+    });
+}
 });

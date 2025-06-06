@@ -27,6 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
           "#user-dropdown-menu"
         );
 
+        const cartIcon = cabeceraElement.querySelector("#cartIcon");
+        const cartItemCount = cabeceraElement.querySelector("#cartItemCount");
+        const cartDropdown = cabeceraElement.querySelector("#cartDropdown");
+        const checkoutButton = cabeceraElement.querySelector("#checkoutButton");
+        const clearCartButton = cabeceraElement.querySelector("#clearCartButton");
+
         // --- Search Bar Logic (Conditional Display) ---
         if (searchBarContainer && searchBar && searchSubmit) {
           // Show search bar only on prueba.html (or your main page)
@@ -66,6 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (userButton && userDropdownMenu && userIcon) {
           userButton.addEventListener("click", (event) => {
             event.stopPropagation();
+            // Cerrar el carrito si está abierto
+            if (cartDropdown && cartDropdown.classList.contains("active")) {
+              cartDropdown.classList.remove("active");
+            }
             const isVisible = userDropdownMenu.style.display === "block";
             userDropdownMenu.style.display = isVisible ? "none" : "block";
           });
@@ -192,6 +202,61 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             }
           });
+        }
+
+        // --- Cart Logic (Mejorado para desplegar recuadro flotante) ---
+        if (cartIcon && cartItemCount && cartDropdown) {
+          cartIcon.addEventListener("click", (event) => {
+            event.stopPropagation();
+            if (userDropdownMenu && userDropdownMenu.style.display === "block") {
+              userDropdownMenu.style.display = "none";
+            }
+            const isVisible = cartDropdown.classList.contains("active");
+            if (isVisible) {
+              cartDropdown.classList.remove("active");
+            } else {
+              cartDropdown.classList.add("active");
+            }
+          });
+
+          // Cerrar el dropdown al hacer clic fuera
+          window.addEventListener("click", (event) => {
+            if (
+              cartDropdown.classList.contains("active") &&
+              !cartIcon.contains(event.target) &&
+              !cartDropdown.contains(event.target)
+            ) {
+              cartDropdown.classList.remove("active");
+            }
+          });
+
+          // Cerrar con Escape
+          window.addEventListener("keydown", (event) => {
+            if (
+              event.key === "Escape" &&
+              cartDropdown.classList.contains("active")
+            ) {
+              cartDropdown.classList.remove("active");
+            }
+          });
+
+          // Renderizar el carrito al cargar la cabecera (forzar tras carga de cart.js)
+          setTimeout(() => {
+            if (typeof window.renderCartItems === 'function') {
+              window.renderCartItems();
+            }
+            // Escuchar clicks en botones de agregar combo/dulcería para actualizar el carrito en tiempo real
+            document.body.addEventListener('click', (e) => {
+              if (
+                e.target.matches('.select-combo, .add-dulceria') ||
+                (e.target.closest && (e.target.closest('.select-combo') || e.target.closest('.add-dulceria')))
+              ) {
+                if (typeof window.renderCartItems === 'function') {
+                  setTimeout(() => window.renderCartItems(), 50);
+                }
+              }
+            });
+          }, 100);
         }
       })
       .catch((error) =>

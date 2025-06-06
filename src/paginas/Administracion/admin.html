@@ -67,6 +67,29 @@
             </table>
           </section>
 
+          <!-- Sección de Gestión de Dulcería -->
+          <section class="admin-section" id="dulceria-management">
+            <h2>Gestionar Dulcería</h2>
+            <button class="btn-add" id="add-dulceria-btn">
+              Añadir Producto de Dulcería
+            </button>
+            <table id="dulceria-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Imagen</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="dulceria-table-body">
+                <!-- Las filas de dulcería se insertarán aquí -->
+              </tbody>
+            </table>
+          </section>
+
           <!-- Sección de Gestión de Usuarios -->
           <section class="admin-section" id="users-management">
             <h2>Gestionar Administradores</h2>
@@ -184,6 +207,34 @@
           <div class="modal-buttons">
             <button type="button" id="cancel-user-role-form">Cancelar</button>
             <button type="submit" id="save-user-role-btn">Guardar Rol</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal para Añadir/Editar Producto de Dulcería -->
+    <div id="dulceria-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="close-dulceria-modal">&times;</span>
+        <h3 id="dulceria-modal-title">Añadir Producto de Dulcería</h3>
+        <form id="dulceria-form">
+          <input type="hidden" id="dulceria-id" name="id" />
+
+          <label for="dulceria-nombre">Nombre:</label>
+          <input type="text" id="dulceria-nombre" name="nombre" required />
+
+          <label for="dulceria-descripcion">Descripción:</label>
+          <textarea id="dulceria-descripcion" name="descripcion" required></textarea>
+
+          <label for="dulceria-precio">Precio:</label>
+          <input type="number" id="dulceria-precio" name="precio" step="0.01" required />
+
+          <label for="dulceria-imagen">URL de Imagen:</label>
+          <input type="text" id="dulceria-imagen" name="imagen" />
+
+          <div class="modal-buttons">
+            <button type="button" id="cancel-dulceria-form">Cancelar</button>
+            <button type="submit" id="save-dulceria-btn">Guardar</button>
           </div>
         </form>
       </div>

@@ -19,12 +19,12 @@
     <section class="carousel-container">
         <div class="carousel-track">
           <div class="carousel-slide">
-            <a href="/ruta/a/la/pagina-de-promocion-1" class="carousel-image-link">
+            <a href="/paginas/promociones.html#promo1" class="carousel-image-link">
               <img src="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/4a06dc64-23fd-43b2-a24c-f5c5e9acc4f1/ChatGPT%20Image%2022%20may%202025%2C%2011_30_25%20p_m__QJVYPB.png" alt="Descripción de la imagen 1" />
             </a>
           </div>
           <div class="carousel-slide">
-            <a href="/ruta/a/la/pagina-de-promocion-2" class="carousel-image-link">
+            <a href="/paginas/promociones.html#promo2" class="carousel-image-link">
               <img src="https://utp-prd-upload-file-storage.s3.amazonaws.com/pao/content/6190eace-e15a-491f-a460-ca22861f11d0/IMG_20250516_175130_GVPWNV.png" alt="Descripción de la imagen 2" />
             </a>
           </div>
@@ -41,8 +41,8 @@
         <button id="upcoming-button" class="cine-nav-button">
           <i class="fas fa-calendar-alt"></i> Próximamente
         </button>
-        <button id="promotions-button" class="cine-nav-button promotions-only">
-          <i class="fas fa-tags"></i> Promociones
+        <button id="dulceria-button" class="cine-nav-button">
+          <i class="fas fa-ice-cream"></i> Dulcería
         </button>
     </nav>
 
@@ -60,6 +60,19 @@
           <!-- Los combos se cargarán dinámicamente aquí -->
         </div>
       </section>
+
+      <!-- Sección Dulcería (oculta por defecto) -->
+      <section id="dulceria-section" style="display: none;">
+        <h2 class="section-title">Dulcería</h2>
+        <div class="dulceria-container">
+          <h3 class="dulceria-subtitle">Productos individuales</h3>
+          <div id="dulceria-list" class="movie-grid dulceria-grid"></div>
+        </div>
+        <div class="combos-container">
+          <h3 class="dulceria-subtitle">Combos y Promociones</h3>
+          <div id="combos-list" class="movie-grid combos-grid"></div>
+        </div>
+      </section>
     </main>
 
     <footer></footer>
@@ -68,7 +81,7 @@
     <script src="/js/paginas/Componentes/cabecera.js"></script>
     <script src="/js/paginas/Componentes/piePagina.js"></script>
     <script src="/js/components/movies.js"></script> 
-
+    <script src="/js/cart.js"></script>
     <script src="/js/scripts.js"></script> 
 
   </body>

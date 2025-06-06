@@ -20,5 +20,22 @@
                 <!-- Links for login/register or user email/logout will be populated by cabecera.js -->
             </div>
         </div>
+
+        <!-- Cart Icon and Dropdown -->
+        <div class="cart-icon-container">
+            <img src="/assets/icons/cart.svg" alt="Cart" id="cartIcon">
+            <span id="cartItemCount">0</span>
+            <div class="cart-dropdown" id="cartDropdown">
+                <div id="cartItems">
+                    <p>El carrito está vacío.</p>
+                </div>
+                <div class="cart-summary">
+                    <p>Total: S/.<span id="cartTotal">0.00</span></p>
+                    <button id="checkoutButton" class="btn btn-primary">Pagar</button>
+                    <button id="clearCartButton" class="btn btn-secondary">Vaciar Carrito</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
