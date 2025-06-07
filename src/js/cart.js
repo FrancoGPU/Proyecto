@@ -60,6 +60,8 @@ function renderCartItems() {
             removeFromCart(itemId);
         });
     });
+    // Disparar evento personalizado para re-asociar el botón de vaciar
+    document.dispatchEvent(new CustomEvent('cart:rendered'));
 }
 
 // Función para añadir un item al carrito
@@ -132,20 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartIcon = document.getElementById('cartIcon');
     const cartDropdown = document.getElementById('cartDropdown');
     // Forzar selector global por si el botón está fuera del scope
-    const clearCartButton = document.getElementById('clearCartButton') || document.querySelector('#clearCartButton');
-    if (clearCartButton) {
-        clearCartButton.onclick = function() {
-            cart = [];
-            saveCart();
-            localStorage.removeItem('cart');
-            if (typeof renderCartItems === 'function') {
-                renderCartItems();
-            }
-            // También actualizar el contador si existe
-            const cartItemCountElement = document.getElementById('cartItemCount');
-            if (cartItemCountElement) cartItemCountElement.textContent = '0';
-        };
+    function setupClearCartButton() {
+        const clearCartButton = document.getElementById('clearCartButton') || document.querySelector('#clearCartButton');
+        if (clearCartButton) {
+            clearCartButton.onclick = function() {
+                cart = [];
+                saveCart();
+                if (typeof renderCartItems === 'function') {
+                    renderCartItems();
+                }
+                updateCartIcon();
+                // También actualizar el contador si existe
+                const cartItemCountElement = document.getElementById('cartItemCount');
+                if (cartItemCountElement) cartItemCountElement.textContent = '0';
+            };
+        }
     }
+    setupClearCartButton();
 
     // Mostrar u ocultar el carrito al hacer clic en el icono
     if (cartIcon) {
@@ -170,6 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
             cartDropdown.classList.remove('active');
         }
     });
+
+    // También volver a asociar el botón cuando se renderiza el carrito (por si el DOM cambia)
+    document.addEventListener('cart:rendered', setupClearCartButton);
 });
 
 

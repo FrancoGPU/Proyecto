@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             comboList.innerHTML = '<p>Error al cargar combos.</p>';
         }
     }
+
     // Inicializar
     loadDulceria();
     loadCombos();
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // TODO: Lógica de carrito y continuar
+    // Lógica de carrito y continuar
     continueButton.addEventListener('click', () => {
         // Redirigir a confirmación o siguiente paso
         window.location.href = '/paginas/Reserva/confirmacion.html';

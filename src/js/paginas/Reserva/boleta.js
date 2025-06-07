@@ -21,20 +21,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const purchaseDateElement = document.getElementById('purchase-date');
     if (purchaseDateElement) purchaseDateElement.textContent = purchaseDate;
 
+    // --- Mostrar combos seleccionados desde el carrito (igual que confirmacion.js) ---
+    // Filtrar combos del carrito (id_combo)
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCombos = Array.isArray(cartItems) ? cartItems.filter(item => item.id_combo) : [];
     const comboSummaryElement = document.getElementById('combo-summary');
-    if (comboSummaryElement && selectedCombo) {
-        comboSummaryElement.innerHTML = `
-            <h4>${selectedCombo.name}</h4>
-            <img src="${selectedCombo.image}" alt="${selectedCombo.name}" style="width: 100px; height: auto; border-radius: 4px; margin-bottom: 5px;">
-            <p>${selectedCombo.description}</p>
-            <p class="price">S/.${parseFloat(selectedCombo.price).toFixed(2)}</p>
-        `;
-    } else if (comboSummaryElement) {
-        comboSummaryElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
+    if (comboSummaryElement) {
+        if (cartCombos.length > 0) {
+            comboSummaryElement.innerHTML = cartCombos.map(c => {
+                const name = c.nombre || c.name || 'Combo';
+                const image = c.imagen || c.image || '';
+                const description = c.descripcion || c.description || '';
+                const price = c.precio || c.price || 0;
+                return `<h4>${name}</h4>
+                    <img src="${image}" alt="${name}" style="width: 100px; height: auto; border-radius: 4px; margin-bottom: 5px;">
+                    <p>${description}</p>
+                    <p class="price">S/.${parseFloat(price).toFixed(2)}</p>`;
+            }).join('<hr>');
+        } else {
+            comboSummaryElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
+        }
     }
 
     // --- Recuperar productos del carrito ---
-    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     let cartTotal = 0;
     if (cartItems.length > 0) {
         cartItems.forEach(item => {
@@ -116,11 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (pdfCartSummary) pdfCartSummary.innerHTML = pdfCartHTML;
 
-        // Llenar el combo
+        // --- Mostrar combos seleccionados en el PDF ---
         const pdfComboDetails = document.getElementById('pdf-new-combo-details');
         if (pdfComboDetails) {
-            if (selectedCombo) {
-                pdfComboDetails.innerHTML = `<div><strong>${selectedCombo.name}</strong></div><div>${selectedCombo.description}</div><div>S/.${parseFloat(selectedCombo.price).toFixed(2)}</div>`;
+            if (cartCombos.length > 0) {
+                pdfComboDetails.innerHTML = cartCombos.map(c => {
+                    const name = c.nombre || c.name || 'Combo';
+                    const description = c.descripcion || c.description || '';
+                    const price = c.precio || c.price || 0;
+                    return `<div><strong>${name}</strong></div><div>${description}</div><div>S/.${parseFloat(price).toFixed(2)}</div>`;
+                }).join('<hr>');
             } else {
                 pdfComboDetails.innerHTML = '<div style="color:#888">Sin combo seleccionado.</div>';
             }

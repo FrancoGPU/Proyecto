@@ -108,6 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('selectedSeats', selectedSeats.join(','));
         localStorage.setItem('totalPrice', totalPrice);
 
-        window.location.href = '/paginas/Reserva/combos.html';
+        window.location.href = '/paginas/Reserva/dulceria.html';
     });
 });
