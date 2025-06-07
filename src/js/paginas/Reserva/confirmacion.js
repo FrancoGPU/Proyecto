@@ -10,6 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Lógica para formatear el número de tarjeta (Nueva función)
+    const cardNumberInput = document.getElementById('card-number');
+
+    if (cardNumberInput) { // Asegúrate de que el elemento exista antes de añadir el listener
+        cardNumberInput.addEventListener('input', (event) => {
+            let value = event.target.value.replace(/\D/g, ''); // Eliminar todo lo que no sea dígito
+            let formattedValue = '';
+
+            // Insertar un espacio cada 4 dígitos
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+
+            event.target.value = formattedValue;
+
+            // Limitar la longitud máxima a la del placeholder (19 caracteres incluyendo espacios)
+            // Asegúrate de que la validación final del formulario también elimine los espacios
+            if (formattedValue.length > 19) {
+                event.target.value = formattedValue.substring(0, 19);
+            }
+        });
+    }
+
     // 1. Mostrar película y horario
     const movieTitle = localStorage.getItem('movieTitle') || 'Película no especificada';
     const showtime = localStorage.getItem('selectedShowtime') || 'Horario no especificado';
@@ -99,7 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const cardName = document.getElementById('card-name').value.trim();
-            const cardNumber = document.getElementById('card-number').value.trim();
+            // IMPORTANTE: Eliminar los espacios del número de tarjeta antes de la validación y envío
+            const cardNumber = document.getElementById('card-number').value.trim().replace(/\s/g, '');
             const expiryDate = document.getElementById('expiry-date').value.trim();
             const cvv = document.getElementById('cvv').value.trim();
 
@@ -109,8 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Validación básica de número de tarjeta y CVV
-            if (!/^\d{13,19}$/.test(cardNumber.replace(/\s/g, ''))) {
-                alert('Número de tarjeta inválido.');
+            // Ahora la validación se hace sobre el cardNumber sin espacios
+            if (!/^\d{13,19}$/.test(cardNumber)) {
+                alert('Número de tarjeta inválido. Debe contener entre 13 y 19 dígitos.');
                 return;
             }
             if (!/^\d{3,4}$/.test(cvv)) {
