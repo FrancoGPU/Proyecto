@@ -243,4 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, 500);
     }
+
+    // --- Vaciar el carrito automáticamente al cargar la boleta (compra completada) ---
+    localStorage.removeItem('cart');
+    if (typeof window.cart !== 'undefined') window.cart = [];
+    // Si hay renderCartItems disponible, actualizar el header si está presente
+    if (typeof window.renderCartItems === 'function') {
+        window.renderCartItems();
+    }
 });
