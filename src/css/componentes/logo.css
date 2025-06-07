@@ -7,8 +7,8 @@
 
 /* Estilos para la imagen del logo */
 .logo-img {
-    height: 120px; /* Ajusta esta altura según sea necesario */
-    width: 180px; /* Mantiene la proporción de la imagen */
+    height: 70px; /* Ajusta esta altura según sea necesario */
+    width: 210px; /* Mantiene la proporción de la imagen */
     display: block; /* Elimina espacio extra debajo de la imagen */
     transition: transform 0.3s ease, filter 0.3s ease; /* Transiciones suaves */
 }

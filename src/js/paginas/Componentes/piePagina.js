@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="footer-main-content">
                 <div class="footer-container">
-                    <div class="cabecera-container">
+                    <div class="footer-logo-area">
                         <a href="/paginas/prueba.html" class="logo-link">
-                        <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
+                            <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
                         </a>
                     </div>
                     <nav class="footer-links-section">
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <ul>
                                 <li><a href="/paginas/prueba.html?section=now-showing">Cartelera</a></li>
                                 <li><a href="/paginas/prueba.html?section=upcoming">Próximamente</a></li>
-                                <li><a href="/paginas/prueba.html?section=promotions">Promociones</a></li>
+                                <li><a href="/paginas/prueba.html?section=dulceria">Dulcería</a></li>
                             </ul>
                         </div>
                         <div class="footer-column">

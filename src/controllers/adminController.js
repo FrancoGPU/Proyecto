@@ -147,4 +147,70 @@ module.exports = {
       res.status(500).json({ message: "Error interno del servidor." });
     }
   },
+  // --- DULCERIA ---
+  getDulceria: async (req, res) => {
+    try {
+      const result = await pool.query("SELECT * FROM dulceria ORDER BY id ASC");
+      res.json(result.rows);
+    } catch (err) {
+      console.error("Error al obtener dulcería:", err.message);
+      res.status(500).json({ message: "Error interno del servidor al obtener dulcería." });
+    }
+  },
+  addDulceria: async (req, res) => {
+    const { nombre, descripcion, precio, imagen } = req.body;
+    try {
+      const result = await pool.query(
+        "INSERT INTO dulceria (nombre, descripcion, precio, imagen) VALUES ($1, $2, $3, $4) RETURNING *",
+        [nombre, descripcion, precio, imagen]
+      );
+      res.status(201).json({ message: "Producto de dulcería añadido exitosamente", producto: result.rows[0] });
+    } catch (err) {
+      console.error("Error al añadir producto de dulcería:", err.message);
+      res.status(500).json({ message: "Error interno del servidor." });
+    }
+  },
+  updateDulceria: async (req, res) => {
+    const { id } = req.params;
+    const { nombre, descripcion, precio, imagen } = req.body;
+    try {
+      const result = await pool.query(
+        "UPDATE dulceria SET nombre = $1, descripcion = $2, precio = $3, imagen = $4 WHERE id = $5 RETURNING *",
+        [nombre, descripcion, precio, imagen, id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Producto de dulcería no encontrado." });
+      }
+      res.json({ message: "Producto de dulcería actualizado exitosamente.", producto: result.rows[0] });
+    } catch (err) {
+      console.error("Error al actualizar producto de dulcería:", err.message);
+      res.status(500).json({ message: "Error interno del servidor." });
+    }
+  },
+  deleteDulceria: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const result = await pool.query("DELETE FROM dulceria WHERE id = $1 RETURNING *", [id]);
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Producto de dulcería no encontrado." });
+      }
+      res.json({ message: "Producto de dulcería eliminado exitosamente.", producto: result.rows[0] });
+    } catch (err) {
+      console.error("Error al eliminar producto de dulcería:", err.message);
+      res.status(500).json({ message: "Error interno del servidor." });
+    }
+  },
+  getDulceriaById: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const result = await pool.query("SELECT * FROM dulceria WHERE id = $1", [id]);
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Producto de dulcería no encontrado." });
+      }
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error("Error al obtener producto de dulcería por ID:", err.message);
+      res.status(500).json({ message: "Error interno del servidor." });
+    }
+  },
 };

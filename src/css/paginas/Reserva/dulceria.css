@@ -129,3 +129,16 @@
     transform: scale(0.95); /* Efecto de reducción */
 }
 
+/* Dulcería y Combos - Usa los mismos estilos para ambos grids */
+.dulceria-section {
+    margin-top: var(--space-lg);
+}
+
+#dulceria-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    justify-content: center;
+}
+

@@ -1,49 +1,132 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Recuperar datos desde localStorage
-    const movieName = localStorage.getItem('movieTitle');
-    const seats = localStorage.getItem('selectedSeats');
-    const totalPrice = parseFloat(localStorage.getItem('totalPrice')); // Convertir a número
-    const showtime = localStorage.getItem('selectedShowtime'); // Recuperar el horario seleccionado
-    const selectedCombo = JSON.parse(localStorage.getItem('selectedCombo')); // Recuperar el combo seleccionado
+    // Utilidad para parsear JSON seguro
+    function getParsedItem(key, fallback = null) {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        try {
+            return JSON.parse(raw);
+        } catch {
+            return raw;
+        }
+    }
 
-    // Mostrar los datos en el resumen
+    // Lógica para formatear el número de tarjeta (Nueva función)
+    const cardNumberInput = document.getElementById('card-number');
+
+    if (cardNumberInput) { // Asegúrate de que el elemento exista antes de añadir el listener
+        cardNumberInput.addEventListener('input', (event) => {
+            let value = event.target.value.replace(/\D/g, ''); // Eliminar todo lo que no sea dígito
+            let formattedValue = '';
+
+            // Insertar un espacio cada 4 dígitos
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+
+            event.target.value = formattedValue;
+
+            // Limitar la longitud máxima a la del placeholder (19 caracteres incluyendo espacios)
+            // Asegúrate de que la validación final del formulario también elimine los espacios
+            if (formattedValue.length > 19) {
+                event.target.value = formattedValue.substring(0, 19);
+            }
+        });
+    }
+
+    // 1. Mostrar película y horario
+    const movieTitle = localStorage.getItem('movieTitle') || 'Película no especificada';
+    const showtime = localStorage.getItem('selectedShowtime') || 'Horario no especificado';
     const movieNameElement = document.getElementById('movie-name');
     if (movieNameElement) {
-        movieNameElement.textContent = `${movieName || 'Película no especificada'} - ${showtime || 'Horario no especificado'}`;
+        movieNameElement.textContent = `${movieTitle} - ${showtime}`;
     }
 
+    // 2. Mostrar asientos seleccionados (siempre como lista legible)
+    const seatsRaw = localStorage.getItem('selectedSeats');
+    let seatsDisplay = 'No seleccionadas';
+    if (seatsRaw) {
+        // Permitir tanto array como string
+        try {
+            const seatsArr = JSON.parse(seatsRaw);
+            if (Array.isArray(seatsArr) && seatsArr.length > 0) {
+                seatsDisplay = seatsArr.join(', ');
+            } else if (typeof seatsArr === 'string' && seatsArr.trim() !== '') {
+                seatsDisplay = seatsArr;
+            }
+        } catch {
+            if (seatsRaw.trim() !== '') {
+                seatsDisplay = seatsRaw;
+            }
+        }
+    }
     const seatsElement = document.getElementById('seats');
     if (seatsElement) {
-        seatsElement.textContent = seats || 'No seleccionadas';
+        seatsElement.textContent = seatsDisplay;
     }
 
+    // 3. Mostrar combos seleccionados desde el carrito (dulcería)
+    // Solo mostrar combos que estén en el carrito y tengan id_combo
+    const cartItems = getParsedItem('cart', []);
+    const cartCombos = Array.isArray(cartItems)
+        ? cartItems.filter(item => item.id_combo)
+        : [];
+    const comboDetailsElement = document.getElementById('combo-details');
+    if (comboDetailsElement) {
+        if (cartCombos.length > 0) {
+            comboDetailsElement.innerHTML = cartCombos.map(c => {
+                const name = c.nombre || c.name || 'Combo';
+                const image = c.imagen || c.image || '';
+                const description = c.descripcion || c.description || '';
+                const price = c.precio || c.price || 0;
+                return `<h4>${name}</h4>
+                    <img src="${image}" alt="${name}">
+                    <p>${description}</p>
+                    <p class="price">S/.${parseFloat(price).toFixed(2)}</p>`;
+            }).join('<hr>');
+        } else {
+            comboDetailsElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
+        }
+    }
+
+    // 4. Mostrar productos del carrito (soporta propiedades en español/inglés)
+    const cartDetailsElement = document.getElementById('cart-details');
+    let cartTotal = 0;
+    if (cartDetailsElement) {
+        if (Array.isArray(cartItems) && cartItems.length > 0) {
+            let cartHTML = '<ul>';
+            cartItems.forEach(item => {
+                const nombre = item.nombre || item.name || 'Producto';
+                const precio = item.precio || item.price || 0;
+                cartHTML += `<li>${nombre} - S/.${parseFloat(precio).toFixed(2)}</li>`;
+                cartTotal += parseFloat(precio);
+            });
+            cartHTML += '</ul>';
+            cartDetailsElement.innerHTML = cartHTML;
+        } else {
+            cartDetailsElement.innerHTML = '<p>No hay productos en el carrito.</p>';
+        }
+    }
+
+    // 5. Calcular y mostrar el total combinado
+    const entradasTotal = parseFloat(localStorage.getItem('totalPrice')) || 0;
+    const combinedTotal = entradasTotal + cartTotal;
     const totalPriceElement = document.getElementById('total-price');
     if (totalPriceElement) {
-        totalPriceElement.textContent = !isNaN(totalPrice) ? `S/.${totalPrice.toFixed(2)}` : 'S/.0.00';
+        totalPriceElement.textContent = `S/.${combinedTotal.toFixed(2)}`;
     }
 
-    // Mostrar los detalles del combo seleccionado
-    const comboDetailsElement = document.getElementById('combo-details');
-    if (comboDetailsElement && selectedCombo) {
-        comboDetailsElement.innerHTML = `
-            <h4>${selectedCombo.name}</h4>
-            <img src="${selectedCombo.image}" alt="${selectedCombo.name}" style="width: 100px; height: auto;">
-            <p>${selectedCombo.description}</p>
-            <p class="price">S/.${parseFloat(selectedCombo.price).toFixed(2)}</p>
-        `;
-    } else if (comboDetailsElement) {
-        comboDetailsElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
-    }
-
-    // Manejar el formulario de pago
+    // 6. Manejar el formulario de pago
     const paymentForm = document.getElementById('payment-form');
     if (paymentForm) {
         paymentForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Evitar el envío del formulario por defecto
+            e.preventDefault();
 
-            // Validar los datos del formulario
             const cardName = document.getElementById('card-name').value.trim();
-            const cardNumber = document.getElementById('card-number').value.trim();
+            // IMPORTANTE: Eliminar los espacios del número de tarjeta antes de la validación y envío
+            const cardNumber = document.getElementById('card-number').value.trim().replace(/\s/g, '');
             const expiryDate = document.getElementById('expiry-date').value.trim();
             const cvv = document.getElementById('cvv').value.trim();
 
@@ -52,10 +135,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Simular el procesamiento del pago
-            alert('Pago realizado con éxito. Redirigiendo a la boleta...');
+            // Validación básica de número de tarjeta y CVV
+            // Ahora la validación se hace sobre el cardNumber sin espacios
+            if (!/^\d{13,19}$/.test(cardNumber)) {
+                alert('Número de tarjeta inválido. Debe contener entre 13 y 19 dígitos.');
+                return;
+            }
+            if (!/^\d{3,4}$/.test(cvv)) {
+                alert('CVV inválido.');
+                return;
+            }
 
-            // Redirigir a la página de boleta
+            alert('Pago realizado con éxito. Redirigiendo a la boleta...');
+            // Eliminar del storage SOLO en boleta.html, NO aquí
             window.location.href = 'boleta.html';
         });
     }

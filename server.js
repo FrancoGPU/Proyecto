@@ -69,6 +69,14 @@ app.get("/api/admin/combos/:id", isAdmin, adminController.getComboById);
 app.get("/api/admin/users", isAdmin, adminController.getUsers);
 app.put("/api/admin/users/:userId/role", isAdmin, adminController.updateUserRole);
 
+// --- Endpoints de Dulcería ---
+app.get("/api/dulceria", adminController.getDulceria); // Ruta pública para productos individuales
+app.get("/api/admin/dulceria", isAdmin, adminController.getDulceria);
+app.post("/api/admin/dulceria", isAdmin, adminController.addDulceria);
+app.put("/api/admin/dulceria/:id", isAdmin, adminController.updateDulceria);
+app.delete("/api/admin/dulceria/:id", isAdmin, adminController.deleteDulceria);
+app.get("/api/admin/dulceria/:id", isAdmin, adminController.getDulceriaById);
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/paginas/prueba.html"));
 });

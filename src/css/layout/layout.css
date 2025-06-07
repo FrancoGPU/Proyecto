@@ -117,7 +117,7 @@ a {
     max-width: 1400px;
     margin: 0 auto;
     display: block;
-    padding: 0 1.5rem 2rem 1.5rem;
+    padding: 2rem 1.5rem 2rem 1.5rem;
     box-sizing: border-box;
 }
 
@@ -273,29 +273,32 @@ a {
 .footer-main-content .footer-container {
     display: flex;
     flex-wrap: wrap;
+    align-items: center; /* Centra verticalmente el contenido */
     justify-content: space-between;
     gap: var(--space-lg, 2rem);
 }
 
 .footer-logo-area {
-    flex-basis: 200px; /* Espacio para el logo */
+    flex-basis: 150px; /* Ajusta el espacio para el logo */
     flex-shrink: 0;
-}
-.footer-logo { /* Estilos para el logo en el footer si es diferente al header */
-    font-size: 2.5rem; /* Ajusta según tu logo */
-    /* color: var(--primary, #cc0000); */ /* Hereda de .logo */
-    position: relative; /* Asegura que sea el contexto de posicionamiento para ::before */
-}
-.footer-logo .logo-go {
-    color: var(--primary, #e50914); /* GO en color primario (rojo) */
-}
-.footer-logo .logo-cine {
-    color: var(--footer-logo-cine-color, #ffffff); /* CINE en blanco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    height: 100%;
 }
 
-/* Nueva regla para el pseudo-elemento ::before del logo del footer */
-.footer-logo::before {
-    pointer-events: none; /* Evita que el pseudo-elemento intercepte clics */
+.footer-logo-area .logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-logo-area .logo-img {
+    width: 150px !important;
+    height: auto !important;
+    max-width: 100%;
+    display: block;
 }
 
 .footer-links-section {
