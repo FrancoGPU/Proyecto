@@ -24,13 +24,22 @@ npm install
 ```
 
 ### 3. Configurar la base de datos
-1. Crea una base de datos en PostgreSQL llamada `gocine`:
-   ```sql
-   CREATE DATABASE gocine;
-   ```
-2. Restaura el archivo `gocine.sql` en la base de datos:
+1. **Eliminar la base de datos actual `gocine`**:
+   Conéctate a PostgreSQL como superusuario y elimina la base de datos:
    ```bash
-   psql -U postgres -d gocine -f gocine.sql
+   sudo -u postgres psql
+   ```
+   Luego, ejecuta los siguientes comandos en la consola de PostgreSQL:
+   ```sql
+   DROP DATABASE IF EXISTS gocine;
+   CREATE DATABASE gocine;
+   \q
+   ```
+
+2. **Inicializar la base de datos con el contenido de `backup.sql`**:
+   Restaura el archivo `backup.sql` en la base de datos recién creada:
+   ```bash
+   sudo -u postgres psql -d gocine -f /workspaces/Proyecto/backup.sql
    ```
 
 ### 4. Configurar variables de entorno
@@ -71,7 +80,7 @@ También puedes acceder a otras páginas específicas como:
 cinema-website/
 ├── db.js                  # Configuración de la base de datos
 ├── server.js              # Servidor principal
-├── gocine.sql             # Archivo SQL para restaurar la base de datos
+├── backup.sql             # Archivo SQL para restaurar la base de datos
 ├── .env-example           # Ejemplo de archivo de configuración de entorno
 ├── package.json           # Dependencias y configuración del proyecto
 ├── src/
