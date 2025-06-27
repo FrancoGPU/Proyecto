@@ -19,6 +19,19 @@
     <main class="main-content">
       <div class="admin-container">
         <h1>Panel de Administrador</h1>
+        
+        <!-- Enlaces de navegación rápida -->
+        <div class="admin-navigation" style="margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+          <a href="/paginas/Administracion/estadisticas-compras.html" 
+             style="color: #ff6b35; text-decoration: none; font-weight: bold; margin-right: 1rem;">
+            📊 Ver Estadísticas de Compras
+          </a>
+          <a href="/paginas/Administracion/vip-admin.html" 
+             style="color: #ffd700; text-decoration: none; font-weight: bold;">
+            ⭐ Gestión VIP
+          </a>
+        </div>
+        
         <div id="admin-message">
           <p>Verificando permisos...</p>
         </div>
@@ -92,7 +105,10 @@
 
           <!-- Sección de Gestión de Usuarios -->
           <section class="admin-section" id="users-management">
-            <h2>Gestionar Administradores</h2>
+            <div class="section-header">
+              <h2>Gestionar Administradores</h2>
+              <a href="vip-admin.html" class="btn-vip-admin">👑 Gestionar VIP</a>
+            </div>
             <table id="users-table">
               <thead>
                 <tr>

@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       adminMessage.innerHTML =
         '<p style="color: red;">Acceso denegado. Solo los administradores pueden ver esta página. Serás redirigido.</p>';
       setTimeout(() => {
-        window.location.href = "/paginas/Autenticacion/login.html";
+        window.location.href = "/src/paginas/Autenticacion/login.html";
       }, 3000);
     }
   } catch (error) {
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     adminMessage.innerHTML =
       '<p style="color: red;">Error al verificar permisos. Inténtalo más tarde.</p>';
     setTimeout(() => {
-      window.location.href = "/paginas/prueba.html";
+      window.location.href = "/src/paginas/Autenticacion/login.html";
     }, 3000);
   }
 

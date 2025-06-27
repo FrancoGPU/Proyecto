@@ -183,6 +183,16 @@ document.addEventListener("DOMContentLoaded", () => {
             userDisplay.textContent = userData.username || userData.email; // Priorizar username, fallback a email
             userDropdownMenu.appendChild(userDisplay);
 
+            // Enlace al historial de compras
+            const historyLink = document.createElement("a");
+            historyLink.href = "/paginas/Usuario/historial-compras.html";
+            historyLink.textContent = "Mi Historial";
+            historyLink.style.display = "flex";
+            historyLink.style.alignItems = "center";
+            historyLink.style.gap = "0.5rem";
+            historyLink.innerHTML = `📋 Mi Historial de Compras`;
+            userDropdownMenu.appendChild(historyLink);
+
             if (userData.role === "admin") {
               const adminPanelLink = document.createElement("a");
               adminPanelLink.href = "/paginas/Administracion/admin.html";
@@ -249,18 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- Cart Logic (Mejorado para desplegar recuadro flotante) ---
         if (cartIcon && cartItemCount && cartDropdown) {
-          cartIcon.addEventListener("click", (event) => {
-            event.stopPropagation();
-            if (userDropdownMenu && userDropdownMenu.style.display === "block") {
-              userDropdownMenu.style.display = "none";
-            }
-            const isVisible = cartDropdown.classList.contains("active");
-            if (isVisible) {
-              cartDropdown.classList.remove("active");
-            } else {
-              cartDropdown.classList.add("active");
-            }
-          });
+          // Cart icon click handled by cart.js instead
+          // if (userDropdownMenu && userDropdownMenu.style.display === "block") {
+          //   userDropdownMenu.style.display = "none";
+          // }
 
           // Cerrar el dropdown al hacer clic fuera
           window.addEventListener("click", (event) => {

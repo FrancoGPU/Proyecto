@@ -8,6 +8,7 @@ const isAdmin = require("./src/middleware/isAdmin");
 const authController = require("./src/controllers/authController");
 const adminController = require("./src/controllers/adminController");
 const movieController = require("./src/controllers/movieController");
+const purchaseController = require("./src/controllers/purchaseController");
 
 const app = express();
 const PORT = 3000;
@@ -52,6 +53,110 @@ app.post("/api/logout", authController.logout);
 app.post("/api/recuperar", authController.recuperar);
 app.post("/api/restablecer-contrasena", authController.restablecerContrasena);
 app.get("/api/session/status", authController.sessionStatus);
+
+// --- Endpoints VIP ---
+const User = require("./src/models/User");
+
+// Verificar estado VIP del usuario actual en sesión
+app.get("/api/user/vip-status", async (req, res) => {
+  try {
+    if (!req.session.user || !req.session.user.id) {
+      return res.json({ isVip: false, discountPercentage: 0 });
+    }
+
+    const userId = req.session.user.id;
+    const isVip = await User.isVipActive(userId);
+    const discountPercentage = await User.getVipDiscount(userId);
+    
+    res.json({
+      isVip,
+      discountPercentage
+    });
+  } catch (error) {
+    console.error("Error al verificar estado VIP:", error);
+    res.json({ isVip: false, discountPercentage: 0 });
+  }
+});
+
+// Verificar estado VIP de un usuario específico
+app.get("/api/users/:userId/vip-status", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    // Verificar si el usuario autenticado puede acceder a esta información
+    if (!req.session.user || (req.session.user.id != userId && req.session.user.role !== 'admin')) {
+      return res.status(403).json({ message: "Acceso denegado" });
+    }
+
+    const isVip = await User.isVipActive(userId);
+    const discountPercentage = await User.getVipDiscount(userId);
+    
+    res.json({
+      isVip,
+      discountPercentage
+    });
+  } catch (error) {
+    console.error("Error al verificar estado VIP:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+// Actualizar usuario a VIP (solo administradores)
+app.post("/api/admin/users/:userId/upgrade-vip", isAdmin, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { discountPercentage = 15, membershipDurationMonths = 12 } = req.body;
+    
+    const updatedUser = await User.upgradeToVip(userId, discountPercentage, membershipDurationMonths);
+    
+    res.json({
+      message: "Usuario actualizado a VIP exitosamente",
+      user: {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        is_vip: updatedUser.is_vip,
+        vip_discount_percentage: updatedUser.vip_discount_percentage
+      }
+    });
+  } catch (error) {
+    console.error("Error al actualizar usuario a VIP:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+// Remover estado VIP (solo administradores)
+app.delete("/api/admin/users/:userId/remove-vip", isAdmin, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    const updatedUser = await User.removeVipStatus(userId);
+    
+    res.json({
+      message: "Estado VIP removido exitosamente",
+      user: {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        is_vip: updatedUser.is_vip,
+        vip_discount_percentage: updatedUser.vip_discount_percentage
+      }
+    });
+  } catch (error) {
+    console.error("Error al remover estado VIP:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+// --- Endpoints de Compras ---
+// Registrar una nueva compra
+app.post("/api/purchases", purchaseController.createPurchase);
+
+// Obtener historial de compras del usuario actual
+app.get("/api/purchases/history", purchaseController.getUserPurchases);
+
+// Obtener estadísticas de compras (solo administradores)
+app.get("/api/admin/purchases/stats", isAdmin, purchaseController.getPurchaseStats);
 
 // --- Endpoints de Administración ---
 app.get("/api/admin/movies", isAdmin, adminController.getMovies);

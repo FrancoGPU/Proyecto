@@ -1,3 +1,12 @@
+/* Importar variables y estilos base */
+@import 'base/variables.css';
+@import 'base/base.css';
+@import 'componentes/botones.css';
+@import 'componentes/barraBusqueda.css';
+@import 'componentes/logo.css';
+@import 'componentes/animaciones.css';
+@import 'componentes/peliculas.css';
+
 /* Estilos Globales, Variables, etc. */
 /* ... (otros estilos globales si los tienes) ... */
 
@@ -292,6 +301,18 @@ body {
     border-bottom: 1px solid #eee;
 }
 
+/* Estilos para información VIP en el dropdown del usuario */
+.vip-info {
+    padding: 8px 15px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #8b4513;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-top: 1px solid #ffd700;
+    border-bottom: 1px solid #ffd700;
+    text-align: center;
+}
+
 /* Estilos para el Carrito de Compras */
 .cart-icon-container {
     cursor: pointer;
@@ -392,12 +413,102 @@ body {
     color: #333;
 }
 
+/* Estilos para precios VIP en el carrito - mantener en línea */
 .cart-item-price {
     margin: 0;
     font-size: 0.85rem;
     color: #555;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
+.cart-item-price .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.cart-item-price .vip-price {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Específico para el carrito - mantener elementos en línea */
+.cart-item-price .vip-price-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-direction: row !important;
+}
+
+/* Estilos VIP para páginas de confirmación y boleta - NO carrito */
+.confirmation-section .vip-price-container,
+.boleta-section .vip-price-container,
+.purchase-summary .vip-price-container,
+.cart-summary .vip-price-container:not(.cart-item-price .vip-price-container) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.confirmation-section .vip-price-container .original-price,
+.boleta-section .vip-price-container .original-price,
+.purchase-summary .vip-price-container .original-price,
+.cart-summary .vip-price-container:not(.cart-item-price .vip-price-container) .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.confirmation-section .vip-price-container .vip-price,
+.boleta-section .vip-price-container .vip-price,
+.purchase-summary .vip-price-container .vip-price,
+.cart-summary .vip-price-container:not(.cart-item-price .vip-price-container) .vip-price {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Para totales más grandes */
+.boleta-value-total .vip-price-container .original-price,
+#total-price .vip-price-container .original-price {
+    font-size: 1rem;
+}
+
+.boleta-value-total .vip-price-container .vip-price,
+#total-price .vip-price-container .vip-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.vip-savings-badge {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+/* Responsive para notificaciones VIP */
+@media (max-width: 480px) {
+    .vip-notification-container {
+        right: 10px;
+        left: 10px;
+    }
+    
+    .vip-notification {
+        max-width: none;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+    }
+}
+
+/* Estilos adicionales para el carrito */
 .remove-from-cart-btn {
     background: none;
     border: none;
@@ -460,23 +571,74 @@ body {
     background-color: #545b62;
 }
 
-/* ... (otros estilos específicos de página si los tienes) ... */
+/* Estilos para sistema VIP */
 
-/* Responsive adjustments for cart dropdown if needed */
-@media (max-width: 480px) {
-    .cart-dropdown {
-        width: 95vw;
-        right: -10vw;
-        min-width: 200px;
-        max-width: 320px;
+/* Notificaciones VIP */
+.vip-notification-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.vip-notification {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #8b4513;
+    padding: 12px 18px;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    border: 2px solid #ffd700;
+    animation: slideInVip 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    font-weight: 600;
+    max-width: 280px;
+}
+
+.vip-notification.fade-out {
+    animation: slideOutVip 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.vip-notification-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vip-crown {
+    font-size: 1.2rem;
+    animation: crownPulse 2s infinite;
+}
+
+.vip-message {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+@keyframes slideInVip {
+    from {
+        opacity: 0;
+        transform: translateX(100px) scale(0.8);
     }
-    header.cine-cabecera {
-        padding: 0 10px;
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
     }
-    .cabecera-actions {
-        gap: 10px;
+}
+
+@keyframes slideOutVip {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
     }
-    #search-bar {
-        max-width: 120px;
+    to {
+        opacity: 0;
+        transform: translateX(100px) scale(0.8);
     }
+}
+
+@keyframes crownPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }

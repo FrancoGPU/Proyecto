@@ -107,3 +107,389 @@
         .modal-buttons { margin-top: 20px; text-align: right; }
         .modal-buttons button { padding: 10px 15px; margin-left: 10px; }
         .close-button { float: right; font-size: 1.5rem; font-weight: bold; cursor: pointer; }
+
+        /* Estilos específicos para administración VIP */
+
+        .vip-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+
+        .users-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+        }
+
+        .btn-vip-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #8b4513;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid #ffd700;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-vip-admin:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+            transform: translateY(-1px);
+            text-decoration: none;
+            color: #8b4513;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .users-table-container {
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .users-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .users-table td {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .users-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .regular-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e9ecef;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid #dee2e6;
+        }
+
+        .loading-row,
+        .no-data {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        /* Modal para gestión VIP */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #e9ecef;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        /* Notificaciones de administración */
+        .admin-notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .admin-notification {
+            background: white;
+            border-left: 4px solid #007bff;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 350px;
+            pointer-events: auto;
+            animation: slideInNotification 0.3s ease-out;
+        }
+
+        .admin-notification.success {
+            border-left-color: #28a745;
+        }
+
+        .admin-notification.error {
+            border-left-color: #dc3545;
+        }
+
+        .admin-notification.warning {
+            border-left-color: #ffc107;
+        }
+
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .notification-message {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-close:hover {
+            color: #333;
+        }
+
+        @keyframes slideInNotification {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .vip-stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .users-table {
+                font-size: 0.8rem;
+            }
+            
+            .users-table th,
+            .users-table td {
+                padding: 8px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .admin-notification-container {
+                left: 10px;
+                right: 10px;
+            }
+            
+            .admin-notification {
+                max-width: none;
+            }
+        }

@@ -1,27 +1,77 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOM completamente cargado y parseado.");
+
+    // Verificar estado VIP del usuario
+    let userVipStatus = { isVip: false, discountPercentage: 0 };
+    try {
+        const sessionResponse = await fetch('/api/session/status');
+        if (sessionResponse.ok) {
+            const sessionData = await sessionResponse.json();
+            if (sessionData.loggedIn && sessionData.user) {
+                const vipResponse = await fetch('/api/user/vip-status');
+                if (vipResponse.ok) {
+                    userVipStatus = await vipResponse.json();
+                    console.log('Estado VIP en boleta:', userVipStatus);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error al verificar estado VIP en boleta:', error);
+    }
+
+    // Función para calcular precio con descuento VIP
+    function getVipPrice(originalPrice, vipStatus) {
+        if (!vipStatus.isVip || !originalPrice) return originalPrice;
+        const discount = (originalPrice * vipStatus.discountPercentage) / 100;
+        return originalPrice - discount;
+    }
+
+    // Función para crear elemento de precio con descuento VIP
+    function createPriceDisplay(originalPrice, vipStatus) {
+        if (!vipStatus.isVip) {
+            return `S/.${parseFloat(originalPrice).toFixed(2)}`;
+        }
+        
+        const vipPrice = getVipPrice(originalPrice, vipStatus);
+        return `
+            <span class="vip-price-container">
+                <span class="original-price">S/.${parseFloat(originalPrice).toFixed(2)}</span>
+                <span class="vip-price">S/.${vipPrice.toFixed(2)} ⭐VIP</span>
+            </span>
+        `;
+    }
 
     // --- Recuperar datos de localStorage ---
     const movieName = localStorage.getItem('movieTitle') || 'Película Desconocida';
     const seats = localStorage.getItem('selectedSeats') || 'Asientos no seleccionados';
-    const totalPrice = parseFloat(localStorage.getItem('totalPrice')) || 0; // Este es el total final
-    const purchaseDate = new Date().toLocaleString(); // Para la página visible
+    // Usar el total final con descuentos si está disponible, sino el original
+    const finalTotalPrice = parseFloat(localStorage.getItem('finalTotalPrice'));
+    const originalTotalPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
+    const totalPrice = finalTotalPrice || originalTotalPrice;
+    // Usar la fecha de compra registrada o la actual como fallback
+    const purchaseDate = localStorage.getItem('purchaseDate') ? 
+        new Date(localStorage.getItem('purchaseDate')).toLocaleString() : 
+        new Date().toLocaleString();
     const selectedCombo = JSON.parse(localStorage.getItem('selectedCombo'));
 
-    // --- Mostrar datos en la página HTML principal (la que ve el usuario, no la plantilla PDF) ---
+    // --- Mostrar datos en la página HTML principal con descuentos VIP ---
     const movieNameElement = document.getElementById('movie-name');
-    if (movieNameElement) movieNameElement.textContent = movieName;
+    if (movieNameElement) {
+        const entradasPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
+        const entradasPriceDisplay = createPriceDisplay(entradasPrice, userVipStatus);
+        movieNameElement.innerHTML = `${movieName}<br><small><strong>Precio entradas:</strong> ${entradasPriceDisplay}</small>`;
+    }
 
     const seatsElement = document.getElementById('seats');
     if (seatsElement) seatsElement.textContent = seats;
 
-    const totalPriceElement = document.getElementById('total-price');
-    if (totalPriceElement) totalPriceElement.textContent = `S/.${totalPrice.toFixed(2)}`;
-
     const purchaseDateElement = document.getElementById('purchase-date');
     if (purchaseDateElement) purchaseDateElement.textContent = purchaseDate;
 
-    // --- Mostrar combos seleccionados desde el carrito (igual que confirmacion.js) ---
+    // Seleccionar elemento del precio total
+    const totalPriceElement = document.getElementById('total-price');
+
+    // --- Mostrar combos seleccionados desde el carrito con descuentos VIP ---
     // Filtrar combos del carrito (id_combo)
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cartCombos = Array.isArray(cartItems) ? cartItems.filter(item => item.id_combo) : [];
@@ -33,71 +83,123 @@ document.addEventListener('DOMContentLoaded', () => {
                 const image = c.imagen || c.image || '';
                 const description = c.descripcion || c.description || '';
                 const price = c.precio || c.price || 0;
+                const priceDisplay = createPriceDisplay(price, userVipStatus);
                 return `<h4>${name}</h4>
                     <img src="${image}" alt="${name}" style="width: 100px; height: auto; border-radius: 4px; margin-bottom: 5px;">
                     <p>${description}</p>
-                    <p class="price">S/.${parseFloat(price).toFixed(2)}</p>`;
+                    <p class="price">${priceDisplay}</p>`;
             }).join('<hr>');
         } else {
             comboSummaryElement.innerHTML = '<p>No seleccionaste ningún combo.</p>';
         }
     }
 
-    // --- Recuperar productos del carrito ---
+    // --- Recuperar productos del carrito con descuentos VIP ---
     let cartTotal = 0;
+    let originalCartTotal = 0;
     if (cartItems.length > 0) {
         cartItems.forEach(item => {
-            cartTotal += parseFloat(item.precio);
+            const originalPrice = parseFloat(item.precio || item.price || 0);
+            const finalPrice = getVipPrice(originalPrice, userVipStatus);
+            originalCartTotal += originalPrice;
+            cartTotal += finalPrice;
         });
     }
 
-    // --- Mostrar productos y butacas en la página ---
+    // --- Mostrar productos y butacas en la página con descuentos VIP ---
     const cartSummaryElement = document.getElementById('cart-summary');
     let cartHTML = '';
+    
+    // Mostrar butacas con descuento VIP si aplica
     if (seats && totalPrice > 0) {
-        cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">Butacas</span><span class="boleta-item-price">S/.${totalPrice.toFixed(2)}</span></li>`;
+        const entradasPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
+        const finalEntradasPrice = getVipPrice(entradasPrice, userVipStatus);
+        const priceDisplay = createPriceDisplay(entradasPrice, userVipStatus);
+        cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">Butacas</span><span class="boleta-item-price">${priceDisplay}</span></li>`;
     }
+    
     if (cartItems.length > 0) {
         cartItems.forEach(item => {
-            cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">${item.nombre}</span><span class="boleta-item-price">S/.${parseFloat(item.precio).toFixed(2)}</span></li>`;
+            const nombre = item.nombre || item.name || 'Producto';
+            const precio = item.precio || item.price || 0;
+            const priceDisplay = createPriceDisplay(precio, userVipStatus);
+            cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">${nombre}</span><span class="boleta-item-price">${priceDisplay}</span></li>`;
         });
     } else {
         cartHTML += '<li class="boleta-list-item"><span class="boleta-item-label">No hay productos en el carrito.</span></li>';
     }
-    // Mostrar combo seleccionado en el detalle de compra
+    
+    // Mostrar combo seleccionado en el detalle de compra con descuento VIP
     if (selectedCombo && selectedCombo.price) {
-        cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">Combo: ${selectedCombo.name}</span><span class="boleta-item-price">S/.${parseFloat(selectedCombo.price).toFixed(2)}</span></li>`;
+        const priceDisplay = createPriceDisplay(selectedCombo.price, userVipStatus);
+        cartHTML += `<li class="boleta-list-item"><span class="boleta-item-label">Combo: ${selectedCombo.name}</span><span class="boleta-item-price">${priceDisplay}</span></li>`;
     }
+    
     if (cartSummaryElement) cartSummaryElement.innerHTML = cartHTML;
 
-    // --- Ajustar el total mostrado sumando butacas, carrito y combo ---
+    // --- Ajustar el total mostrado sumando butacas, carrito y combo con descuentos VIP ---
     let comboPrice = selectedCombo && selectedCombo.price ? parseFloat(selectedCombo.price) : 0;
+    let finalComboPrice = getVipPrice(comboPrice, userVipStatus);
     let entradasPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
-    let combinedTotal = entradasPrice + comboPrice + cartTotal;
+    let finalEntradasPrice = getVipPrice(entradasPrice, userVipStatus);
+    let combinedTotal = finalEntradasPrice + finalComboPrice + cartTotal;
+    
     if (totalPriceElement) {
-        totalPriceElement.textContent = `S/.${combinedTotal.toFixed(2)}`;
+        if (userVipStatus.isVip) {
+            let originalCombinedTotal = entradasPrice + comboPrice + originalCartTotal;
+            totalPriceElement.innerHTML = `
+                <span class="vip-price-container">
+                    <span class="original-price">S/.${originalCombinedTotal.toFixed(2)}</span>
+                    <span class="vip-price">S/.${combinedTotal.toFixed(2)} ⭐VIP (-${userVipStatus.discountPercentage}%)</span>
+                </span>
+            `;
+        } else {
+            totalPriceElement.textContent = `S/.${combinedTotal.toFixed(2)}`;
+        }
     }
 
     // --- Botón para regresar al inicio ---
-    const backToHomeButton = document.getElementById('back-to-home');
-    if (backToHomeButton) {
-        backToHomeButton.addEventListener('click', () => {
-            window.location.href = '/paginas/prueba.html'; // O la página de inicio que corresponda
-        });
+    function setupButtons() {
+        const backToHomeButton = document.getElementById('back-to-home');
+        if (backToHomeButton) {
+            console.log('Botón "Regresar al Inicio" encontrado, configurando evento...');
+            backToHomeButton.addEventListener('click', () => {
+                console.log('Botón "Regresar al Inicio" clickeado');
+                window.location.href = '/paginas/prueba.html'; // Ruta corregida
+            });
+        } else {
+            console.error("Botón 'back-to-home' no encontrado.");
+        }
+
+        // --- Botón para descargar PDF ---
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        if (downloadPdfButton) {
+            console.log('Botón "Descargar PDF" encontrado, configurando evento...');
+            downloadPdfButton.addEventListener('click', generarYDescargarBoletaPDF);
+        } else {
+            console.error("Botón 'download-pdf-button' no encontrado.");
+        }
     }
 
-    // --- Botón para descargar PDF ---
-    const downloadPdfButton = document.getElementById('download-pdf-button');
-    if (downloadPdfButton) {
-        downloadPdfButton.addEventListener('click', generarYDescargarBoletaPDF);
-    } else {
-        console.error("Botón de descarga PDF no encontrado.");
-    }
+    // Configurar botones después de un pequeño delay para asegurar que el DOM esté listo
+    setTimeout(setupButtons, 100);
 
     // --- Función para generar y descargar el PDF ---
     function generarYDescargarBoletaPDF() {
         console.log("Iniciando generarYDescargarBoletaPDF con nueva plantilla...");
-        const idBoleta = `GOCINE-${Date.now()}`;
+        
+        // Verificar que html2pdf esté disponible
+        if (typeof html2pdf === 'undefined') {
+            console.error('html2pdf no está disponible');
+            alert('Error: No se puede generar el PDF. Biblioteca no cargada.');
+            return;
+        }
+        
+        // Usar el ID de compra registrado o generar uno nuevo como fallback
+        const idBoleta = localStorage.getItem('purchaseId') || `GOCINE-${Date.now()}`;
+        const purchaseDate = localStorage.getItem('purchaseDate') ? 
+            new Date(localStorage.getItem('purchaseDate')).toLocaleString() : 
+            new Date().toLocaleString();
 
         // Rellenar la plantilla PDF con los datos correctos
         document.getElementById('pdf-new-movie-name').textContent = movieName;
@@ -106,26 +208,48 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('pdf-new-boleta-id').textContent = idBoleta;
         document.getElementById('pdf-new-boleta-year').textContent = new Date().getFullYear();
 
-        // Llenar el detalle de compra (butacas y productos)
+        // Llenar el detalle de compra (butacas y productos) con descuentos VIP
         const pdfCartSummary = document.getElementById('pdf-cart-summary');
         let pdfCartHTML = '';
+        
+        // Mostrar butacas con descuento VIP si aplica
         if (seats && totalPrice > 0) {
-            pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Butacas</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${totalPrice.toFixed(2)}</span></li>`;
+            const entradasPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
+            const finalEntradasPrice = getVipPrice(entradasPrice, userVipStatus);
+            if (userVipStatus.isVip) {
+                pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Butacas (VIP -${userVipStatus.discountPercentage}%)</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${finalEntradasPrice.toFixed(2)}</span></li>`;
+            } else {
+                pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Butacas</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${totalPrice.toFixed(2)}</span></li>`;
+            }
         }
+        
         if (cartItems.length > 0) {
             cartItems.forEach(item => {
-                pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>${item.nombre}</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${parseFloat(item.precio).toFixed(2)}</span></li>`;
+                const nombre = item.nombre || item.name || 'Producto';
+                const precio = item.precio || item.price || 0;
+                const finalPrice = getVipPrice(precio, userVipStatus);
+                if (userVipStatus.isVip) {
+                    pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>${nombre} (VIP -${userVipStatus.discountPercentage}%)</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${finalPrice.toFixed(2)}</span></li>`;
+                } else {
+                    pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>${nombre}</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${parseFloat(precio).toFixed(2)}</span></li>`;
+                }
             });
         } else {
             pdfCartHTML += '<li><span style="color:#888">No hay productos en el carrito.</span></li>';
         }
-        // Mostrar combo seleccionado en el PDF
+        
+        // Mostrar combo seleccionado en el PDF con descuento VIP
         if (selectedCombo && selectedCombo.price) {
-            pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Combo: ${selectedCombo.name}</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${parseFloat(selectedCombo.price).toFixed(2)}</span></li>`;
+            const finalComboPrice = getVipPrice(selectedCombo.price, userVipStatus);
+            if (userVipStatus.isVip) {
+                pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Combo: ${selectedCombo.name} (VIP -${userVipStatus.discountPercentage}%)</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${finalComboPrice.toFixed(2)}</span></li>`;
+            } else {
+                pdfCartHTML += `<li style=\"display:flex;justify-content:space-between;align-items:center;padding:2px 0;\"><span>Combo: ${selectedCombo.name}</span><span style=\"font-weight:bold;min-width:60px;text-align:right;\">S/.${parseFloat(selectedCombo.price).toFixed(2)}</span></li>`;
+            }
         }
         if (pdfCartSummary) pdfCartSummary.innerHTML = pdfCartHTML;
 
-        // --- Mostrar combos seleccionados en el PDF ---
+        // --- Mostrar combos seleccionados en el PDF con descuentos VIP ---
         const pdfComboDetails = document.getElementById('pdf-new-combo-details');
         if (pdfComboDetails) {
             if (cartCombos.length > 0) {
@@ -133,23 +257,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const name = c.nombre || c.name || 'Combo';
                     const description = c.descripcion || c.description || '';
                     const price = c.precio || c.price || 0;
-                    return `<div><strong>${name}</strong></div><div>${description}</div><div>S/.${parseFloat(price).toFixed(2)}</div>`;
+                    const finalPrice = getVipPrice(price, userVipStatus);
+                    const priceText = userVipStatus.isVip ? 
+                        `S/.${finalPrice.toFixed(2)} (VIP -${userVipStatus.discountPercentage}%)` : 
+                        `S/.${parseFloat(price).toFixed(2)}`;
+                    return `<div><strong>${name}</strong></div><div>${description}</div><div>${priceText}</div>`;
                 }).join('<hr>');
             } else {
                 pdfComboDetails.innerHTML = '<div style="color:#888">Sin combo seleccionado.</div>';
             }
         }
 
-        // Calcular el total pagado
+        // Calcular el total pagado con descuentos VIP
         let comboPrice = selectedCombo && selectedCombo.price ? parseFloat(selectedCombo.price) : 0;
+        let finalComboPrice = getVipPrice(comboPrice, userVipStatus);
         let entradasPrice = parseFloat(localStorage.getItem('totalPrice')) || 0;
-        let cartTotal = 0;
-        if (cartItems.length > 0) {
-            cartItems.forEach(item => {
-                cartTotal += parseFloat(item.precio);
-            });
-        }
-        let combinedTotal = entradasPrice + comboPrice + cartTotal;
+        let finalEntradasPrice = getVipPrice(entradasPrice, userVipStatus);
+        let combinedTotal = finalEntradasPrice + finalComboPrice + cartTotal;
+        
         const pdfSummaryTotalAmount = document.getElementById('pdf-summary-total-amount');
         const pdfNewTotalPrice = document.getElementById('pdf-new-total-price');
         if (pdfSummaryTotalAmount) pdfSummaryTotalAmount.textContent = `S/. ${combinedTotal.toFixed(2)}`;
@@ -193,8 +318,12 @@ document.addEventListener('DOMContentLoaded', () => {
         elementoBoletaPDF.style.zIndex = '10000';
         elementoBoletaPDF.style.display = 'block';
 
-        downloadPdfButton.textContent = 'Generando PDF...';
-        downloadPdfButton.disabled = true;
+        // Get the download button reference within this function scope
+        const downloadPdfButton = document.getElementById('download-pdf-button');
+        if (downloadPdfButton) {
+            downloadPdfButton.textContent = 'Generando PDF...';
+            downloadPdfButton.disabled = true;
+        }
 
         setTimeout(() => {
             const opt = {
@@ -238,8 +367,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 elementoBoletaPDF.style.left = originalStyle.left;
                 elementoBoletaPDF.style.zIndex = originalStyle.zIndex;
                 elementoBoletaPDF.style.border = originalStyle.border;
-                downloadPdfButton.textContent = 'Descargar Boleta en PDF';
-                downloadPdfButton.disabled = false;
+                if (downloadPdfButton) {
+                    downloadPdfButton.textContent = 'Descargar Boleta en PDF';
+                    downloadPdfButton.disabled = false;
+                }
             });
         }, 500);
     }
