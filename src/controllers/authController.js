@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "1gocine12@gmail.com",
-    pass: "dwcc haia lsur xqor",
+    pass: "kucu fflo cfmp bmed",
   },
 });
 
@@ -106,7 +106,7 @@ module.exports = {
         [recoveryToken, expiresAt, user.id]
       );
 
-      const recoveryLink = `http://localhost:3000/paginas/restablecer-contrasena.html?token=${recoveryToken}`;
+      const recoveryLink = `http://localhost:3000/paginas/Autenticacion/restablecer-contrasena.html?token=${recoveryToken}`;
 
       const mailOptions = {
         from: "1gocine12@gmail.com",

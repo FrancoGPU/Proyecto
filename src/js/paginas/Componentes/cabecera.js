@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cabeceraElement.innerHTML = data;
 
         // --- Initialize Header Elements (after HTML is loaded) ---
+        const searchToggle = cabeceraElement.querySelector("#search-toggle");
         const searchBarContainer = cabeceraElement.querySelector(
           ".search-bar-container"
         );
@@ -20,9 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const searchSubmit = cabeceraElement.querySelector("#search-submit");
 
         const userButton = cabeceraElement.querySelector("#user-button");
-        const userIcon = userButton
-          ? userButton.querySelector("i.fas.fa-user")
-          : null;
+        
+        // Los iconos ya están definidos en el HTML como imágenes SVG
+        // No necesitamos agregar iconos de Font Awesome
+        
         const userDropdownMenu = cabeceraElement.querySelector(
           "#user-dropdown-menu"
         );
@@ -32,6 +34,45 @@ document.addEventListener("DOMContentLoaded", () => {
         const cartDropdown = cabeceraElement.querySelector("#cartDropdown");
         const checkoutButton = cabeceraElement.querySelector("#checkoutButton");
         const clearCartButton = cabeceraElement.querySelector("#clearCartButton");
+
+        // --- Search Toggle Logic ---
+        if (searchToggle && searchBarContainer) {
+          searchToggle.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const isVisible = searchBarContainer.classList.contains("active");
+            
+            if (isVisible) {
+              searchBarContainer.classList.remove("active");
+              searchToggle.classList.remove("active");
+            } else {
+              searchBarContainer.classList.add("active");
+              searchToggle.classList.add("active");
+              if (searchBar) {
+                setTimeout(() => searchBar.focus(), 100);
+              }
+            }
+          });
+
+          // Hide search bar when clicking outside
+          window.addEventListener("click", (event) => {
+            if (
+              searchBarContainer.classList.contains("active") &&
+              !searchBarContainer.contains(event.target) &&
+              !searchToggle.contains(event.target)
+            ) {
+              searchBarContainer.classList.remove("active");
+              searchToggle.classList.remove("active");
+            }
+          });
+
+          // Hide search bar on escape key
+          window.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && searchBarContainer.classList.contains("active")) {
+              searchBarContainer.classList.remove("active");
+              searchToggle.classList.remove("active");
+            }
+          });
+        }
 
         // --- Search Bar Logic (Conditional Display) ---
         if (searchBarContainer && searchBar && searchSubmit) {
@@ -69,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // --- User Authentication and Menu Logic ---
-        if (userButton && userDropdownMenu && userIcon) {
+        if (userButton && userDropdownMenu) {
           userButton.addEventListener("click", (event) => {
             event.stopPropagation();
             // Cerrar el carrito si está abierto
@@ -103,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         async function checkLoginStatusAndUpdateUI() {
-          if (!userButton || !userDropdownMenu || !userIcon) {
+          if (!userButton || !userDropdownMenu) {
             console.warn(
               "Elementos del menú de usuario no encontrados en cabecera. No se actualizará el estado de login."
             );
@@ -131,11 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function updateUserMenu(isLoggedIn, userData = null) {
-          if (!userDropdownMenu || !userIcon) return;
+          if (!userDropdownMenu) return;
           userDropdownMenu.innerHTML = ""; // Clear previous options
 
           if (isLoggedIn && userData) {
-            userIcon.classList.add("logged-in");
+            // Agregar clase visual al botón si es necesario
+            userButton.classList.add("logged-in");
             const userDisplay = document.createElement("div");
             userDisplay.classList.add("dropdown-user-email"); // Reutilizamos la clase existente para el estilo
             userDisplay.textContent = userData.username || userData.email; // Priorizar username, fallback a email
@@ -182,7 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             userDropdownMenu.appendChild(logoutLink);
           } else {
-            userIcon.classList.remove("logged-in");
+            // Remover clase visual del botón si es necesario
+            userButton.classList.remove("logged-in");
             const loginLink = document.createElement("a");
             loginLink.href = "/paginas/Autenticacion/login.html";
             loginLink.textContent = "Iniciar Sesión";

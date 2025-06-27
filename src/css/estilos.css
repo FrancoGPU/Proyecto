@@ -52,40 +52,178 @@ body {
 .cabecera-actions {
     display: flex;
     align-items: center;
-    gap: 24px; /* Más espacio entre los iconos y el logo */
+    gap: 12px; /* Reducir un poco el espacio entre elementos */
     margin-left: 32px; /* Separa los iconos del logo */
+    transition: all 0.3s ease;
 }
 
 /* Estilos para la barra de búsqueda */
 .search-bar-container {
     display: flex;
     align-items: center;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left: 10px;
+    margin-right: 10px;
+    opacity: 0;
+    transform: translateX(-20px) scale(0.8);
+    width: 0;
+    max-width: 0;
+    pointer-events: none;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar-container.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    width: auto;
+    max-width: 280px;
+    pointer-events: auto;
+    background-color: rgba(255, 255, 255, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.search-bar-container:focus-within {
+    background-color: rgba(255, 255, 255, 0.22);
+    border: 2px solid rgba(231, 76, 60, 0.8); /* Borde rojo más sutil */
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15), 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 #search-bar {
-    height: 40px !important;
+    height: 38px !important;
+    width: 0;
+    min-width: 0;
     box-sizing: border-box;
-    padding: 8px 12px;
-    border: 1px solid var(--accent);
-    border-radius: 20px 0 0 20px;
+    padding: 8px 0;
+    border: none;
+    background: transparent;
+    color: white;
     font-size: 0.9rem;
+    outline: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 400;
+}
+
+.search-bar-container.active #search-bar {
+    width: 220px;
+    padding: 8px 20px;
+}
+
+#search-bar::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 300;
 }
 
 #search-submit {
-    height: 40px !important;
+    height: 38px !important;
+    width: 38px;
+    min-width: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 10px;
-    background-color: var(--primary);
-    color: white;
-    border: 1px solid var(--accent);
-    border-left: none;
-    border-radius: 0 20px 20px 0;
+    background: transparent;
+    border: none;
     cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
 }
+
 #search-submit:hover {
-    background-color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+#search-submit:active {
+    transform: scale(0.95);
+}
+
+/* Ocultar el botón de búsqueda cuando la barra está activa */
+.search-bar-container.active #search-submit {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Mejora para el botón de búsqueda en la cabecera */
+.btn-icon.search-toggle {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-icon.search-toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-icon.search-toggle.active::after {
+    width: 100%;
+    height: 100%;
+}
+
+.btn-icon.search-toggle.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+#search-submit .icon-img {
+    width: 22px;
+    height: 22px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Indicador visual sutil para la barra de búsqueda activa */
+.search-bar-container.active::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-radius: 0 2px 2px 0;
+    animation: searchActiveIndicator 0.4s ease-out;
+}
+
+@keyframes searchActiveIndicator {
+    from {
+        opacity: 0;
+        height: 0%;
+    }
+    to {
+        opacity: 1;
+        height: 60%;
+    }
+}
+
+/* Mejora adicional para el estilo general de la barra */
+.search-bar-container.active {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.12));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .user-menu-container, .cart-icon-container {
@@ -98,10 +236,30 @@ body {
     color: #fff; /* Color de los iconos en la cabecera */
     font-size: 1.5rem; /* Tamaño de los iconos */
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Hacer el botón circular */
+    transition: background-color 0.3s ease;
+    width: 40px; /* Ancho fijo para que sea circular */
+    height: 40px; /* Alto fijo para que sea circular */
 }
+
 .btn-icon:hover {
-    color: #ddd; /* Color al pasar el mouse */
+    background-color: rgba(255, 255, 255, 0.1); /* Círculo sutil al pasar el mouse */
+}
+
+/* Estilos para las imágenes de iconos SVG */
+.icon-img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1); /* Hace que los iconos SVG sean blancos */
+    transition: opacity 0.3s ease;
+}
+
+.btn-icon:hover .icon-img {
+    opacity: 0.8;
 }
 
 .dropdown-menu {
@@ -143,23 +301,27 @@ body {
 }
 
 #cartIcon {
-    width: 24px; /* Icono del carrito */
-    height: auto;
-    /* Si es un SVG, puedes usar fill: #fff; si el SVG lo permite */
+    position: relative; /* Para posicionar el contador */
 }
 
-#cartItemCount {
+.cart-item-count {
     position: absolute;
     top: -5px; /* Ajustar para que esté bien posicionado */
-    right: -8px;
+    right: -5px;
     background-color: #e74c3c;
     color: white;
     border-radius: 50%;
-    padding: 2px 5px;
-    font-size: 0.65rem;
+    padding: 2px 6px;
+    font-size: 0.7rem;
     font-weight: bold;
     line-height: 1;
-    border: 1px solid #2c3e50; /* Borde del color de la cabecera para mejor integración */
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--secondary); /* Borde del color de la cabecera */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra para que destaque */
 }
 
 .cart-dropdown {

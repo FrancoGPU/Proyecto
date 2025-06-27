@@ -3,21 +3,33 @@
         <img src="/assets/icons/logo.PNG" alt="GOCINE Logo" class="logo-img">
     </a>
     <div class="cabecera-actions">
-        <!-- Search bar container -->
-        <div class="search-bar-container" style="display: none;">
+        <!-- Search icon button to toggle search bar -->
+        <div class="search-icon-container">
+            <button id="search-toggle" class="btn-icon" aria-label="Buscar">
+                <img src="/assets/icons/search.svg" alt="Buscar" class="icon-img">
+            </button>
+        </div>
+
+        <!-- Search bar container (hidden by default) -->
+        <div class="search-bar-container" id="search-bar-container" style="display: none;">
             <input type="text" id="search-bar" class="search-bar" placeholder="Buscar películas..." />
-            <button id="search-submit" class="btn-icon" aria-label="Buscar"></button>
+            <button id="search-submit" class="btn-icon" aria-label="Buscar">
+                <img src="/assets/icons/search.svg" alt="Buscar" class="icon-img">
+            </button>
         </div>
 
         <!-- User menu container -->
         <div class="user-menu-container">
-            <button id="user-button" class="btn-icon" aria-label="Cuenta"></button>
+            <button id="user-button" class="btn-icon" aria-label="Cuenta">
+                <img src="/assets/icons/user.svg" alt="Usuario" class="icon-img">
+            </button>
+            <div id="user-dropdown-menu" class="dropdown-menu"></div>
         </div>
 
         <!-- Cart Icon and Dropdown -->
         <div class="cart-icon-container">
             <button id="cartIcon" class="btn-icon" aria-label="Carrito">
-                <i class="fas fa-shopping-cart"></i>
+                <img src="/assets/icons/cart.svg" alt="Carrito" class="icon-img">
                 <span id="cartItemCount" class="cart-item-count">0</span>
             </button>
             <div id="cartDropdown" class="cart-dropdown">
