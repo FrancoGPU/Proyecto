@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Películas en Estreno - GoCine</title>
+    <link rel="stylesheet" href="../../css/base/base.css">
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../../css/layout/layout.css">
+    <link rel="stylesheet" href="../../css/componentes/botones.css">
+    <link rel="stylesheet" href="../../css/componentes/peliculas.css">
+    <link rel="stylesheet" href="../../css/paginas/Reserva/estrenos.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <!-- Hero Section con Carrusel de Estrenos -->
+        <section class="hero-premieres">
+            <div class="carousel-container">
+                <div class="carousel-wrapper" id="premieresCarousel">
+                    <!-- Las slides del carrusel se cargarán dinámicamente -->
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev" onclick="previousSlide()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <polyline points="15,18 9,12 15,6" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn next" onclick="nextSlide()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <polyline points="9,6 15,12 9,18" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="carousel-indicators" id="carouselIndicators">
+                    <!-- Los indicadores se generarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Filtros y Búsqueda -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-header">
+                    <h2>Películas en Estreno</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid" onclick="toggleView('grid')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                        </button>
+                        <button class="view-btn" data-view="list" onclick="toggleView('list')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+                                <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"/>
+                                <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters-controls">
+                    <div class="search-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Buscar películas..." onkeyup="searchMovies()">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select id="genreFilter" onchange="filterMovies()">
+                            <option value="">Todos los géneros</option>
+                            <option value="accion">Acción</option>
+                            <option value="animacion">Animación</option>
+                            <option value="aventura">Aventura</option>
+                            <option value="ciencia_ficcion">Ciencia Ficción</option>
+                            <option value="comedia">Comedia</option>
+                            <option value="drama">Drama</option>
+                            <option value="fantasia">Fantasía</option>
+                            <option value="terror">Terror</option>
+                            <option value="thriller">Thriller</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select id="dateFilter" onchange="filterMovies()">
+                            <option value="">Todas las fechas</option>
+                            <option value="esta_semana">Esta semana</option>
+                            <option value="proxima_semana">Próxima semana</option>
+                            <option value="este_mes">Este mes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select id="sortFilter" onchange="sortMovies()">
+                            <option value="estreno_desc">Más recientes</option>
+                            <option value="estreno_asc">Más antiguos</option>
+                            <option value="titulo_asc">A-Z</option>
+                            <option value="titulo_desc">Z-A</option>
+                            <option value="popularidad">Popularidad</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid de Películas -->
+        <section class="movies-section">
+            <div class="container">
+                <div class="movies-grid" id="moviesGrid">
+                    <!-- Las películas se cargarán dinámicamente -->
+                </div>
+                <div class="movies-list" id="moviesList" style="display: none;">
+                    <!-- Vista de lista se cargará aquí -->
+                </div>
+                
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Cargando películas...</p>
+                </div>
+                
+                <div class="no-results" id="noResults" style="display: none;">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+                        <line x1="11" y1="8" x2="11" y2="16" stroke="currentColor" stroke-width="2"/>
+                        <line x1="8" y1="11" x2="14" y2="11" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <h3>No se encontraron películas</h3>
+                    <p>Intenta ajustar los filtros de búsqueda</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Próximos Estrenos -->
+        <section class="coming-soon">
+            <div class="container">
+                <h2>Próximos Estrenos</h2>
+                <div class="coming-soon-grid" id="comingSoonGrid">
+                    <!-- Los próximos estrenos se cargarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter de Estrenos -->
+        <section class="newsletter-premieres">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h2>¡No te pierdas ningún estreno!</h2>
+                        <p>Suscríbete a nuestro newsletter y recibe notificaciones sobre los últimos estrenos, preventa de entradas y ofertas exclusivas.</p>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <div class="form-group">
+                            <input type="email" id="newsletterEmail" placeholder="Tu email" required>
+                            <button type="submit" class="btn btn-primary">Suscribirse</button>
+                        </div>
+                        <div class="newsletter-benefits">
+                            <span>✅ Notificaciones de estrenos</span>
+                            <span>✅ Ofertas exclusivas</span>
+                            <span>✅ Preventa de entradas</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Detalles de Película -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content movie-modal">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeMovieModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="movieModalContent">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/components/modal.js"></script>
+    <script src="../../js/paginas/Reserva/estrenos.js"></script>
+    <script>
+        // Cargar header
+        fetch('../components/cabecera.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

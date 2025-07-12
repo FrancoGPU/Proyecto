@@ -44,9 +44,43 @@
         <button id="dulceria-button" class="cine-nav-button">
           <i class="fas fa-ice-cream"></i> Dulcería
         </button>
+        <button id="newsletter-button" class="cine-nav-button">
+          <i class="fas fa-envelope"></i> Newsletter
+        </button>
     </nav>
 
     <main class="main-content">
+      <!-- Sección de Newsletter -->
+      <section id="newsletter-section" class="newsletter-section" style="display: none;">
+        <div class="newsletter-container">
+          <h2>Suscríbete a nuestro Newsletter</h2>
+          <p>Recibe las últimas noticias sobre estrenos, promociones y eventos especiales.</p>
+          <form id="newsletter-form" class="newsletter-form">
+            <div class="form-group">
+              <input type="email" id="newsletter-email" placeholder="Tu correo electrónico" required>
+            </div>
+            <div class="form-group">
+              <input type="text" id="newsletter-name" placeholder="Tu nombre (opcional)">
+            </div>
+            <div class="preferences-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="preferences" value="premieres" checked>
+                <span>Notificaciones de estrenos</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="preferences" value="promotions" checked>
+                <span>Promociones especiales</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="preferences" value="events">
+                <span>Eventos y actividades</span>
+              </label>
+            </div>
+            <button type="submit" class="btn-primary">Suscribirse</button>
+          </form>
+        </div>
+      </section>
+
       <section id="movie-section" class="movie-section">
         <div id="movie-list" class="movie-grid">
           <!-- Las películas en cartelera se cargarán dinámicamente aquí -->
@@ -79,6 +113,7 @@
     <!-- El pie de página se cargará dinámicamente -->
 
     <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/user-menu.js"></script>
     <script src="/js/paginas/Componentes/piePagina.js"></script>
     <script src="/js/components/movies.js"></script> 
     <script src="/js/cart.js"></script>

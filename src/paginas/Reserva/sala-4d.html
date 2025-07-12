@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiencia 4D - GoCine</title>
+    <link rel="stylesheet" href="../../css/base/base.css">
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../../css/layout/layout.css">
+    <link rel="stylesheet" href="../../css/componentes/botones.css">
+    <link rel="stylesheet" href="../../css/paginas/Reserva/sala-4d.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-4d">
+            <div class="hero-content">
+                <h1 class="hero-title">Experiencia 4D</h1>
+                <p class="hero-subtitle">Vive el cine como nunca antes</p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L3.09 8.26L12 22L20.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                        <span>Efectos Ambientales</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <path d="M8 21L12 17L16 21M3 7V5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5V7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="7" width="18" height="10" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                        <span>Asientos en Movimiento</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.38 8.53L19.47 7.62C19.08 7.23 18.45 7.23 18.06 7.62L10.5 15.18L5.94 10.62C5.55 10.23 4.92 10.23 4.53 10.62L3.62 11.53C3.23 11.92 3.23 12.55 3.62 12.94L9.79 19.11C10.18 19.5 10.81 19.5 11.2 19.11L20.38 9.94C20.77 9.55 20.77 8.92 20.38 8.53Z" fill="currentColor"/>
+                        </svg>
+                        <span>Audio Surround Premium</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="../../assets/images/4d-experience.jpg" alt="Sala 4D" onerror="this.style.display='none'">
+            </div>
+        </section>
+
+        <!-- Qué es 4D Section -->
+        <section class="what-is-4d">
+            <div class="container">
+                <h2>¿Qué es la Experiencia 4D?</h2>
+                <div class="explanation-grid">
+                    <div class="explanation-text">
+                        <p>La tecnología 4D lleva la experiencia cinematográfica a una nueva dimensión. No solo ves y escuchas la película, sino que la <strong>sientes</strong> con todos tus sentidos.</p>
+                        <p>Nuestros asientos especializados se mueven en sincronía con la acción en pantalla, mientras que efectos ambientales como agua, viento, niebla y aromas te sumergen completamente en la historia.</p>
+                        <div class="experience-stats">
+                            <div class="stat">
+                                <span class="stat-number">180°</span>
+                                <span class="stat-label">Movimiento</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">12</span>
+                                <span class="stat-label">Efectos Diferentes</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">80</span>
+                                <span class="stat-label">Asientos Premium</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="explanation-visual">
+                        <div class="effect-showcase">
+                            <div class="effect-item" data-effect="motion">
+                                <div class="effect-icon">🎢</div>
+                                <h4>Movimiento</h4>
+                                <p>Asientos que se mueven en 6 direcciones</p>
+                            </div>
+                            <div class="effect-item" data-effect="wind">
+                                <div class="effect-icon">💨</div>
+                                <h4>Viento</h4>
+                                <p>Efectos de aire sincronizados</p>
+                            </div>
+                            <div class="effect-item" data-effect="water">
+                                <div class="effect-icon">💧</div>
+                                <h4>Agua</h4>
+                                <p>Rocío y lluvia controlada</p>
+                            </div>
+                            <div class="effect-item" data-effect="scent">
+                                <div class="effect-icon">🌸</div>
+                                <h4>Aromas</h4>
+                                <p>Fragancias ambientales</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Películas Disponibles en 4D -->
+        <section class="movies-4d">
+            <div class="container">
+                <h2>Películas en 4D</h2>
+                <div class="movies-filter">
+                    <button class="filter-btn active" data-filter="all" onclick="filterMovies('all')">Todas</button>
+                    <button class="filter-btn" data-filter="action" onclick="filterMovies('action')">Acción</button>
+                    <button class="filter-btn" data-filter="adventure" onclick="filterMovies('adventure')">Aventura</button>
+                    <button class="filter-btn" data-filter="animation" onclick="filterMovies('animation')">Animación</button>
+                </div>
+                <div class="movies-grid" id="movies4DGrid">
+                    <!-- Las películas se cargarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarifas y Precios -->
+        <section class="pricing-4d">
+            <div class="container">
+                <h2>Tarifas Especiales 4D</h2>
+                <div class="pricing-grid">
+                    <div class="pricing-card standard">
+                        <h3>Día de Semana</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">25.99</span>
+                        </div>
+                        <ul class="features">
+                            <li>✅ Experiencia 4D completa</li>
+                            <li>✅ Asiento premium</li>
+                            <li>✅ Todos los efectos incluidos</li>
+                            <li>✅ Audio premium</li>
+                        </ul>
+                        <div class="pricing-note">Lunes a Jueves</div>
+                    </div>
+                    
+                    <div class="pricing-card premium">
+                        <div class="popular-badge">Más Popular</div>
+                        <h3>Fin de Semana</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">32.99</span>
+                        </div>
+                        <ul class="features">
+                            <li>✅ Experiencia 4D completa</li>
+                            <li>✅ Asiento premium</li>
+                            <li>✅ Todos los efectos incluidos</li>
+                            <li>✅ Audio premium</li>
+                            <li>✅ Snacks premium incluidos</li>
+                        </ul>
+                        <div class="pricing-note">Viernes a Domingo</div>
+                    </div>
+                    
+                    <div class="pricing-card vip">
+                        <h3>Experiencia VIP 4D</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">45.99</span>
+                        </div>
+                        <ul class="features">
+                            <li>✅ Todo lo anterior</li>
+                            <li>✅ Acceso prioritario</li>
+                            <li>✅ Combo premium incluido</li>
+                            <li>✅ Servicio personalizado</li>
+                            <li>✅ Asientos VIP</li>
+                        </ul>
+                        <div class="pricing-note">Disponible todos los días</div>
+                    </div>
+                </div>
+                
+                <!-- Descuentos por rango -->
+                <div class="rank-discounts" id="rankDiscounts" style="display: none;">
+                    <h3>Tu Descuento por Rango</h3>
+                    <div class="discount-info">
+                        <span class="rank-badge" id="userRankBadge">Gold</span>
+                        <span class="discount-amount" id="userDiscountAmount">10% de descuento</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recomendaciones y Consejos -->
+        <section class="recommendations">
+            <div class="container">
+                <h2>Recomendaciones para tu Experiencia 4D</h2>
+                <div class="recommendations-grid">
+                    <div class="recommendation-card">
+                        <div class="recommendation-icon">👕</div>
+                        <h4>Vestimenta</h4>
+                        <p>Usa ropa cómoda y evita accesorios sueltos. Los efectos pueden incluir agua y viento.</p>
+                    </div>
+                    <div class="recommendation-card">
+                        <div class="recommendation-icon">⚠️</div>
+                        <h4>Restricciones</h4>
+                        <p>No recomendado para mujeres embarazadas, personas con problemas cardíacos o de espalda.</p>
+                    </div>
+                    <div class="recommendation-card">
+                        <div class="recommendation-icon">🎒</div>
+                        <h4>Objetos Personales</h4>
+                        <p>Guarda tus pertenencias en los compartimentos seguros antes de que inicie la función.</p>
+                    </div>
+                    <div class="recommendation-card">
+                        <div class="recommendation-icon">⏰</div>
+                        <h4>Llegada</h4>
+                        <p>Llega 15 minutos antes para familiarizarte con los controles de tu asiento.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-4d">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>¿Listo para la Experiencia 4D?</h2>
+                    <p>Reserva ahora y vive el cine de una manera completamente nueva</p>
+                    <div class="cta-buttons">
+                        <button class="btn btn-primary" onclick="goToMovieSelection()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Seleccionar Película 4D
+                        </button>
+                        <button class="btn btn-secondary" onclick="watchDemo()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                            </svg>
+                            Ver Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Demo -->
+    <div class="modal" id="demoModal">
+        <div class="modal-content video-modal">
+            <div class="modal-header">
+                <h3>Demo de Experiencia 4D</h3>
+                <button class="modal-close" onclick="closeDemoModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container">
+                    <video id="demoVideo" controls poster="../../assets/images/4d-poster.jpg">
+                        <source src="../../assets/videos/4d-demo.mp4" type="video/mp4">
+                        <p>Tu navegador no soporta videos HTML5.</p>
+                    </video>
+                </div>
+                <div class="demo-description">
+                    <h4>Características del Demo:</h4>
+                    <ul>
+                        <li>🎬 Clips de películas populares en 4D</li>
+                        <li>💺 Vista de los asientos en movimiento</li>
+                        <li>🌪️ Demostración de efectos ambientales</li>
+                        <li>🎵 Audio surround premium</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/paginas/Reserva/sala-4d.js"></script>
+    <script>
+        // Cargar header
+        fetch('../components/cabecera.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

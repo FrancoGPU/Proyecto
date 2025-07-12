@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - GOCINE</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/paginas/Usuario/perfil.css">
+</head>
+<body>
+    <header class="cine-cabecera">
+        <!-- Contenido de la cabecera se cargará dinámicamente -->
+    </header>
+
+    <main class="main-content">
+        <div class="profile-container">
+            <!-- Información del Usuario -->
+            <section class="user-info-section">
+                <div class="user-header">
+                    <div class="profile-image-container">
+                        <img src="/assets/images/Avatar3.jpg" alt="Avatar" class="profile-image" id="profileImage">
+                        <button class="change-image-btn" onclick="changeProfileImage()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.1 3.89 23 5 23H19C20.1 23 21 22.1 21 21V9ZM19 9H15V5H19V9Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="user-details">
+                        <h1 class="username" id="username">Cargando...</h1>
+                        <div class="user-rank-container">
+                            <span class="rank-badge" id="userRank">Bronze</span>
+                            <span class="points-display" id="userPoints">0 puntos</span>
+                        </div>
+                        <p class="member-since" id="memberSince">Miembro desde: Enero 2024</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalPurchases">0</span>
+                        <span class="stat-label">Compras Realizadas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalSpent">$0</span>
+                        <span class="stat-label">Total Gastado</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="favoritesCount">0</span>
+                        <span class="stat-label">Películas Favoritas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sistema de Puntos y Rangos -->
+            <section class="points-section">
+                <h2>Sistema de Puntos y Rangos</h2>
+                <div class="points-progress">
+                    <div class="progress-header">
+                        <span>Progreso al siguiente rango</span>
+                        <span id="progressText">0 / 500 puntos</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="ranks-info">
+                    <h3>Rangos Disponibles</h3>
+                    <div class="ranks-grid" id="ranksGrid">
+                        <!-- Los rangos se cargarán dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="points-benefits">
+                    <h3>Beneficios de tu Rango Actual</h3>
+                    <div class="benefits-list" id="currentBenefits">
+                        <!-- Los beneficios se cargarán dinámicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historial de Compras - Botón de Acceso -->
+            <section class="history-access-section">
+                <h2>Historial de Compras</h2>
+                <p>Revisa todas tus compras y transacciones anteriores</p>
+                <div class="history-button-container">
+                    <button class="btn btn-primary history-btn" onclick="goToHistory()">
+                        <i class="fas fa-history"></i>
+                        Ver Historial Completo
+                    </button>
+                </div>
+            </section>
+
+            <!-- Configuración del Perfil -->
+            <section class="profile-settings-section">
+                <h2>Configuración del Perfil</h2>
+                <form class="profile-form" id="profileForm">
+                    <!-- Información Básica -->
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Ej: +51 999 999 999">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Fecha de Nacimiento</label>
+                        <input type="date" id="birthDate" name="birthDate">
+                    </div>
+                    
+                    <!-- Sección de Cambio de Contraseña -->
+                    <div class="password-section">
+                        <h3>Cambiar Contraseña</h3>
+                        <div class="password-fields">
+                            <div class="form-group">
+                                <label for="currentPassword">Contraseña Actual</label>
+                                <input type="password" id="currentPassword" name="currentPassword" placeholder="Ingresa tu contraseña actual">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Nueva Contraseña</label>
+                                <input type="password" id="newPassword" name="newPassword" placeholder="Mínimo 6 caracteres">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirma la nueva contraseña">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botones de Acción -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal para cambiar imagen de perfil -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Imagen de Perfil</h3>
+                <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+                <div class="image-preview">
+                    <img id="previewImg" src="" alt="Vista previa" style="display: none;">
+                </div>
+                <div class="preset-avatars">
+                    <h4>O elige un avatar predeterminado:</h4>
+                    <div class="avatars-grid">
+                        <img src="../../assets/images/Avatar3.jpg" alt="Avatar 1" onclick="selectPresetAvatar(this.src)">
+                        <!-- Agregar más avatares aquí -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveProfileImage()">Guardar</button>
+                <button class="btn btn-secondary" onclick="closeImageModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/components/modal.js"></script>
+    <footer></footer>
+
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/user-menu.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
+    <script src="/js/paginas/Usuario/perfil.js"></script>
+</body>
+</html>

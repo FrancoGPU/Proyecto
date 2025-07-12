@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Historial de Compras - GOCINE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/estilos.css">
+    <link rel="stylesheet" href="/css/layout/layout.css">
+    <link rel="stylesheet" href="/css/paginas/Autenticacion/login.css">
+    <style>
+        .purchase-history-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .purchase-history-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #d32f2f;
+        }
+
+        .purchase-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .purchase-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .purchase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .purchase-title {
+            color: #ff6b35;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .purchase-id {
+            background: #d32f2f;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .purchase-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-group {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .info-label {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #fff;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .purchase-items {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+        }
+
+        .items-title {
+            color: #ff6b35;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+        }
+
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item-list li {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.3rem;
+            border-radius: 6px;
+            border-left: 2px solid #666;
+            color: #ddd;
+        }
+
+        .purchase-totals {
+            background: rgba(211, 47, 47, 0.1);
+            border: 1px solid #d32f2f;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-row:last-child {
+            margin-bottom: 0;
+            padding-top: 0.5rem;
+            border-top: 1px solid #d32f2f;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .total-label {
+            color: #ccc;
+        }
+
+        .total-value {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .total-value.final {
+            color: #ff6b35;
+            font-size: 1.2rem;
+        }
+
+        .vip-badge {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: #d32f2f;
+        }
+
+        @media (max-width: 768px) {
+            .purchase-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .purchase-info {
+                grid-template-columns: 1fr;
+            }
+
+            .total-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="cine-cabecera">
+        <!-- Contenido de la cabecera se cargará dinámicamente -->
+    </header>
+
+    <main class="purchase-history-container">
+        <div class="purchase-history-header">
+            <h1>Mi Historial de Compras</h1>
+            <p>Aquí puedes ver todas las compras que has realizado en GOCINE</p>
+        </div>
+
+        <div id="purchase-history-content">
+            <div class="loading">
+                <p>Cargando historial de compras...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Contenido del pie de página se cargará dinámicamente -->
+    </footer>
+
+    <script src="/js/paginas/Componentes/cabecera.js"></script>
+    <script src="/js/paginas/Componentes/user-menu.js"></script>
+    <script src="/js/paginas/Componentes/piePagina.js"></script>
+    <script src="/js/paginas/Usuario/historial-compras.js"></script>
+    <!-- No cargar cart.js ni scripts.js en esta página -->
+</body>
+</html>

@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="footer-top-bar">
                 <div class="footer-container">
                     <div class="footer-social-links">
-                        <a href="https://facebook.com" target="_blank" class="social-link">
+                        <a href="https://www.facebook.com/profile.php?id=61577231202867" target="_blank" class="social-link">
                             <i class="fab fa-facebook-f"></i> FACEBOOK <span class="social-username">GOCINE</span>
                         </a>
-                        <a href="https://twitter.com" target="_blank" class="social-link">
+                        <a href="https://x.com/GOCINE183403" target="_blank" class="social-link">
                             <i class="fab fa-twitter"></i> TWITTER <span class="social-username">GOCINE_SOCIAL</span>
                         </a>
-                        <a href="https://instagram.com" target="_blank" class="social-link">
+                        <a href="https://www.instagram.com/go_cinee?igsh=cDJnajgxN252Mm9h" target="_blank" class="social-link">
                             <i class="fab fa-instagram"></i> INSTAGRAM <span class="social-username">GOCINEGRAM</span>
                         </a>
                         <a href="https://wa.me/51998164722" target="_blank" class="social-link">

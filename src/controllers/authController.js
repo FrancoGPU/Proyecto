@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "1gocine12@gmail.com",
-    pass: "dwcc haia lsur xqor",
+    pass: "kucu fflo cfmp bmed",
   },
 });
 
@@ -43,7 +43,7 @@ module.exports = {
     }
     try {
       const result = await pool.query(
-        "SELECT id, username, email, password, role FROM users WHERE email = $1",
+        "SELECT id, username, email, password, role, is_vip, vip_discount_percentage FROM users WHERE email = $1",
         [email]
       );
       if (result.rows.length === 0) {
@@ -59,6 +59,9 @@ module.exports = {
         email: user.email,
         username: user.username,
         role: user.role,
+        is_admin: user.role === 'admin',
+        is_vip: user.is_vip,
+        vip_discount_percentage: user.vip_discount_percentage
       };
       res.json({
         message: "Inicio de sesión exitoso.",
@@ -67,6 +70,8 @@ module.exports = {
           email: user.email,
           username: user.username,
           role: user.role,
+          is_vip: user.is_vip,
+          vip_discount_percentage: user.vip_discount_percentage
         },
       });
     } catch (err) {
@@ -106,7 +111,7 @@ module.exports = {
         [recoveryToken, expiresAt, user.id]
       );
 
-      const recoveryLink = `http://localhost:3000/paginas/restablecer-contrasena.html?token=${recoveryToken}`;
+      const recoveryLink = `http://localhost:3000/paginas/Autenticacion/restablecer-contrasena.html?token=${recoveryToken}`;
 
       const mailOptions = {
         from: "1gocine12@gmail.com",
@@ -165,9 +170,13 @@ module.exports = {
     if (req.session.user) {
       return res.status(200).json({
         loggedIn: true,
+        authenticated: true,
         user: req.session.user,
       });
     }
-    res.status(200).json({ loggedIn: false });
+    res.status(200).json({ 
+      loggedIn: false, 
+      authenticated: false 
+    });
   },
 };

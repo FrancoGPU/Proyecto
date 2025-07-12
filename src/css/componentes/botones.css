@@ -83,39 +83,291 @@
 }
 
 .dropdown-menu {
-  display: none; /* Oculto por defecto */
+  display: none !important;
   position: absolute;
-  top: 100%; /* Se posiciona justo debajo del botón */
-  right: 0; /* Alineado a la derecha del contenedor */
-  background-color: var(--secondary-dark, #2c3e50); /* Un color de fondo oscuro, ajusta si es necesario */
-  border: 1px solid var(--gray-light, #444);
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
-  z-index: 1050; /* Asegurar que esté por encima de otros elementos de la cabecera */
-  min-width: 180px; /* Ancho mínimo del menú */
-  border-radius: var(--border-radius-sm, 4px); /* Bordes redondeados */
-  padding: var(--space-xs, 0.5rem) 0; /* Padding vertical */
+  top: calc(100% + 8px);
+  right: 0;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%) !important;
+  border: 2px solid transparent !important;
+  border-image: linear-gradient(135deg, #ff4500, #ff6b35, #d2001c) 1 !important;
+  border-radius: 8px;
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.7),
+    0 4px 16px rgba(255, 69, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: 9999;
+  min-width: 220px;
+  overflow: hidden;
+  font-family: 'Roboto', Arial, sans-serif;
+  backdrop-filter: blur(10px);
 }
 
-/* Estilo para mostrar el email del usuario en el dropdown */
-.dropdown-user-email {
-  padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
-  color: var(--text-muted, #aaa); /* Un color más tenue para el email */
-  font-size: 0.85rem;
-  border-bottom: 1px solid var(--gray-dark, #333); /* Separador sutil */
-  margin-bottom: var(--space-xs, 0.5rem);
-  text-align: center;
+.dropdown-menu.active {
+  display: block !important;
+  animation: fadeInDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header del usuario */
+.dropdown-user-info {
+  background: linear-gradient(135deg, #ff4500 0%, #ff6b35 50%, #d2001c 100%) !important;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-user-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.user-display-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 1;
+}
+
+.user-role {
+  color: #ffffff;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+/* Enlaces del menú */
 .dropdown-menu a {
-  color: var(--text-light, #f1f1f1);
-  padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+  color: #ffffff !important;
+  padding: 14px 20px;
   text-decoration: none;
-  display: block;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  background: transparent !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-menu a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #ff4500, #ff6b35);
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu a i {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.dropdown-menu a span {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.dropdown-menu a:hover::before {
+  width: 100%;
 }
 
 .dropdown-menu a:hover {
-  background-color: var(--primary-dark, #c0392b); /* Un color de hover, ajusta si es necesario */
-  color: var(--text-light, #fff);
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  transform: translateX(5px);
+}
+
+.dropdown-menu a:hover i {
+  color: #ffffff;
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.dropdown-menu a:hover span {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Colores específicos para íconos */
+.dropdown-menu a[href*="admin"] i {
+  color: #ffd700;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.dropdown-menu a[href*="admin"]:hover::before {
+  background: linear-gradient(90deg, #ffd700, #ffb347);
+}
+
+.dropdown-menu a[href*="historial"] i {
+  color: #87ceeb;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.dropdown-menu a[href*="auth"] i {
+  color: #f8f9fa;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+/* Estilo para mostrar el email del usuario en el dropdown - OBSOLETO */
+.dropdown-user-email {
+  display: none;
+}
+
+/* Separador visual y efectos adicionales */
+.dropdown-menu a + a {
+  position: relative;
+}
+
+/* Efecto de brillo en hover */
+.dropdown-menu a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.dropdown-menu a:hover::before {
+  left: 100%;
+}
+
+/* Divisor visual */
+.dropdown-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  margin: 8px 0;
+  border: none;
+}
+
+/* Efectos adicionales */
+.dropdown-menu::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #1a1a1a;
+  filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    right: 5px;
+    min-width: 200px;
+  }
+  
+  .dropdown-user-info {
+    padding: 14px 18px;
+  }
+  
+  .dropdown-menu a {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+  
+  .dropdown-menu a i {
+    font-size: 14px;
+  }
+}
+
+/* Animación de entrada más suave */
+@keyframes gocineSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-menu.active {
+  animation: gocineSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Asegurar que los nuevos estilos del dropdown tengan prioridad sobre cualquier estilo anterior */
+.user-menu-container .dropdown-menu {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%) !important;
+  border: 2px solid transparent !important;
+  border-image: linear-gradient(135deg, #ff4500, #ff6b35, #d2001c) 1 !important;
+}
+
+.user-menu-container .dropdown-menu a {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+.user-menu-container .dropdown-menu a:hover {
+  background: linear-gradient(90deg, #ff4500, #ff6b35) !important;
+  color: #ffffff !important;
+}
+
+.user-menu-container .dropdown-user-info {
+  background: linear-gradient(135deg, #ff4500 0%, #ff6b35 50%, #d2001c 100%) !important;
+}
+
+.user-menu-container .user-display-name,
+.user-menu-container .user-role {
+  color: #ffffff !important;
 }

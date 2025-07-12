@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión VIP - GoCine</title>
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../../css/base/base.css">
+    <link rel="stylesheet" href="../../css/estilos.css">
+    <link rel="stylesheet" href="../../css/paginas/Administracion/admin.css">
+</head>
+<body>
+    <header class="cine-cabecera">
+        <div class="cabecera-container">
+            <a href="/" class="logo-link">
+                <img src="../../assets/icons/logo.PNG" alt="GoCine Logo" class="logo-img">
+            </a>
+            <div class="cabecera-actions">
+                <div class="user-menu-container">
+                    <button class="btn-icon" id="userMenuToggle">
+                        <img src="../../assets/icons/user.svg" alt="Usuario" class="icon-img">
+                    </button>
+                    <div class="dropdown-menu" id="userDropdown">
+                        <div class="dropdown-user-email" id="userEmailDisplay">Cargando...</div>
+                        <a href="/src/paginas/Administracion/admin.html">Panel Admin</a>
+                        <a href="#" id="logoutButton">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Gestión de Usuarios VIP</h1>
+                <p>Administra las membresías VIP de los usuarios</p>
+            </div>
+
+            <div class="admin-navigation">
+                <a href="admin.html" class="nav-btn">← Volver al Panel</a>
+            </div>
+
+            <div class="vip-stats">
+                <div class="stat-card">
+                    <h3>Usuarios VIP Activos</h3>
+                    <span class="stat-number" id="vipActiveCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Total de Usuarios</h3>
+                    <span class="stat-number" id="totalUsersCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Descuento Promedio</h3>
+                    <span class="stat-number" id="avgDiscountPercent">0%</span>
+                </div>
+            </div>
+
+            <div class="users-section">
+                <div class="section-header">
+                    <h2>Lista de Usuarios</h2>
+                    <div class="filters">
+                        <select id="userFilter" class="filter-select">
+                            <option value="all">Todos los usuarios</option>
+                            <option value="vip">Solo VIP</option>
+                            <option value="regular">Solo regulares</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Estado VIP</th>
+                                <th>Descuento</th>
+                                <th>Vencimiento</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="7" class="loading-row">Cargando usuarios...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para gestión VIP -->
+    <div class="modal-overlay" id="vipModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Gestionar Usuario VIP</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="vipForm">
+                    <input type="hidden" id="modalUserId">
+                    <div class="form-group">
+                        <label for="discountPercentage">Porcentaje de Descuento (%)</label>
+                        <input type="number" id="discountPercentage" min="1" max="50" value="15" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="membershipDuration">Duración de Membresía (meses)</label>
+                        <select id="membershipDuration" required>
+                            <option value="3">3 meses</option>
+                            <option value="6">6 meses</option>
+                            <option value="12" selected>12 meses</option>
+                            <option value="24">24 meses</option>
+                            <option value="0">Permanente</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Actualizar</button>
+                        <button type="button" class="btn-secondary" id="cancelModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/components/autenticacion.js"></script>
+    <script src="vip-admin.js"></script>
+</body>
+</html>
