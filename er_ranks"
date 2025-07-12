@@ -1,0 +1,15 @@
+                                          Table "public.user_ranks"
+       Column        |         Type          | Collation | Nullable |                Default                 
+---------------------+-----------------------+-----------+----------+----------------------------------------
+ id                  | integer               |           | not null | nextval('user_ranks_id_seq'::regclass)
+ rank_name           | character varying(20) |           | not null | 
+ min_points          | integer               |           | not null | 
+ max_points          | integer               |           |          | 
+ discount_percentage | numeric(5,2)          |           |          | 0.00
+ points_multiplier   | numeric(3,2)          |           |          | 1.00
+ description         | text                  |           |          | 
+ rank_color          | character varying(7)  |           |          | '#000000'::character varying
+Indexes:
+    "user_ranks_pkey" PRIMARY KEY, btree (id)
+    "user_ranks_rank_name_key" UNIQUE CONSTRAINT, btree (rank_name)
+

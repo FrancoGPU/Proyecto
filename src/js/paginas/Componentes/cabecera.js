@@ -111,35 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- User Authentication and Menu Logic ---
         if (userButton && userDropdownMenu) {
-          userButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            // Cerrar el carrito si está abierto
-            if (cartDropdown && cartDropdown.classList.contains("active")) {
-              cartDropdown.classList.remove("active");
-            }
-            const isVisible = userDropdownMenu.style.display === "block";
-            userDropdownMenu.style.display = isVisible ? "none" : "block";
-          });
-
-          window.addEventListener("click", (event) => {
-            if (
-              userDropdownMenu.style.display === "block" &&
-              !userButton.contains(event.target) &&
-              !userDropdownMenu.contains(event.target)
-            ) {
-              userDropdownMenu.style.display = "none";
-            }
-          });
-
-          window.addEventListener("keydown", (event) => {
-            if (
-              event.key === "Escape" &&
-              userDropdownMenu.style.display === "block"
-            ) {
-              userDropdownMenu.style.display = "none";
-            }
-          });
-
+          // Event listener removido - se maneja en user-menu.js
+          // Solo inicializar el estado del menú
           checkLoginStatusAndUpdateUI();
         }
 
@@ -178,44 +151,54 @@ document.addEventListener("DOMContentLoaded", () => {
           if (isLoggedIn && userData) {
             // Agregar clase visual al botón si es necesario
             userButton.classList.add("logged-in");
-            const userDisplay = document.createElement("div");
-            userDisplay.classList.add("dropdown-user-email"); // Reutilizamos la clase existente para el estilo
-            userDisplay.textContent = userData.username || userData.email; // Priorizar username, fallback a email
-            userDropdownMenu.appendChild(userDisplay);
+            
+            // Crear header del usuario con el nuevo diseño
+            const userInfo = document.createElement("div");
+            userInfo.classList.add("dropdown-user-info");
+            
+            const userName = document.createElement("div");
+            userName.classList.add("user-display-name");
+            userName.textContent = userData.username || userData.email;
+            
+            const userRole = document.createElement("div");
+            userRole.classList.add("user-role");
+            userRole.textContent = userData.role === "admin" ? "ADMINISTRADOR" : "USUARIO";
+            
+            userInfo.appendChild(userName);
+            userInfo.appendChild(userRole);
+            userDropdownMenu.appendChild(userInfo);
+
+            // Enlace al perfil
+            const profileLink = document.createElement("a");
+            profileLink.href = "/paginas/Usuario/perfil.html";
+            profileLink.innerHTML = `<i class="fas fa-user"></i><span>Mi Perfil</span>`;
+            userDropdownMenu.appendChild(profileLink);
 
             // Enlace al historial de compras
             const historyLink = document.createElement("a");
             historyLink.href = "/paginas/Usuario/historial-compras.html";
-            historyLink.textContent = "Mi Historial";
-            historyLink.style.display = "flex";
-            historyLink.style.alignItems = "center";
-            historyLink.style.gap = "0.5rem";
-            historyLink.innerHTML = `📋 Mi Historial de Compras`;
+            historyLink.innerHTML = `<i class="fas fa-history"></i><span>Mi Historial de Compras</span>`;
             userDropdownMenu.appendChild(historyLink);
 
             if (userData.role === "admin") {
               const adminPanelLink = document.createElement("a");
               adminPanelLink.href = "/paginas/Administracion/admin.html";
-              adminPanelLink.textContent = "Panel Admin";
+              adminPanelLink.innerHTML = `<i class="fas fa-crown"></i><span>Panel Admin</span>`;
               userDropdownMenu.appendChild(adminPanelLink);
             }
 
             const logoutLink = document.createElement("a");
             logoutLink.href = "#";
-            logoutLink.textContent = "Cerrar Sesión";
+            logoutLink.innerHTML = `<i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span>`;
             logoutLink.addEventListener("click", async (e) => {
               e.preventDefault();
-              userDropdownMenu.style.display = "none";
+              userDropdownMenu.classList.remove("active");
               try {
                 const logoutResponse = await fetch("/api/logout", {
                   method: "POST",
                 });
                 if (logoutResponse.ok) {
                   checkLoginStatusAndUpdateUI();
-                  // Optional: Redirect if needed
-                  // if (window.location.pathname.includes('/admin.html')) {
-                  //    window.location.href = '/paginas/prueba.html';
-                  // }
                 } else {
                   const errorData = await logoutResponse.json();
                   alert(
@@ -238,20 +221,20 @@ document.addEventListener("DOMContentLoaded", () => {
             userButton.classList.remove("logged-in");
             const loginLink = document.createElement("a");
             loginLink.href = "/paginas/Autenticacion/login.html";
-            loginLink.textContent = "Iniciar Sesión";
+            loginLink.innerHTML = `<i class="fas fa-sign-in-alt"></i><span>Iniciar Sesión</span>`;
             userDropdownMenu.appendChild(loginLink);
 
             const registerLink = document.createElement("a");
             registerLink.href = "/paginas/Autenticacion/registro.html";
-            registerLink.textContent = "Registrarse";
+            registerLink.innerHTML = `<i class="fas fa-user-plus"></i><span>Registrarse</span>`;
             userDropdownMenu.appendChild(registerLink);
           }
 
           // Re-assign listeners for closing menu on link click
           userDropdownMenu.querySelectorAll("a").forEach((link) => {
-            if (link.textContent !== "Cerrar Sesión") {
+            if (!link.textContent.includes("Cerrar Sesión")) {
               link.addEventListener("click", () => {
-                userDropdownMenu.style.display = "none";
+                userDropdownMenu.classList.remove("active");
               });
             }
           });

@@ -271,35 +271,7 @@ body {
     opacity: 0.8;
 }
 
-.dropdown-menu {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    z-index: 1001;
-    min-width: 180px;
-    display: none; /* Oculto por defecto */
-}
-.dropdown-menu.active {
-    display: block;
-}
-.dropdown-menu a, .dropdown-menu div {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #333;
-    font-size: 0.9rem;
-}
-.dropdown-menu a:hover {
-    background-color: #f5f5f5;
-}
-.dropdown-user-email {
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-}
+/* Los estilos del dropdown han sido movidos a componentes/botones.css para mejor organización */
 
 /* Estilos para información VIP en el dropdown del usuario */
 .vip-info {

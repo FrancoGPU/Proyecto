@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const upcomingSection = document.getElementById("upcoming-section"); // Ensure this ID exists if used
   const dulceriaButton = document.getElementById("dulceria-button");
   const dulceriaSection = document.getElementById("dulceria-section");
+  
+  // --- Newsletter Section Elements (moved here to fix initialization order) ---
+  const newsletterButton = document.getElementById("newsletter-button");
+  const newsletterSection = document.getElementById("newsletter-section");
 
   // --- Helper Functions for Main Content ---
   function activateButton(activeButton, ...inactiveButtons) {
@@ -146,11 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Event Listeners for Main Content Navigation ---
   if (nowShowingButton && upcomingButton && dulceriaButton) {
     nowShowingButton.addEventListener("click", () => {
-      activateButton(nowShowingButton, upcomingButton, dulceriaButton);
+      activateButton(nowShowingButton, upcomingButton, dulceriaButton, newsletterButton);
       if (movieSection) movieSection.style.display = "block";
       if (comboSection) comboSection.style.display = "none";
       if (dulceriaSection) dulceriaSection.style.display = "none";
       if (upcomingSection) upcomingSection.style.display = "none";
+      if (newsletterSection) newsletterSection.style.display = "none";
       if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "grid";
       if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "none";
       clearMovieList();
@@ -162,11 +167,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     upcomingButton.addEventListener("click", () => {
-      activateButton(upcomingButton, nowShowingButton, dulceriaButton);
+      activateButton(upcomingButton, nowShowingButton, dulceriaButton, newsletterButton);
       if (movieSection) movieSection.style.display = "block";
       if (comboSection) comboSection.style.display = "none";
       if (dulceriaSection) dulceriaSection.style.display = "none";
       if (upcomingSection) upcomingSection.style.display = "block";
+      if (newsletterSection) newsletterSection.style.display = "none";
       if (document.getElementById("movie-list")) document.getElementById("movie-list").style.display = "none";
       if (document.getElementById("upcoming-list")) document.getElementById("upcoming-list").style.display = "grid";
       clearMovieList();
@@ -201,11 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     dulceriaButton.addEventListener("click", () => {
-      activateButton(dulceriaButton, nowShowingButton, upcomingButton);
+      activateButton(dulceriaButton, nowShowingButton, upcomingButton, newsletterButton);
       if (movieSection) movieSection.style.display = "none";
       if (comboSection) comboSection.style.display = "none";
       if (dulceriaSection) dulceriaSection.style.display = "block";
       if (upcomingSection) upcomingSection.style.display = "none";
+      if (newsletterSection) newsletterSection.style.display = "none";
       loadDulceria();
     });
   } else {
@@ -219,9 +226,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (section === 'upcoming' && upcomingButton) {
       upcomingButton.click();
-    } else if (section === 'promotions' && promotionsButton) { // Este bloque puede eliminarse si "promotions" ya no se usa
-      promotionsButton.click();
-    } else if (section === 'dulceria' && dulceriaButton) { // Añadido para manejar la sección dulceria
+    } else if (section === 'newsletter' && newsletterButton) {
+      newsletterButton.click();
+    } else if (section === 'dulceria' && dulceriaButton) {
       dulceriaButton.click();
     } else if (section === 'now-showing' && nowShowingButton) {
       nowShowingButton.click();
@@ -311,7 +318,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- Initial calls ---
-  handleSectionFromURL(); // Handle section based on URL params after everything is set up
+  
+  // Función para manejar la carga inicial de la sección
+  function initializeSection() {
+    console.log("Inicializando sección desde URL");
+    handleSectionFromURL(); // Handle section based on URL params after everything is set up
+  }
+  
+  // Ejecutar inmediatamente y también después de un breve delay para asegurar que todo esté cargado
+  initializeSection();
+  setTimeout(initializeSection, 200);
 
   // Cambiar enlaces de combos.html a dulceria.html en la navegación principal y botones
   // Actualiza el botón o enlace de combos en la navegación para que apunte a /paginas/Reserva/dulceria.html
@@ -400,4 +416,140 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 }
+
+  // --- Cargar películas de estreno para el carrusel ---
+  async function loadPremiereMoviesForCarousel() {
+    try {
+      const response = await fetch('/api/movies/premieres');
+      if (response.ok) {
+        const premieres = await response.json();
+        updateCarouselWithPremieres(premieres);
+      }
+    } catch (error) {
+      console.error('Error al cargar estrenos para el carrusel:', error);
+    }
+  }
+
+  function updateCarouselWithPremieres(premieres) {
+    if (!track || premieres.length === 0) return;
+
+    // Limpiar slides existentes pero mantener algunos originales
+    const originalSlides = Array.from(track.children).slice(0, 2); // Mantener 2 slides originales
+    track.innerHTML = '';
+    
+    // Agregar slides originales
+    originalSlides.forEach(slide => track.appendChild(slide));
+
+    // Agregar slides de estrenos
+    premieres.slice(0, 3).forEach(movie => {
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      
+      const link = document.createElement('a');
+      link.href = '/paginas/Reserva/horarios.html';
+      link.className = 'carousel-image-link';
+      link.addEventListener('click', () => {
+        // Guardar información de la película para horarios
+        localStorage.setItem('selectedMovieId', movie.id);
+        localStorage.setItem('selectedMovieTitle', movie.title);
+      });
+      
+      const img = document.createElement('img');
+      img.src = movie.image_url || '/assets/images/default-movie.jpg';
+      img.alt = `Estreno: ${movie.title}`;
+      
+      // Agregar overlay con información de estreno
+      const overlay = document.createElement('div');
+      overlay.className = 'carousel-premiere-overlay';
+      overlay.innerHTML = `
+        <div class="premiere-badge">ESTRENO</div>
+        <h3 class="premiere-title">${movie.title}</h3>
+        <p class="premiere-info">${movie.room_type ? movie.room_type.toUpperCase() : 'Digital'}</p>
+      `;
+      
+      link.appendChild(img);
+      link.appendChild(overlay);
+      slide.appendChild(link);
+      track.appendChild(slide);
+    });
+
+    // Actualizar variables del carrusel
+    const newSlides = Array.from(track.children);
+    slides.length = 0;
+    slides.push(...newSlides);
+    
+    // Reinicializar carrusel
+    if (slides.length > 0) {
+      currentSlide = 0;
+      updateSlideWidthAndPosition();
+      startInterval();
+    }
+  }
+
+  // --- Cargar películas de estreno al iniciar ---
+  loadPremiereMoviesForCarousel();
+  
+  // --- Cargar cartelera por defecto ---
+  if (typeof fetchMovies === "function") {
+    fetchMovies();
+  } else {
+    console.warn("fetchMovies function is not defined.");
+  }
+
+  // Newsletter button event listener
+  if (newsletterButton) {
+    newsletterButton.addEventListener("click", () => {
+      activateButton(newsletterButton, nowShowingButton, upcomingButton, dulceriaButton);
+      if (movieSection) movieSection.style.display = "none";
+      if (comboSection) comboSection.style.display = "none";
+      if (dulceriaSection) dulceriaSection.style.display = "none";
+      if (upcomingSection) upcomingSection.style.display = "none";
+      if (newsletterSection) newsletterSection.style.display = "block";
+    });
+  }
+
+  // Newsletter form submission
+  const newsletterForm = document.getElementById("newsletter-form");
+  if (newsletterForm) {
+    newsletterForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById("newsletter-email").value;
+      const name = document.getElementById("newsletter-name").value;
+      const preferencesCheckboxes = document.querySelectorAll('input[name="preferences"]:checked');
+      const preferences = {};
+      
+      preferencesCheckboxes.forEach(checkbox => {
+        preferences[checkbox.value] = true;
+      });
+      
+      try {
+        const response = await fetch('/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            name: name || null,
+            preferences: preferences
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('¡Suscripción exitosa! Recibirás nuestras novedades en tu correo.');
+          newsletterForm.reset();
+          // Regresar a cartelera
+          if (nowShowingButton) nowShowingButton.click();
+        } else {
+          alert(result.message || 'Error al procesar la suscripción');
+        }
+      } catch (error) {
+        console.error('Error al suscribirse al newsletter:', error);
+        alert('Error al procesar la suscripción. Intenta nuevamente.');
+      }
+    });
+  }
 });

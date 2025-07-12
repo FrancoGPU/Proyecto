@@ -382,4 +382,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (typeof window.renderCartItems === 'function') {
         window.renderCartItems();
     }
+    
+    // Funcionalidad para generar factura
+    const generateInvoiceButton = document.getElementById('generate-invoice-button');
+    if (generateInvoiceButton) {
+        generateInvoiceButton.addEventListener('click', function() {
+            // Recopilar datos de la compra actual
+            const purchaseData = {
+                movieTitle: movieName,
+                seats: seats,
+                totalPrice: totalPrice,
+                originalTotal: originalTotalPrice,
+                purchaseDate: new Date().toISOString(),
+                vipDiscount: userVipStatus.isVip ? userVipStatus.discountPercentage : 0
+            };
+
+            // Guardar datos para la factura
+            localStorage.setItem('invoicePurchaseData', JSON.stringify(purchaseData));
+            
+            // Redirigir a la página de factura
+            window.location.href = '/paginas/Reserva/factura.html';
+        });
+    }
 });

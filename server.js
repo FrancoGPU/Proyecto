@@ -9,6 +9,7 @@ const authController = require("./src/controllers/authController");
 const adminController = require("./src/controllers/adminController");
 const movieController = require("./src/controllers/movieController");
 const purchaseController = require("./src/controllers/purchaseController");
+const userController = require("./src/controllers/userController");
 
 const app = express();
 const PORT = 3000;
@@ -36,6 +37,11 @@ app.use(
 
 // --- Endpoints Públicos ---
 app.get("/api/movies", movieController.getMovies);
+app.get("/api/movies/4d", movieController.get4DMovies);
+app.get("/api/movies/premieres", movieController.getPremieres);
+app.get("/api/movies/coming-soon", movieController.getComingSoon);
+app.get("/api/movies/:id", movieController.getMovieDetails);
+app.get("/api/theater-rooms", movieController.getTheaterRooms);
 app.get("/api/upcoming", movieController.getUpcomingMovies);
 app.get("/api/combos", async (req, res) => {
   try {
@@ -53,6 +59,21 @@ app.post("/api/logout", authController.logout);
 app.post("/api/recuperar", authController.recuperar);
 app.post("/api/restablecer-contrasena", authController.restablecerContrasena);
 app.get("/api/session/status", authController.sessionStatus);
+app.post("/api/notify-premiere", movieController.notifyPremiere);
+
+// --- Endpoints de Perfil de Usuario ---
+app.get("/api/user/profile", userController.getProfile);
+app.put("/api/user/profile", userController.updateProfile);
+app.get("/api/user/purchases", userController.getUserPurchases);
+app.get("/api/user/ranks", userController.getRanks);
+app.get("/api/user/points-history", userController.getPointsHistory);
+app.post("/api/user/purchases/confirm", userController.confirmPurchase);
+app.post("/api/user/invoice/generate", userController.generateInvoice);
+app.get("/api/user/points", userController.getUserPoints);
+app.get("/api/user/rank", userController.getUserRank);
+
+// --- Endpoints Newsletter ---
+app.post("/api/newsletter/subscribe", userController.subscribeNewsletter);
 
 // --- Endpoints VIP ---
 const User = require("./src/models/User");

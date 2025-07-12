@@ -105,9 +105,15 @@ async function loadVipStatuses() {
 function updateStats() {
     const vipUsers = allUsers.filter(user => user.isVip);
     const totalUsers = allUsers.length;
-    const avgDiscount = vipUsers.length > 0 ? 
-        (vipUsers.reduce((sum, user) => sum + (user.vipDiscountPercentage || 0), 0) / vipUsers.length).toFixed(1) : 
-        0;
+
+    // Filtrar descuentos válidos y calcular promedio
+    const validDiscounts = vipUsers
+        .map(user => parseFloat(user.vipDiscountPercentage) || 0) // Asegurarse de que sea un número válido
+        .filter(discount => discount > 0); // Filtrar valores mayores a 0
+
+    const avgDiscount = validDiscounts.length > 0 
+        ? (validDiscounts.reduce((sum, discount) => sum + discount, 0) / validDiscounts.length).toFixed(1) 
+        : 0;
 
     document.getElementById('vipActiveCount').textContent = vipUsers.length;
     document.getElementById('totalUsersCount').textContent = totalUsers;
